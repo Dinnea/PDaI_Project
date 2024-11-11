@@ -1,18 +1,17 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "TestCharacter.h"
+#include "HnS_Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
 
+
 // Sets default values
-ATestCharacter::ATestCharacter()
+AHnS_Character::AHnS_Character()
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 	this->bUseControllerRotationYaw = false;
-	
 
 	springArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm"));
 	springArm->SetupAttachment(RootComponent);
@@ -33,7 +32,7 @@ ATestCharacter::ATestCharacter()
 }
 
 // Called when the game starts or when spawned
-void ATestCharacter::BeginPlay()
+void AHnS_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	check(GEngine != nullptr);
@@ -42,18 +41,17 @@ void ATestCharacter::BeginPlay()
 	// The -1 "Key" value argument prevents the message from being updated or refreshed.
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));
 	
-	
 }
 
 // Called every frame
-void ATestCharacter::Tick(float DeltaTime)
+void AHnS_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
 
 // Called to bind functionality to input
-void ATestCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+void AHnS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
