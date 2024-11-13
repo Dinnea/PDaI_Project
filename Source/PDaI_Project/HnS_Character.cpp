@@ -27,6 +27,8 @@ AHnS_Character::AHnS_Character()
 	charMovement = this->GetCharacterMovement();
 	charMovement->bOrientRotationToMovement = true;
 
+	charMovement->bRequestedMoveUseAcceleration = false;
+
 	meshRef = this->GetMesh();
 	meshRef->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -90.f), FRotator(0.f, -90.f, 0.f));
 }
