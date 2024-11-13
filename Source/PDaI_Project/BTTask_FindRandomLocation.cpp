@@ -8,7 +8,7 @@
 
 UBTTask_FindRandomLocation::UBTTask_FindRandomLocation(FObjectInitializer const& objectInitializer)
 {
-	NodeName = "Find Random Location";
+	NodeName = TEXT("Find Random Location");
 }
 
 EBTNodeResult::Type UBTTask_FindRandomLocation::ExecuteTask(UBehaviorTreeComponent& ownerComponent, uint8* NodeMemory)
