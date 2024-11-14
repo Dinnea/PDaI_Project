@@ -23,6 +23,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* setDestination;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	float shortPressThreshold;
 	
 protected:
 
@@ -36,4 +39,5 @@ protected:
 
 private:
 	FVector cachedDest;
+	float followTime;
 };

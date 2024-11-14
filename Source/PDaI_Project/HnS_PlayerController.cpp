@@ -7,6 +7,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "EnhancedInputComponent.h"
 #include "Engine/LocalPlayer.h"
+#include "Blueprint/AIBlueprintHelperLibrary.h"
 
 AHnS_PlayerController::AHnS_PlayerController()
 {
@@ -43,12 +44,12 @@ void AHnS_PlayerController::SetupInputComponent()
 
 void AHnS_PlayerController::OnInputStarted()
 {
-	StopMovement();
+	//StopMovement();
 }
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
-
+	followTime += GetWorld()->GetDeltaSeconds();
 	FHitResult hit;
 	bool hitSuccessful = false;
 
@@ -67,4 +68,9 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 
 void AHnS_PlayerController::OnSetDestinationReleased()
 {
+	if (followTime <= shortPressThreshold)
+	{
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
+		followTime = 0.f;
+	}
 }
