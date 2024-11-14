@@ -64,8 +64,9 @@ void ABaseEnemyController::SetUpPerceptionSystem()
 
 void ABaseEnemyController::OnTargetDetected(AActor* actor, FAIStimulus const stimulus)
 {
-	if (AHnS_Character* const characer = Cast<AHnS_Character>(actor)) 
+	if (AHnS_Character* const character = Cast<AHnS_Character>(actor)) 
 	{
+		//GetBlackboardComponent()->SetValueAsObject("targetActor", actor);
 		GetBlackboardComponent()->SetValueAsBool("hasSeenPlayer?", stimulus.WasSuccessfullySensed());
 	}
 }
