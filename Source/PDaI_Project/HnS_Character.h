@@ -27,6 +27,10 @@ private:
 	UPROPERTY()
 	UMeshComponent* meshRef;
 
+	class UAIPerceptionStimuliSourceComponent* stimulusSource;
+
+	void SetupStimulusSouce();
+
 public:
 	// Sets default values for this character's properties
 	AHnS_Character();
