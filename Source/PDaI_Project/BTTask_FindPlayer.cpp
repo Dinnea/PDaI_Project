@@ -25,7 +25,8 @@ EBTNodeResult::Type UBTTask_FindPlayer::ExecuteTask(UBehaviorTreeComponent& owne
 			{
 				if (navSystem->GetRandomPointInNavigableRadius(playerLocation, searchRadius, location)) 
 				{
-					ownerComponent.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), location.Location);
+					ownerComponent.GetBlackboardComponent()->SetValueAsObject("targetActor", player);
+					//ownerComponent.GetBlackboardComponent()->SetValueAsVector(GetSelectedBlackboardKey(), location.Location);
 					FinishLatentTask(ownerComponent, EBTNodeResult::Succeeded);
 					return EBTNodeResult::Succeeded;
 				}
