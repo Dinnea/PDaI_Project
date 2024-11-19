@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-#include <string>
 #include "HnS_PlayerController.h"
 #include "GameFramework/Pawn.h"
 #include "InputActionValue.h"
@@ -8,11 +7,13 @@
 #include "EnhancedInputComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include <string>
 #include "HnS_Character.h"
 
 AHnS_PlayerController::AHnS_PlayerController()
 {
 	this->bShowMouseCursor = true;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	this->cachedDest = FVector::ZeroVector;
 	followTime = 0;
 }
@@ -41,7 +42,7 @@ void AHnS_PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(setDestination, ETriggerEvent::Completed, this, &AHnS_PlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(setDestination, ETriggerEvent::Canceled, this, &AHnS_PlayerController::OnSetDestinationReleased);
 		//Setup basic attack input events
-		EnhancedInputComponent->BindAction(autoAttack, ETriggerEvent::Triggered, this, &AHnS_PlayerController::autoAttackBullet);
+		EnhancedInputComponent->BindAction(autoAttack, ETriggerEvent::Started, this, &AHnS_PlayerController::autoAttackBullet);
 	}
 	else
 	{
@@ -87,9 +88,19 @@ void AHnS_PlayerController::OnSetDestinationReleased()
 void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
-	if (PlayerCharacter)
+	if (PlayerCharacter && canFire)
 	{
 		PlayerCharacter->ShootBullet();
+		canFire = false;
+
+		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this,&AHnS_PlayerController::setCanFire,true);
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, timeBetweenFires, false);
 	}
+}
+
+void AHnS_PlayerController::setCanFire(bool Value)
+{
+	canFire = true;
 }
 

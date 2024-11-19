@@ -4,6 +4,7 @@
 #include "HnS_Bullet.h"
 #include "Components/SphereComponent.h"
 #include "NiagaraComponent.h"
+#include "GameFramework/ProjectileMovementComponent.h"
 
 // Sets default values
 AHnS_Bullet::AHnS_Bullet()
@@ -13,6 +14,10 @@ AHnS_Bullet::AHnS_Bullet()
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
 	CollisionSphere->SetupAttachment(BulletFX);
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComponent"));
+	ProjectileMovement->ProjectileGravityScale = 0;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, ProjectileMovement);
+
 	PrimaryActorTick.bCanEverTick = true;
 
 	//UPROPERTY(EditDefaultsOnly)

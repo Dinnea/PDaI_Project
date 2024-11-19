@@ -45,6 +45,13 @@ protected:
 
 	class AHnS_Character* PlayerCharacter;
 
+	bool canFire = true;
+
+	UPROPERTY(EditAnywhere)
+	float timeBetweenFires = 1.2f;
+
+	void setCanFire(bool Value);
+
 private:
 	FVector cachedDest;
 	float followTime;

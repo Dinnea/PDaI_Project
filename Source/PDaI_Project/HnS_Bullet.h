@@ -26,8 +26,14 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class USphereComponent* CollisionSphere;
 
+	UPROPERTY(EditDefaultsOnly)
+	class UProjectileMovementComponent* ProjectileMovement;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditDefaultsOnly)
+	float Speed;
 
 };
