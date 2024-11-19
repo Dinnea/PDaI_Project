@@ -8,6 +8,7 @@
 
 class USpringArmComponent;
 class UCameraComponent;
+class AHnS_Bullet;
 
 UCLASS()
 class PDAI_PROJECT_API AHnS_Character : public ACharacter
@@ -27,13 +28,24 @@ private:
 	UPROPERTY()
 	UMeshComponent* meshRef;
 
+
 public:
 	// Sets default values for this character's properties
 	AHnS_Character();
+	AActor* ShootBullet();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere);
+	UChildActorComponent* Weapon;
+
+	UPROPERTY(EditAnywhere);
+	USceneComponent* SpawnLocation;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AHnS_Bullet> BulletToSpawn;
 
 public:	
 	// Called every frame

@@ -1,0 +1,106 @@
+[
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_Bullet.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_Bullet.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_Character.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_Character.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_Enemy.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_Enemy.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_PlayerController.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_PlayerController.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_Weapon.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\HnS_Weapon.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\PDaI_Project.Build.cs",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\PDaI_Project.cpp",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	},
+	{
+		"file": "C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\Source\\PDaI_Project\\PDaI_Project.h",
+		"arguments": [
+			"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.41.34120\\bin\\Hostx64\\x64\\cl.exe",
+			"@C:\\Users\\mikog\\Desktop\\PDaI-project\\PDaI_Project\\.vscode\\compileCommands_PDaI_Project\\PDaI_Project.1.rsp"
+		],
+		"directory": "C:\\Program Files\\Epic Games\\UE_5.4\\Engine\\Source"
+	}
+]
