@@ -13,6 +13,7 @@ AHnS_PlayerController::AHnS_PlayerController()
 {
 	this->bShowMouseCursor = true;
 	this->cachedDest = FVector::ZeroVector;
+	followTime = 0;
 }
 
 void AHnS_PlayerController::BeginPlay()
@@ -71,6 +72,6 @@ void AHnS_PlayerController::OnSetDestinationReleased()
 	if (followTime <= shortPressThreshold)
 	{
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
-		followTime = 0.f;
 	}
+	followTime = 0.f;
 }
