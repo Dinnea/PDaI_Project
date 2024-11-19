@@ -35,6 +35,6 @@ void AHnS_Bullet::BeginPlay()
 void AHnS_Bullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(this->GetActorLocation().ToString()));
 }
 

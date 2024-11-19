@@ -8,6 +8,7 @@
 #include "Engine/LocalPlayer.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include <string>
+#include "Kismet/KismetMathLibrary.h"
 #include "HnS_Character.h"
 
 AHnS_PlayerController::AHnS_PlayerController()
@@ -16,6 +17,7 @@ AHnS_PlayerController::AHnS_PlayerController()
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	this->cachedDest = FVector::ZeroVector;
 	followTime = 0;
+	this->cachedDest_attack = FVector::ZeroVector;
 }
 
 void AHnS_PlayerController::BeginPlay()
@@ -87,15 +89,36 @@ void AHnS_PlayerController::OnSetDestinationReleased()
 
 void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 {
+	FHitResult attackHit;
+	bool attackHitSuccessful = false;
+
+	attackHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
+
+	if (attackHitSuccessful) {
+		cachedDest_attack = attackHit.Location;
+	}
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
 	if (PlayerCharacter && canFire)
 	{
+		//FVector direction = FVector(value.Get<FVector2D>(), 0);
+		//PlayerCharacter->SetActorRotation(direction.Rotation());
+		GetCharacter()->GetCharacterMovement()->DisableMovement();
+		APawn* ludek = GetPawn();
+		FVector PlayerLoc = ludek->GetActorLocation();
+		FVector CursorLocation = cachedDest_attack;
+		FRotator PlayerRotation = UKismetMathLibrary::FindLookAtRotation(CursorLocation, PlayerLoc);
+		FRotator newPlayerRotation = FRotator(ludek->GetActorRotation().Pitch, PlayerRotation.Yaw - 180, ludek->GetActorRotation().Roll);
+		ludek->SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
+
 		PlayerCharacter->ShootBullet();
 		canFire = false;
 
 		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this,&AHnS_PlayerController::setCanFire,true);
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, timeBetweenFires, false);
+		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 	}
 }
 
