@@ -4,7 +4,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include <GameFramework/Actor.h>
 #include "HnS_Character.generated.h"
+
 
 class USpringArmComponent;
 class UCameraComponent;
