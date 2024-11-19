@@ -4,6 +4,8 @@
 #include "HnS_Character.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Camera/CameraComponent.h"
+#include "HnS_Weapon.h"
+#include "HnS_Bullet.h"
 
 
 // Sets default values
@@ -29,6 +31,11 @@ AHnS_Character::AHnS_Character()
 
 	meshRef = this->GetMesh();
 	meshRef->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -90.f), FRotator(0.f, -90.f, 0.f));
+
+	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
+	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
+	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
+	SpawnLocation->SetupAttachment(GetMesh());
 }
 
 // Called when the game starts or when spawned
@@ -36,10 +43,14 @@ void AHnS_Character::BeginPlay()
 {
 	Super::BeginPlay();
 	check(GEngine != nullptr);
-
 	// Display a debug message for five seconds. 
 	// The -1 "Key" value argument prevents the message from being updated or refreshed.
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));
+	AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor());
+	if(weaponPtr)
+	{
+		weaponPtr->SetPlayerPointer(this);
+	}
 	
 }
 
@@ -55,5 +66,19 @@ void AHnS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+AActor* AHnS_Character::ShootBullet()
+{
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Instigator = this;
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation(),GetActorRotation());
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
+	}
+
+	return SpawnedActor;
 }
 

@@ -8,6 +8,7 @@
 #include "EnhancedInputComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "HnS_Character.h"
 
 AHnS_PlayerController::AHnS_PlayerController()
 {
@@ -18,6 +19,8 @@ AHnS_PlayerController::AHnS_PlayerController()
 void AHnS_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
+
+	PlayerCharacter = Cast<AHnS_Character>(GetPawn());
 }
 
 void AHnS_PlayerController::SetupInputComponent()
@@ -30,11 +33,14 @@ void AHnS_PlayerController::SetupInputComponent()
 	}
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("EnhancedInput debug!"));
 		// Setup mouse input events
 		EnhancedInputComponent->BindAction(setDestination, ETriggerEvent::Started, this, &AHnS_PlayerController::OnInputStarted);
 		EnhancedInputComponent->BindAction(setDestination, ETriggerEvent::Triggered, this, &AHnS_PlayerController::OnSetDestinationTriggered);
 		EnhancedInputComponent->BindAction(setDestination, ETriggerEvent::Completed, this, &AHnS_PlayerController::OnSetDestinationReleased);
 		EnhancedInputComponent->BindAction(setDestination, ETriggerEvent::Canceled, this, &AHnS_PlayerController::OnSetDestinationReleased);
+		//Setup basic attack input events
+		EnhancedInputComponent->BindAction(autoAttack, ETriggerEvent::Triggered, this, &AHnS_PlayerController::autoAttackBullet);
 	}
 	else
 	{
@@ -49,6 +55,7 @@ void AHnS_PlayerController::OnInputStarted()
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 	followTime += GetWorld()->GetDeltaSeconds();
 	FHitResult hit;
 	bool hitSuccessful = false;
@@ -74,3 +81,13 @@ void AHnS_PlayerController::OnSetDestinationReleased()
 		followTime = 0.f;
 	}
 }
+
+void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
+	if (PlayerCharacter)
+	{
+		PlayerCharacter->ShootBullet();
+	}
+}
+
