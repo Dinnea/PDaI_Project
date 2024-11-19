@@ -35,7 +35,7 @@ AHnS_Character::AHnS_Character()
 	charMovement->bOrientRotationToMovement = true;
 	charMovement->bRequestedMoveUseAcceleration = false;
 	meshRef = this->GetMesh();
-	meshRef->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -90.f), FRotator(0.f, -90.f, 0.f));
+	meshRef->SetRelativeLocationAndRotation(FVector(0.f, 0.f, -90.f), FRotator(0.f, 0.f, 0.f));
 
 	//setup camera
 	//TODO: turn it into a function
@@ -61,6 +61,8 @@ AHnS_Character::AHnS_Character()
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
 	SetupStimulusSouce();
+
+	
 }
 
 // Called when the game starts or when spawned

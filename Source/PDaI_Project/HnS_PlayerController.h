@@ -48,11 +48,12 @@ protected:
 	bool canFire = true;
 
 	UPROPERTY(EditAnywhere)
-	float timeBetweenFires = 1.2f;
+	float timeBetweenFires = 0.7f;
 
 	void setCanFire(bool Value);
 
 private:
 	FVector cachedDest;
+	FVector cachedDest_attack;
 	float followTime;
 };
