@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+#include <string>
 #include "HnS_PlayerController.h"
 #include "GameFramework/Pawn.h"
 #include "InputActionValue.h"
@@ -76,6 +76,7 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 
 void AHnS_PlayerController::OnSetDestinationReleased()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(followTime));
 	if (followTime <= shortPressThreshold)
 	{
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
