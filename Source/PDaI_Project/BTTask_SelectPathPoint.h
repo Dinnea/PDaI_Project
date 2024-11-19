@@ -15,10 +15,10 @@ class PDAI_PROJECT_API UBTTask_SelectPathPoint : public UBTTask_BlackboardBase
 	GENERATED_BODY()
 
 public:
-	explicit UBTTask_SelectPathPoint(FObjectInitializer& const objectInitializer);
+	explicit UBTTask_SelectPathPoint(FObjectInitializer const& objectInitializer);
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& ownerComponent, uint8* nodeMemory) override;
 	
 private:
-	UPROPERTY(EditAnywhere, Category"Blackboard", meta=(AllowPrivateAccess=true))
+	UPROPERTY(EditAnywhere, Category="Blackboard", meta = (AllowPrivateAccess = "true"))
 	FBlackboardKeySelector patrolPathVectorKey;
 };

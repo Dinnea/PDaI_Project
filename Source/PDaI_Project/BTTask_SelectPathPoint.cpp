@@ -6,7 +6,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BaseEnemy.h"
 
-UBTTask_SelectPathPoint::UBTTask_SelectPathPoint(FObjectInitializer& const objectInitializer)
+UBTTask_SelectPathPoint::UBTTask_SelectPathPoint(FObjectInitializer const& objectInitializer)
 {
 	NodeName = TEXT("Select Path Point");
 }
