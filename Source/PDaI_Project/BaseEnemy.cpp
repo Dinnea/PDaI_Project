@@ -30,6 +30,11 @@ void ABaseEnemy::Tick(float DeltaTime)
 
 }
 
+APatrolPath* ABaseEnemy::GetPatrolPath() const
+{
+	return patrolPath;
+}
+
 // Called to bind functionality to input
 void ABaseEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

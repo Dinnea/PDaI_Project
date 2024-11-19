@@ -57,7 +57,7 @@ void AHnS_PlayerController::OnInputStarted()
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 	followTime += GetWorld()->GetDeltaSeconds();
 	FHitResult hit;
 	bool hitSuccessful = false;
@@ -77,7 +77,7 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 
 void AHnS_PlayerController::OnSetDestinationReleased()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(followTime));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(followTime));
 	if (followTime <= shortPressThreshold)
 	{
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
