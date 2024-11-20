@@ -6,10 +6,18 @@
 AHnS_BaseEnemy::AHnS_BaseEnemy()
 {
 	PrimaryActorTick.bCanEverTick = true;
+	SetupMesh();
+	SetupMovement();
 }
 
 void AHnS_BaseEnemy::Tick(float DeltaTime)
 {
+	Super::Tick(DeltaTime);
+}
+
+void AHnS_BaseEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 UBehaviorTree* AHnS_BaseEnemy::GetBehaviorTree() const
@@ -24,4 +32,5 @@ APatrolPath* AHnS_BaseEnemy::GetPatrolPath() const
 
 void AHnS_BaseEnemy::BeginPlay()
 {
+	Super::BeginPlay();
 }

@@ -22,9 +22,6 @@ private:
 	UPROPERTY()
 	UCharacterMovementComponent* charMovement;
 
-	void SetupMesh();
-	void SetupMovement();
-
 public:
 	// Sets default values for this character's properties
 	AHnS_Character();
@@ -33,6 +30,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void SetupMesh();
+	void SetupMovement();
 
 	UPROPERTY(EditAnywhere);
 	UChildActorComponent* Weapon;

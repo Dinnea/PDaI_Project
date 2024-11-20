@@ -4,7 +4,7 @@
 #include "BTTask_SelectPathPoint.h"
 #include "BaseEnemyController.h"
 #include "BehaviorTree/BlackboardComponent.h"
-#include "BaseEnemy.h"
+#include "HnS_BaseEnemy.h"
 
 UBTTask_SelectPathPoint::UBTTask_SelectPathPoint(FObjectInitializer const& objectInitializer)
 {
@@ -19,7 +19,7 @@ EBTNodeResult::Type UBTTask_SelectPathPoint::ExecuteTask(UBehaviorTreeComponent&
 		{
 			int const index = blackboard->GetValueAsInt(GetSelectedBlackboardKey());
 
-			if (auto* enemy = Cast<ABaseEnemy>(controller->GetPawn())) 
+			if (auto* enemy = Cast<AHnS_BaseEnemy>(controller->GetPawn())) 
 			{
 				auto* path = enemy->GetPatrolPath();
 

@@ -33,6 +33,8 @@ void AHns_CharacterPlayer::SetupCamera()
 
 AHns_CharacterPlayer::AHns_CharacterPlayer()
 {
+	SetupMesh();
+	SetupMovement();
 	SetupCamera();
 	SetupStimulusSouce();
 }

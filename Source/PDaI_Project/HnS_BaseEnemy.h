@@ -20,6 +20,7 @@ class PDAI_PROJECT_API AHnS_BaseEnemy : public AHnS_Character
 public:
 	AHnS_BaseEnemy();
 	virtual void Tick(float DeltaTime) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UBehaviorTree* GetBehaviorTree() const;	
 	APatrolPath* GetPatrolPath() const;
