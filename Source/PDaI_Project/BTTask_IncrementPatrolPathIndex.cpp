@@ -4,7 +4,7 @@
 #include "BTTask_IncrementPatrolPathIndex.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "BaseEnemyController.h"
-#include "BaseEnemy.h"
+#include "HnS_BaseEnemy.h"
 
 UBTTask_IncrementPatrolPathIndex::UBTTask_IncrementPatrolPathIndex(FObjectInitializer const& objectInitializer) : UBTTask_BlackboardBase(objectInitializer)
 {
@@ -16,7 +16,7 @@ EBTNodeResult::Type UBTTask_IncrementPatrolPathIndex::ExecuteTask(UBehaviorTreeC
 
 	if (auto* const controller = Cast<ABaseEnemyController>(ownerComponent.GetAIOwner()))
 	{
-		if (auto* const enemy = Cast<ABaseEnemy>(controller -> GetPawn())) 
+		if (auto* const enemy = Cast<AHnS_BaseEnemy>(controller -> GetPawn())) 
 		{
 			if (auto* const blackboard = ownerComponent.GetBlackboardComponent()) 
 			{

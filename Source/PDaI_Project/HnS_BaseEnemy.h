@@ -5,40 +5,35 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "PatrolPath.h"
-#include "BaseEnemy.generated.h"
+#include "HnS_Character.h"
+#include "HnS_BaseEnemy.generated.h"
 
+/**
+ * 
+ */
 class UBehaviorTree;
-
 UCLASS()
-class PDAI_PROJECT_API ABaseEnemy : public ACharacter
+class PDAI_PROJECT_API AHnS_BaseEnemy : public AHnS_Character
 {
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
-	ABaseEnemy();
-
-	UBehaviorTree* GetBehaviorTree() const;
-	// Called every frame
+	AHnS_BaseEnemy();
 	virtual void Tick(float DeltaTime) override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	UBehaviorTree* GetBehaviorTree() const;	
 	APatrolPath* GetPatrolPath() const;
-
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-private:	
-
-
+private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	UBehaviorTree* behaviorTree;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	APatrolPath* patrolPath;
 
-
+	
 };

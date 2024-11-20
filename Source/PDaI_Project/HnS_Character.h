@@ -4,7 +4,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include <GameFramework/Actor.h>
 #include "HnS_Character.generated.h"
+
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -20,18 +22,6 @@ private:
 	UPROPERTY()
 	UCharacterMovementComponent* charMovement;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* springArm;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* camera;
-
-	UPROPERTY()
-	UMeshComponent* meshRef;
-
-	class UAIPerceptionStimuliSourceComponent* stimulusSource;
-
-	void SetupStimulusSouce();
-
 public:
 	// Sets default values for this character's properties
 	AHnS_Character();
@@ -40,6 +30,9 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+	void SetupMesh();
+	void SetupMovement();
 
 	UPROPERTY(EditAnywhere);
 	UChildActorComponent* Weapon;

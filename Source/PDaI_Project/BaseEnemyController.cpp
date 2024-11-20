@@ -2,12 +2,12 @@
 
 
 #include "BaseEnemyController.h"
-#include "BaseEnemy.h"
-#include "HnS_Character.h"
+#include "Hns_CharacterPlayer.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
 #include "Perception/AIPerceptionComponent.h"
+#include "HnS_BaseEnemy.h"
 
 
 ABaseEnemyController::ABaseEnemyController(FObjectInitializer const& objectInitializer)
@@ -20,7 +20,7 @@ void ABaseEnemyController::OnPossess(APawn* InPawn)
 
 	Super::OnPossess(InPawn);
 
-	if (ABaseEnemy* const enemy = Cast<ABaseEnemy>(InPawn)) 
+	if (auto* const enemy = Cast<AHnS_BaseEnemy>(InPawn)) 
 	{
 		if (UBehaviorTree* const behaviorTree = enemy->GetBehaviorTree()) 
 		{
@@ -64,7 +64,7 @@ void ABaseEnemyController::SetUpPerceptionSystem()
 
 void ABaseEnemyController::OnTargetDetected(AActor* actor, FAIStimulus const stimulus)
 {
-	if (AHnS_Character* const character = Cast<AHnS_Character>(actor)) 
+	if (auto* const character = Cast<AHns_CharacterPlayer>(actor)) 
 	{
 		GetBlackboardComponent()->SetValueAsObject("targetActor", actor);
 		//GetBlackboardComponent()->SetValueAsBool("hasSeenPlayer?", stimulus.WasSuccessfullySensed());
