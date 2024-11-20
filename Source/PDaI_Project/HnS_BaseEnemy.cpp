@@ -8,6 +8,7 @@ AHnS_BaseEnemy::AHnS_BaseEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 	SetupMesh();
 	SetupMovement();
+	this->AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 void AHnS_BaseEnemy::Tick(float DeltaTime)

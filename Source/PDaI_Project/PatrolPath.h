@@ -21,7 +21,4 @@ public:
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="AI", meta=(MakeEditWidget="true", AllowPrivateAccess ="true"))
 	TArray<FVector> patrolPoints;
-
-
-
 };
