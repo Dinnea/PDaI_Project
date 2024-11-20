@@ -2,7 +2,6 @@
 
 
 #include "BaseEnemyController.h"
-#include "BaseEnemy.h"
 #include "Hns_CharacterPlayer.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
