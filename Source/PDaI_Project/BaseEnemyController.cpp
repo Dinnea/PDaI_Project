@@ -3,7 +3,7 @@
 
 #include "BaseEnemyController.h"
 #include "BaseEnemy.h"
-#include "HnS_Character.h"
+#include "Hns_CharacterPlayer.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
@@ -65,9 +65,9 @@ void ABaseEnemyController::SetUpPerceptionSystem()
 
 void ABaseEnemyController::OnTargetDetected(AActor* actor, FAIStimulus const stimulus)
 {
-	if (auto* const character = Cast<AHnS_Character>(actor)) 
+	if (auto* const character = Cast<AHns_CharacterPlayer>(actor)) 
 	{
-		//GetBlackboardComponent()->SetValueAsObject("targetActor", actor);
+		GetBlackboardComponent()->SetValueAsObject("targetActor", actor);
 		//GetBlackboardComponent()->SetValueAsBool("hasSeenPlayer?", stimulus.WasSuccessfullySensed());
 	}
 }

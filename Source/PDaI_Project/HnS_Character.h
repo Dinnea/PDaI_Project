@@ -22,17 +22,8 @@ private:
 	UPROPERTY()
 	UCharacterMovementComponent* charMovement;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	USpringArmComponent* springArm;
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera", meta = (AllowPrivateAccess = "true"))
-	UCameraComponent* camera;
-
-	UPROPERTY()
-	UMeshComponent* meshRef;
-
-	class UAIPerceptionStimuliSourceComponent* stimulusSource;
-
-	void SetupStimulusSouce();
+	void SetupMesh();
+	void SetupMovement();
 
 public:
 	// Sets default values for this character's properties
