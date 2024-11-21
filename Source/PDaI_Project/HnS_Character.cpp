@@ -19,6 +19,25 @@ void AHnS_Character::SetupMovement()
 	charMovement->bRequestedMoveUseAcceleration = false;
 }
 
+void AHnS_Character::CreateWeapon()
+{
+	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
+	Weapon->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
+	SpawnLocation->SetupAttachment(GetMesh());
+}
+
+float AHnS_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	//DamageAmount = 10;
+	HP -= DamageAmount;
+	if (HP <= 0)
+	{
+		Destroy();
+	}
+	return DamageAmount;
+}
+
 // Sets default values
 AHnS_Character::AHnS_Character()
 {
@@ -29,7 +48,6 @@ AHnS_Character::AHnS_Character()
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
-	
 }
 
 // Called when the game starts or when spawned
@@ -67,7 +85,8 @@ AActor* AHnS_Character::ShootBullet()
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = this;
-	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation() /*+ FVector(50, 30, 0) */, GetActorRotation());
+	SpawnParams.Owner = this;
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation() + FVector(0, 0, 0) , GetActorRotation(), SpawnParams);
 
 	if (GEngine)
 	{

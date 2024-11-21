@@ -39,6 +39,12 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* impactParticles;
 
+	UPROPERTY(EditDefaultsOnly)
+	float BaseDamage;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageType> DamageType;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

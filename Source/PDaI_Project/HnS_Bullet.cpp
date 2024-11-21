@@ -9,6 +9,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 AHnS_Bullet::AHnS_Bullet()
@@ -37,11 +38,25 @@ void AHnS_Bullet::BeginPlay()
 
 void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (OtherActor->GetFName().ToString() != "BP_HnS_PlayerChar_C_0")
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
+	//OtherActor->GetFName().ToString() != "BP_HnS_PlayerChar_C_0"
+	//GetOwner()->GetFName().ToString();
+	if (GetOwner() == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Owner nullptr"));
+	}
+	if (GetInstigator() == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Instigator nullptr"));
+	}
+	AController* PlayerC = GetInstigator()->GetController(); //Instigator - Object which created the actor/event (player created bullet)
+	if (OtherActor != PlayerC->GetPawn())
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, OtherActor->GetFName().ToString());
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, impactParticles, GetActorLocation());
-		BulletHit();
+		//BulletHit();
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, PlayerC->GetPawn()->GetFName().ToString());
+		UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
 		Destroy();
 	}
 }

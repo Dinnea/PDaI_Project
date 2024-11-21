@@ -22,6 +22,16 @@ private:
 	UPROPERTY()
 	UCharacterMovementComponent* charMovement;
 
+	UPROPERTY(EditAnywhere)
+	float HP;
+
+	virtual float TakeDamage(
+		float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser
+	) override;
+
 public:
 	// Sets default values for this character's properties
 	AHnS_Character();
@@ -33,6 +43,7 @@ protected:
 
 	void SetupMesh();
 	void SetupMovement();
+	void CreateWeapon();
 
 	UPROPERTY(EditAnywhere);
 	UChildActorComponent* Weapon;
