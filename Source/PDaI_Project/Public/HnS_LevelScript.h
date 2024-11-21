@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Engine/LevelScriptActor.h"
-#include "EnemySpawners.h"
 #include "PDaI_Project/HnS_BaseEnemy.h"
 #include "HnS_LevelScript.generated.h"
 
@@ -24,8 +23,7 @@ class PDAI_PROJECT_API AHnS_LevelScript : public ALevelScriptActor
 	}
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Spawning", meta = ( AllowPrivateAccess = "true"))
-	AEnemySpawners* spawners;
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Spawning", meta = ( AllowPrivateAccess = "true")
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Spawning", meta = (AllowPrivateAccess = "true"))
 	TArray<AHnS_BaseEnemy*> enemies;
