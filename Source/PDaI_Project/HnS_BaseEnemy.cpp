@@ -5,6 +5,7 @@
 
 AHnS_BaseEnemy::AHnS_BaseEnemy()
 {
+	this->SpawnCollisionHandlingMethod = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
 	PrimaryActorTick.bCanEverTick = true;
 	SetupMesh();
 	SetupMovement();

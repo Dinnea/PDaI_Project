@@ -25,10 +25,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	AHnS_BaseEnemy* SpawnAtLocation(TSubclassOf<AHnS_BaseEnemy> enemyToSpawn, FVector location, FRotator rotation = FRotator(0.f, 0.f, 0.f));
 
-	//UFUNCTION(BlueprintCallable)
-	//FVector GetRandomLocation(float radius);
-	//UFUNCTION(BlueprintCallable)
-	//AHnS_BaseEnemy* SpawnAtRandomLocation(TSubclassOf<AHnS_BaseEnemy> enemyToSpawn, float radius);
+	UFUNCTION(BlueprintCallable)
+	FVector GetRandomLocation(float radius);
+	UFUNCTION(BlueprintCallable)
+	AHnS_BaseEnemy* SpawnAtRandomLocation(TSubclassOf<AHnS_BaseEnemy> enemyToSpawn, float radius);
 
 protected:
 	virtual void BeginPlay() override;

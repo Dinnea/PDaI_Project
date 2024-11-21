@@ -5,7 +5,9 @@
 #include "CoreMinimal.h"
 #include "Engine/LevelScriptActor.h"
 #include "PDaI_Project/HnS_BaseEnemy.h"
+#include <EnemySpawner.h>
 #include "HnS_LevelScript.generated.h"
+
 
 
 /**
@@ -15,16 +17,13 @@ UCLASS()
 class PDAI_PROJECT_API AHnS_LevelScript : public ALevelScriptActor
 {
 	GENERATED_BODY()
-	UFUNCTION(BlueprintCallable, Category = LevelBlueprint)
-	void TEST()
-	{
-		check(GEngine != nullptr);
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Testing level blueprint."));
-	}
+	UFUNCTION(BlueprintCallable, Category = "Enemy Spawning")
+	void MassEnemySpawn(TSubclassOf<AHnS_BaseEnemy> enemy, AEnemySpawner* spawner, float number, float radius);
+
 
 protected:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Spawning", meta = ( AllowPrivateAccess = "true")
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Spawning", meta = (AllowPrivateAccess = "true"))
-	TArray<AHnS_BaseEnemy*> enemies;
+	TArray<TSubclassOf<AEnemySpawner>> spawners;
 };

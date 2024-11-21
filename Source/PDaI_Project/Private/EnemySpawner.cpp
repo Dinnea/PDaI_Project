@@ -37,19 +37,19 @@ AHnS_BaseEnemy* AEnemySpawner::SpawnAtSpawnerLocation(TSubclassOf<AHnS_BaseEnemy
 	return SpawnAtLocation(enemyToSpawn, this->GetActorLocation(), this->GetActorRotation());
 }
 
-//AHnS_BaseEnemy* AEnemySpawner::SpawnAtRandomLocation(TSubclassOf<AHnS_BaseEnemy> enemyToSpawn, float radius)
-//{
-//	FNavLocation location;
-//	if (UNavigationSystemV1* const navSystem = UNavigationSystemV1::GetCurrent(GetWorld()))
-//	{
-//		navSystem->GetRandomPointInNavigableRadius(this->GetActorLocation(), radius, location);
-//	}
-//	check(GEngine != nullptr);
-//	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::SanitizeFloat(location.Location.X) + ", " +
-//															FString::SanitizeFloat(location.Location.Y) + ", " +
-//															FString::SanitizeFloat(location.Location.Z));
-//	return SpawnAtLocation(enemyToSpawn, location.Location, this->GetActorRotation());
-//}
+AHnS_BaseEnemy* AEnemySpawner::SpawnAtRandomLocation(TSubclassOf<AHnS_BaseEnemy> enemyToSpawn, float radius)
+{
+	FNavLocation location;
+ 	if (UNavigationSystemV1* const navSystem = UNavigationSystemV1::GetCurrent(GetWorld()))
+	{
+		navSystem->GetRandomPointInNavigableRadius(this->GetActorLocation(), radius, location);
+	}
+	check(GEngine != nullptr);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::SanitizeFloat(location.Location.X) + ", " +
+															FString::SanitizeFloat(location.Location.Y) + ", " +
+															FString::SanitizeFloat(location.Location.Z));
+	return SpawnAtLocation(enemyToSpawn, location.Location, this->GetActorRotation());
+}
 
 AHnS_BaseEnemy* AEnemySpawner::SpawnAtLocation(TSubclassOf<AHnS_BaseEnemy> enemyToSpawn, FVector location, FRotator rotation)
 {
@@ -57,15 +57,15 @@ AHnS_BaseEnemy* AEnemySpawner::SpawnAtLocation(TSubclassOf<AHnS_BaseEnemy> enemy
 	return spawnedEnemy;
 }
 
-//FVector AEnemySpawner::GetRandomLocation(float radius)
-//{
-//	FNavLocation location;
-//	if (UNavigationSystemV1* const navSystem = UNavigationSystemV1::GetCurrent(GetWorld()))
-//	{
-//		navSystem->GetRandomPointInNavigableRadius(this->GetActorLocation(), radius, location);
-//	}
-//
-//	return location.Location;
-//}
+FVector AEnemySpawner::GetRandomLocation(float radius)
+{
+	FNavLocation location;
+	if (UNavigationSystemV1* const navSystem = UNavigationSystemV1::GetCurrent(GetWorld()))
+	{
+		navSystem->GetRandomPointInNavigableRadius(this->GetActorLocation(), radius, location);
+	}
+
+	return location.Location;
+}
 
 
