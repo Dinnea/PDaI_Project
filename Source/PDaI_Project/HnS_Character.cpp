@@ -67,7 +67,7 @@ AActor* AHnS_Character::ShootBullet()
 {
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = this;
-	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation(),GetActorRotation());
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation() /*+ FVector(50, 30, 0) */, GetActorRotation());
 
 	if (GEngine)
 	{

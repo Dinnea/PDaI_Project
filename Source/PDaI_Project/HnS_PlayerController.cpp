@@ -23,7 +23,7 @@ AHnS_PlayerController::AHnS_PlayerController()
 void AHnS_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, GetPawn()->GetFName().ToString());
 	PlayerCharacter = Cast<AHnS_Character>(GetPawn());
 }
 
@@ -60,6 +60,7 @@ void AHnS_PlayerController::OnInputStarted()
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
+	GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 	followTime += GetWorld()->GetDeltaSeconds();
 	FHitResult hit;
 	bool hitSuccessful = false;
@@ -117,8 +118,8 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this,&AHnS_PlayerController::setCanFire,true);
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, timeBetweenFires, false);
-		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
-		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
+		//GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+		//GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 	}
 }
 

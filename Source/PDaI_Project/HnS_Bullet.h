@@ -29,6 +29,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class UProjectileMovementComponent* ProjectileMovement;
 
+	UFUNCTION()
+	void BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor,
+		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
+		const FHitResult& SweepResult);
+
+	virtual void BulletHit();
+
+	UPROPERTY(EditDefaultsOnly)
+	class UNiagaraSystem* impactParticles;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

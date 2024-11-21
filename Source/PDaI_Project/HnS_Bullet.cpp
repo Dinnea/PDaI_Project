@@ -1,3 +1,5 @@
+#include "HnS_Bullet.h"
+#include "HnS_Bullet.h"
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
@@ -5,6 +7,8 @@
 #include "Components/SphereComponent.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 AHnS_Bullet::AHnS_Bullet()
@@ -28,7 +32,22 @@ AHnS_Bullet::AHnS_Bullet()
 void AHnS_Bullet::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_Bullet::BeginOverlap);
+}
+
+void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor->GetFName().ToString() != "BP_HnS_PlayerChar_C_0")
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, impactParticles, GetActorLocation());
+		BulletHit();
+		Destroy();
+	}
+}
+
+void AHnS_Bullet::BulletHit()
+{
 }
 
 // Called every frame
