@@ -14,7 +14,6 @@
 AHnS_PlayerController::AHnS_PlayerController()
 {
 	this->bShowMouseCursor = true;
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	this->cachedDest = FVector::ZeroVector;
 	followTime = 0;
 	this->cachedDest_attack = FVector::ZeroVector;

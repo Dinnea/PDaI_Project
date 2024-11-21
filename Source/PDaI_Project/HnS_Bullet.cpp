@@ -4,6 +4,7 @@
 
 
 #include "HnS_Bullet.h"
+#include "HnS_Character.h"
 #include "Components/SphereComponent.h"
 #include "NiagaraComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
@@ -58,6 +59,10 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, PlayerC->GetPawn()->GetFName().ToString());
 		UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
 		Destroy();
+	}
+	if (Cast<AHnS_Character>(OtherActor)->HP <= 0)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, deathImpactParticles, GetActorLocation());
 	}
 }
 

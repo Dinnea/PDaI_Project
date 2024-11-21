@@ -33,11 +33,13 @@ protected:
 	void BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
-
 	virtual void BulletHit();
 
 	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* impactParticles;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UNiagaraSystem* deathImpactParticles;
 
 	UPROPERTY(EditDefaultsOnly)
 	float BaseDamage;

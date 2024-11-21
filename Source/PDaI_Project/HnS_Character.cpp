@@ -54,8 +54,9 @@ AHnS_Character::AHnS_Character()
 void AHnS_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	//check(GEngine != nullptr);
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));
+	check(GEngine != nullptr);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));
+	MaxHP = HP;
 	// Display a debug message for five seconds. 
 	// The -1 "Key" value argument prevents the message from being updated or refreshed.
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));

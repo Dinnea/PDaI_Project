@@ -22,8 +22,6 @@ private:
 	UPROPERTY()
 	UCharacterMovementComponent* charMovement;
 
-	UPROPERTY(EditAnywhere)
-	float HP;
 
 	virtual float TakeDamage(
 		float DamageAmount,
@@ -34,6 +32,12 @@ private:
 
 public:
 	// Sets default values for this character's properties
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxHP;
+
 	AHnS_Character();
 	AActor* ShootBullet();
 
