@@ -82,6 +82,7 @@ void AHnS_PlayerController::OnSetDestinationReleased()
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(followTime));
 	if (followTime <= shortPressThreshold)
 	{
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Navigation movement debug"));
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
 	}
 	followTime = 0.f;

@@ -4,6 +4,8 @@
 #include "HnS_Character.h"
 #include "HnS_Weapon.h"
 #include "HnS_Bullet.h"
+#include "Components/WidgetComponent.h"
+#include "HealthBarWidget.h"
 
 void AHnS_Character::SetupMesh()
 {
@@ -44,6 +46,20 @@ AHnS_Character::AHnS_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	SetupMovement();
+	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthValue"));
+	if (WidgetComponent)
+	{
+		WidgetComponent->SetupAttachment(RootComponent);
+		WidgetComponent->SetWidgetSpace(EWidgetSpace::World);
+		WidgetComponent->SetRelativeLocation(FVector(0.f, 0.f, 125.f)); //Attach healthbar (from widget) above players/enemies head
+		WidgetComponent->SetRelativeRotation(FRotator(180.f, 75.f, 180.f));
+		static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass{ TEXT("/Game/WBP_NPCHealthBar") }; //Choose blueprint to attach the healthbar from
+		if (WidgetClass.Succeeded())
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Purple, TEXT("WidgetClass succedeed"));
+			WidgetComponent->SetWidgetClass((WidgetClass.Class));
+		}
+	}
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
@@ -72,6 +88,10 @@ void AHnS_Character::BeginPlay()
 void AHnS_Character::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (auto const widget = Cast<UHealthBarWidget>(WidgetComponent->GetUserWidgetObject()))
+	{
+		widget->SetBarValuePercent(HP/MaxHP);
+	}
 
 }
 

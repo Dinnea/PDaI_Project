@@ -29,6 +29,8 @@ private:
 		AController* EventInstigator,
 		AActor* DamageCauser
 	) override;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,meta = (AllowPrivateAccess="true"))
+	class UWidgetComponent* WidgetComponent;
 
 public:
 	// Sets default values for this character's properties
