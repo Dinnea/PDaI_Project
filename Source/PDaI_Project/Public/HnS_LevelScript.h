@@ -20,13 +20,17 @@ class PDAI_PROJECT_API AHnS_LevelScript : public ALevelScriptActor
 	UFUNCTION(BlueprintCallable, Category = "Enemy Spawning")
 	void MassEnemySpawn(TSubclassOf<AHnS_BaseEnemy> enemy, AEnemySpawner* spawner, float number, float radius);
 
+	UFUNCTION(BlueprintCallable, Category = "Enemy Spawning")
 	void SpecificEnemySpawn(TArray<TSubclassOf<AHnS_BaseEnemy>> enemyList, AEnemySpawner* spawner, float radius);
 
-	void MassSpawnTimer(TSubclassOf<AHnS_BaseEnemy> enemy, AEnemySpawner* spawner, float number, float radius, float spawnDelay);
+	UFUNCTION(BlueprintCallable, Category = "Enemy Spawning")
+	void MassSpawnTimer(TSubclassOf<AHnS_BaseEnemy> enemy, AEnemySpawner* spawner, float number, float radius, float spawnInterval);
+
+	UFUNCTION(BlueprintCallable, Category = "Enemy Spawning")
+	void SpecificSpawnTimer(TArray<TSubclassOf<AHnS_BaseEnemy>> enemyList, AEnemySpawner* spawner, float number, float radius, float spawnInterval);
 
 
 protected:
-	//UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Spawning", meta = ( AllowPrivateAccess = "true")
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Enemy Spawning", meta = (AllowPrivateAccess = "true"))
 	TArray<TSubclassOf<AEnemySpawner>> spawners;
