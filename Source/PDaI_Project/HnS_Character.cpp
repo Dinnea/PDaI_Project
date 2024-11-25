@@ -5,6 +5,7 @@
 #include "HnS_Weapon.h"
 #include "HnS_Bullet.h"
 #include "Components/WidgetComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 #include "HealthBarWidget.h"
 
 void AHnS_Character::SetupMesh()
@@ -46,10 +47,16 @@ AHnS_Character::AHnS_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	SetupMovement();
+	springArm1 = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm 1"));
+	springArm1->SetupAttachment(RootComponent);
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthValue"));
 	if (WidgetComponent)
 	{
-		WidgetComponent->SetupAttachment(RootComponent);
+		WidgetComponent->SetupAttachment(springArm1, TEXT("Spring Arm"));
+		springArm1->bUsePawnControlRotation = false;
+		springArm1->TargetArmLength = 10.f;
+		springArm1->SetUsingAbsoluteRotation(true);
+		//WidgetComponent->SetAbsolute(false, false, false);
 		WidgetComponent->SetWidgetSpace(EWidgetSpace::World);
 		WidgetComponent->SetRelativeLocation(FVector(0.f, 0.f, 125.f)); //Attach healthbar (from widget) above players/enemies head
 		WidgetComponent->SetRelativeRotation(FRotator(180.f, 75.f, 180.f));

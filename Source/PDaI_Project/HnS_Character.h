@@ -32,6 +32,9 @@ private:
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,meta = (AllowPrivateAccess="true"))
 	class UWidgetComponent* WidgetComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "HPBar", meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* springArm1;
+
 public:
 	// Sets default values for this character's properties
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -53,6 +56,7 @@ protected:
 
 	UPROPERTY(EditAnywhere);
 	UChildActorComponent* Weapon;
+
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;

@@ -35,6 +35,9 @@ void AHnS_Bullet::BeginPlay()
 {
 	Super::BeginPlay();
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_Bullet::BeginOverlap);
+	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Bullet::bulletDestroy, true);
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, timeToDestroy, false);
 }
 
 void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -60,14 +63,22 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 		UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
 		Destroy();
 	}
-	if (Cast<AHnS_Character>(OtherActor)->HP <= 0)
+	if (AHnS_Character* tempCharacter = Cast<AHnS_Character>(OtherActor))
 	{
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, deathImpactParticles, GetActorLocation());
+		if (tempCharacter->HP <= 0)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, deathImpactParticles, GetActorLocation());
+		}
 	}
 }
 
 void AHnS_Bullet::BulletHit()
 {
+}
+
+void AHnS_Bullet::bulletDestroy(bool Value)
+{
+	Destroy();
 }
 
 // Called every frame
