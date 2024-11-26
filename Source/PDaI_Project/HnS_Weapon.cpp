@@ -22,10 +22,10 @@ AActor* AHnS_Weapon::Attack()
 	SpawnParams.Instigator = Player;
 	SpawnParams.Owner = this;
 	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn, spawnLocation->GetComponentLocation() + FVector(0, 0, 0), Player->GetActorRotation(), SpawnParams);
-	if (GEngine)
+	/*if (GEngine)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack debug"));
-	}
+	}*/
 
 	return SpawnedActor;
 }

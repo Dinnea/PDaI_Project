@@ -34,13 +34,13 @@ void AHnS_LevelScript::MassSpawnTimer(TSubclassOf<AHnS_BaseEnemy> enemy, AEnemyS
 	GetWorld()->GetTimerManager().SetTimer(spawnTimer, spawnerDelegate, spawnInterval, true); //will spawn enemies constantly
 }
 
-void AHnS_LevelScript::SpecificSpawnTimer(TArray<TSubclassOf<AHnS_BaseEnemy>> enemyList, AEnemySpawner* spawner, float number, float radius, float spawnInterval)
+void AHnS_LevelScript::SpecificSpawnTimer(TArray<TSubclassOf<AHnS_BaseEnemy>> enemyList, AEnemySpawner* spawner, float radius, float spawnInterval)
 {
 	FTimerHandle spawnTimer;
 
 	FTimerDelegate spawnerDelegate;
 
-	spawnerDelegate.BindUFunction(this, "SpecificEnemySpawn", enemyList, spawner, number, radius);
+	spawnerDelegate.BindUFunction(this, "SpecificEnemySpawn", enemyList, spawner, radius);
 
 	GetWorld()->GetTimerManager().SetTimer(spawnTimer, spawnerDelegate, spawnInterval, true); //will spawn enemies constantly
 }
