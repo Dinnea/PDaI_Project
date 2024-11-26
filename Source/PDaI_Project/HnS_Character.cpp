@@ -77,16 +77,13 @@ AHnS_Character::AHnS_Character()
 void AHnS_Character::BeginPlay()
 {
 	Super::BeginPlay();
-	check(GEngine != nullptr);
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));
+	/*check(GEngine != nullptr);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));*/
 	MaxHP = HP;
-	// Display a debug message for five seconds. 
-	// The -1 "Key" value argument prevents the message from being updated or refreshed.
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));
-	AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor());
-	if(weaponPtr)
+	if(auto* const weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor()))
 	{
 		weaponPtr->SetPlayerPointer(this);
+		weaponPtr->SetProjectileSpawnLocation(SpawnLocation);
 	}
 	
 }
@@ -109,18 +106,21 @@ void AHnS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 }
 
+USceneComponent* AHnS_Character::GetProjectileSpawnLocation()
+{
+	return SpawnLocation;
+}
+
 AActor* AHnS_Character::ShootBullet()
 {
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Instigator = this;
-	SpawnParams.Owner = this;
-	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation() + FVector(0, 0, 0) , GetActorRotation(), SpawnParams);
+	//FActorSpawnParameters SpawnParams;
+	//SpawnParams.Instigator = this;
+	//SpawnParams.Owner = this;
+	//AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation() + FVector(0, 0, 0) , GetActorRotation(), SpawnParams);
 
-	if (GEngine)
-	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
-	}
+	AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor());
+	return weaponPtr->Attack();
 
-	return SpawnedActor;
+	//return SpawnedActor;
 }
 

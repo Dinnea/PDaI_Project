@@ -16,6 +16,9 @@ public:
 	// Sets default values for this actor's properties
 	AHnS_Weapon();
 	void SetPlayerPointer(ACharacter* PlayerPointer);
+	void SetProjectileSpawnLocation(USceneComponent* pSpawnLocation);
+	UFUNCTION(BlueprintCallable)
+	AActor* Attack();
 
 	//UPROPERTY(EditDefaultsOnly)
 	//float damage;
@@ -27,13 +30,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	float Damage;
 
-	UFUNCTION(BlueprintCallable)
-	void WeaponShoot();
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<AHnS_Bullet> BulletToSpawn;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* WeaponMesh;
 
 	ACharacter* Player;
+
+	UPROPERTY()
+	USceneComponent* spawnLocation;
 
 public:	
 	// Called every frame

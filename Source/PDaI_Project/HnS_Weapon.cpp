@@ -4,6 +4,8 @@
 #include "HnS_Weapon.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
+#include "HnS_Bullet.h"
+#include "Hns_CharacterPlayer.h"
 
 // Sets default values
 AHnS_Weapon::AHnS_Weapon()
@@ -14,8 +16,18 @@ AHnS_Weapon::AHnS_Weapon()
 
 }
 
-void AHnS_Weapon::WeaponShoot()
+AActor* AHnS_Weapon::Attack()
 {
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Instigator = Player;
+	SpawnParams.Owner = this;
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn, spawnLocation->GetComponentLocation() + FVector(0, 0, 0), Player->GetActorRotation(), SpawnParams);
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack debug"));
+	}
+
+	return SpawnedActor;
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +42,11 @@ void AHnS_Weapon::BeginPlay()
 void AHnS_Weapon::SetPlayerPointer(ACharacter *PlayerPointer)
 {
 	Player = PlayerPointer;
+}
+
+void AHnS_Weapon::SetProjectileSpawnLocation(USceneComponent* pSpawnLocation)
+{
+	this->spawnLocation = pSpawnLocation;
 }
 
 

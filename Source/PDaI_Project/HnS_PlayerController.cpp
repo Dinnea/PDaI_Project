@@ -22,7 +22,7 @@ AHnS_PlayerController::AHnS_PlayerController()
 void AHnS_PlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, GetPawn()->GetFName().ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, GetPawn()->GetFName().ToString());
 	PlayerCharacter = Cast<AHnS_Character>(GetPawn());
 }
 
@@ -98,7 +98,7 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 	if (attackHitSuccessful) {
 		cachedDest_attack = attackHit.Location;
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
 	if (PlayerCharacter && canFire)
 	{
 		//FVector direction = FVector(value.Get<FVector2D>(), 0);
@@ -110,7 +110,7 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 		FRotator PlayerRotation = UKismetMathLibrary::FindLookAtRotation(CursorLocation, PlayerLoc);
 		FRotator newPlayerRotation = FRotator(ludek->GetActorRotation().Pitch, PlayerRotation.Yaw - 180, ludek->GetActorRotation().Roll);
 		ludek->SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
 
 		PlayerCharacter->ShootBullet();
 		canFire = false;
