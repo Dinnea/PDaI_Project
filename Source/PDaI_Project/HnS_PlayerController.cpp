@@ -44,6 +44,7 @@ void AHnS_PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(setDestination, ETriggerEvent::Canceled, this, &AHnS_PlayerController::OnSetDestinationReleased);
 		//Setup basic attack input events
 		EnhancedInputComponent->BindAction(autoAttack, ETriggerEvent::Started, this, &AHnS_PlayerController::autoAttackBullet);
+		EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
 	}
 	else
 	{
@@ -114,5 +115,27 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 		PlayerCharacter->AutoAttack();
 
 	}
+}
+
+void AHnS_PlayerController::q_ability(const FInputActionValue& value)
+{
+	if (canRoll)
+	{
+		PlayerCharacter->roll();
+	}
+	canRoll = false;
+	FTimerDelegate qDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastQ, true);
+	FTimerHandle qTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(qTimerHandle, qDelegate, QCooldown, false);
+}
+
+void AHnS_PlayerController::setCanFire(bool Value)
+{
+	canFire = true;
+}
+
+void AHnS_PlayerController::setCanCastQ(bool Value)
+{
+	canRoll = true;
 }
 

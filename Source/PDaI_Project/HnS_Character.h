@@ -43,7 +43,11 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxHP;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool playRollAnimation = false;
+
 	AHnS_Character();
+	float roll();
 	AActor* AutoAttack();
 
 protected:
