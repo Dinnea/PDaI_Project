@@ -137,4 +137,13 @@ void AHnS_Character::TestAbility()
 {
 	if(AHnS_Ability* abilityPtr = Cast<AHnS_Ability>(testAbility->GetChildActor())) abilityPtr->Execute();
 }
+float AHnS_Character::roll()
+{
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+		playRollAnimation = true;
+	}
+	return 0.0f;
+}
 

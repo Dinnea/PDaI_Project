@@ -34,6 +34,9 @@ public:
 	class UInputAction* autoAttack;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* QAbility;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ability1;
 	
 protected:
@@ -46,10 +49,23 @@ protected:
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
 	void autoAttackBullet(const FInputActionValue &value);
+	void q_ability(const FInputActionValue& value);
 	void OnAbility1();
 
 	class AHnS_Character* PlayerCharacter;
 
+
+	UPROPERTY(BlueprintReadOnly)
+	bool canRoll = true;
+
+	UPROPERTY(EditAnywhere)
+	float timeBetweenFires = 0.7f;
+
+	UPROPERTY(EditAnywhere)
+	float QCooldown = 8.f;
+
+	void setCanFire(bool Value);
+	void setCanCastQ(bool Value);
 
 private:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
