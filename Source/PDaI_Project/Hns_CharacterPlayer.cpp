@@ -37,6 +37,7 @@ AHns_CharacterPlayer::AHns_CharacterPlayer()
 	SetupMovement();
 	SetupCamera();
 	SetupStimulusSouce();
+	//CreateWeapon();
 }
 
 void AHns_CharacterPlayer::BeginPlay()

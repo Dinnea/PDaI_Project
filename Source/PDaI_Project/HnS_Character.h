@@ -22,8 +22,27 @@ private:
 	UPROPERTY()
 	UCharacterMovementComponent* charMovement;
 
+
+	virtual float TakeDamage(
+		float DamageAmount,
+		struct FDamageEvent const& DamageEvent,
+		AController* EventInstigator,
+		AActor* DamageCauser
+	) override;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,meta = (AllowPrivateAccess="true"))
+	class UWidgetComponent* WidgetComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "HPBar", meta = (AllowPrivateAccess = "true"))
+	USpringArmComponent* springArm1;
+
 public:
 	// Sets default values for this character's properties
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float HP;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float MaxHP;
+
 	AHnS_Character();
 	AActor* ShootBullet();
 
@@ -33,9 +52,11 @@ protected:
 
 	void SetupMesh();
 	void SetupMovement();
+	void CreateWeapon();
 
 	UPROPERTY(EditAnywhere);
 	UChildActorComponent* Weapon;
+
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;

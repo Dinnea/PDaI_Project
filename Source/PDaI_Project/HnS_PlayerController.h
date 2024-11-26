@@ -53,6 +53,7 @@ protected:
 	void setCanFire(bool Value);
 
 private:
+	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector cachedDest;
 	FVector cachedDest_attack;
 	float followTime;
