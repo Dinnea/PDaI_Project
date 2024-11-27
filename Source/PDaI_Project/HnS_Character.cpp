@@ -111,16 +111,15 @@ USceneComponent* AHnS_Character::GetProjectileSpawnLocation()
 	return SpawnLocation;
 }
 
-AActor* AHnS_Character::ShootBullet()
+AActor* AHnS_Character::AutoAttack()
 {
 	//FActorSpawnParameters SpawnParams;
 	//SpawnParams.Instigator = this;
 	//SpawnParams.Owner = this;
 	//AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation() + FVector(0, 0, 0) , GetActorRotation(), SpawnParams);
 
-	AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor());
-	return weaponPtr->Attack();
+	if (AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor())) return weaponPtr->Attack();
 
-	//return SpawnedActor;
+	return nullptr;
 }
 

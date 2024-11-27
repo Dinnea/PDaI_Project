@@ -112,7 +112,7 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 		ludek->SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
 
-		PlayerCharacter->ShootBullet();
+		PlayerCharacter->AutoAttack();
 		canFire = false;
 
 		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this,&AHnS_PlayerController::setCanFire,true);

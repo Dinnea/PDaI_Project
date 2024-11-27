@@ -44,7 +44,7 @@ public:
 	float MaxHP;
 
 	AHnS_Character();
-	AActor* ShootBullet();
+	AActor* AutoAttack();
 
 protected:
 	// Called when the game starts or when spawned
