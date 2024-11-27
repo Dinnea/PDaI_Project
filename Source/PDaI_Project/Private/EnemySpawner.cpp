@@ -44,10 +44,10 @@ AHnS_BaseEnemy* AEnemySpawner::SpawnAtRandomLocation(TSubclassOf<AHnS_BaseEnemy>
 	{
 		navSystem->GetRandomPointInNavigableRadius(this->GetActorLocation(), radius, location);
 	}
-	check(GEngine != nullptr);
+	/*check(GEngine != nullptr);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::SanitizeFloat(location.Location.X) + ", " +
 															FString::SanitizeFloat(location.Location.Y) + ", " +
-															FString::SanitizeFloat(location.Location.Z));
+															FString::SanitizeFloat(location.Location.Z));*/
 	return SpawnAtLocation(enemyToSpawn, location.Location, this->GetActorRotation());
 }
 

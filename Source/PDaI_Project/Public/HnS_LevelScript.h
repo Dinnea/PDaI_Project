@@ -27,7 +27,7 @@ class PDAI_PROJECT_API AHnS_LevelScript : public ALevelScriptActor
 	void MassSpawnTimer(TSubclassOf<AHnS_BaseEnemy> enemy, AEnemySpawner* spawner, float number, float radius, float spawnInterval);
 
 	UFUNCTION(BlueprintCallable, Category = "Enemy Spawning")
-	void SpecificSpawnTimer(TArray<TSubclassOf<AHnS_BaseEnemy>> enemyList, AEnemySpawner* spawner, float number, float radius, float spawnInterval);
+	void SpecificSpawnTimer(TArray<TSubclassOf<AHnS_BaseEnemy>> enemyList, AEnemySpawner* spawner, float radius, float spawnInterval);
 
 
 protected:

@@ -4,6 +4,8 @@
 #include "HnS_Weapon.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
+#include "HnS_Bullet.h"
+#include "Hns_CharacterPlayer.h"
 
 // Sets default values
 AHnS_Weapon::AHnS_Weapon()
@@ -14,8 +16,34 @@ AHnS_Weapon::AHnS_Weapon()
 
 }
 
-void AHnS_Weapon::WeaponShoot()
+void AHnS_Weapon::SetReady(bool value)
 {
+	ready = value;
+}
+
+AActor* AHnS_Weapon::Attack()
+{
+	if (ready) 
+	{
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Instigator = Player;
+		SpawnParams.Owner = this;
+		AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn, spawnLocation->GetComponentLocation() + FVector(0, 0, 0), Player->GetActorRotation(), SpawnParams);
+		/*if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack debug"));
+		}*/
+
+		SetReady(false);
+
+		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Weapon::SetReady, true);
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, cooldown, false);
+
+		return SpawnedActor;
+	}
+	return nullptr;
 }
 
 // Called when the game starts or when spawned
@@ -30,6 +58,11 @@ void AHnS_Weapon::BeginPlay()
 void AHnS_Weapon::SetPlayerPointer(ACharacter *PlayerPointer)
 {
 	Player = PlayerPointer;
+}
+
+void AHnS_Weapon::SetProjectileSpawnLocation(USceneComponent* pSpawnLocation)
+{
+	this->spawnLocation = pSpawnLocation;
 }
 
 

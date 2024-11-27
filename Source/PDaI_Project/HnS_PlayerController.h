@@ -45,12 +45,6 @@ protected:
 
 	class AHnS_Character* PlayerCharacter;
 
-	bool canFire = true;
-
-	UPROPERTY(EditAnywhere)
-	float timeBetweenFires = 0.7f;
-
-	void setCanFire(bool Value);
 
 private:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
