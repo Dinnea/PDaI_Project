@@ -17,6 +17,8 @@ public:
 	AHnS_Weapon();
 	void SetPlayerPointer(ACharacter* PlayerPointer);
 	void SetProjectileSpawnLocation(USceneComponent* pSpawnLocation);
+
+	void SetReady(bool value);
 	UFUNCTION(BlueprintCallable)
 	AActor* Attack();
 
@@ -27,10 +29,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
-	float Damage;
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly, Category = "Stats")
+	float Damage = 0;
 
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
+	float cooldown = 5;
+
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
 	TSubclassOf<AHnS_Bullet> BulletToSpawn;
 
 	UPROPERTY(EditAnywhere)
@@ -40,6 +46,10 @@ protected:
 
 	UPROPERTY()
 	USceneComponent* spawnLocation;
+
+private:
+	bool ready = true;
+	
 
 public:	
 	// Called every frame

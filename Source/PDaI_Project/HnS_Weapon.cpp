@@ -16,18 +16,34 @@ AHnS_Weapon::AHnS_Weapon()
 
 }
 
+void AHnS_Weapon::SetReady(bool value)
+{
+	ready = value;
+}
+
 AActor* AHnS_Weapon::Attack()
 {
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Instigator = Player;
-	SpawnParams.Owner = this;
-	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn, spawnLocation->GetComponentLocation() + FVector(0, 0, 0), Player->GetActorRotation(), SpawnParams);
-	/*if (GEngine)
+	if (ready) 
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack debug"));
-	}*/
 
-	return SpawnedActor;
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Instigator = Player;
+		SpawnParams.Owner = this;
+		AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn, spawnLocation->GetComponentLocation() + FVector(0, 0, 0), Player->GetActorRotation(), SpawnParams);
+		/*if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Attack debug"));
+		}*/
+
+		SetReady(false);
+
+		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Weapon::SetReady, true);
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, cooldown, false);
+
+		return SpawnedActor;
+	}
+	return nullptr;
 }
 
 // Called when the game starts or when spawned
