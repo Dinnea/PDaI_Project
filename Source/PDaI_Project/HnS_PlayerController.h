@@ -51,9 +51,12 @@ protected:
 	void autoAttackBullet(const FInputActionValue &value);
 	void q_ability(const FInputActionValue& value);
 	void OnAbility1();
+	void enableMovement();
 
 	class AHnS_Character* PlayerCharacter;
 
+
+	bool isRolling = false;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool canRoll = true;
@@ -63,6 +66,9 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	float QCooldown = 8.f;
+
+	UPROPERTY(EditAnywhere)
+	float rollingTime;
 
 	void setCanFire(bool Value);
 	void setCanCastQ(bool Value);
