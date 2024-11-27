@@ -59,22 +59,25 @@ void AHnS_PlayerController::OnInputStarted()
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
-	GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
-	followTime += GetWorld()->GetDeltaSeconds();
-	FHitResult hit;
-	bool hitSuccessful = false;
+	if (!isRolling)
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
+		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
+		followTime += GetWorld()->GetDeltaSeconds();
+		FHitResult hit;
+		bool hitSuccessful = false;
 
-	hitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, hit);
+		hitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, hit);
 
-	if (hitSuccessful) {
-		cachedDest = hit.Location;
-	}
+		if (hitSuccessful) {
+			cachedDest = hit.Location;
+		}
 
-	APawn* controlledPawn = GetPawn();
-	if (controlledPawn != nullptr) {
-		FVector direction = (cachedDest - controlledPawn->GetActorLocation()).GetSafeNormal();
-		controlledPawn->AddMovementInput(direction, 1.0, false);
+		APawn* controlledPawn = GetPawn();
+		if (controlledPawn != nullptr) {
+			FVector direction = (cachedDest - controlledPawn->GetActorLocation()).GetSafeNormal();
+			controlledPawn->AddMovementInput(direction, 1.0, false);
+		}
 	}
 }
 
@@ -104,13 +107,16 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 	{
 
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
-		APawn* instigatorPawn = GetPawn();
-		FVector PlayerLoc = instigatorPawn->GetActorLocation();
+		/*
+		APawn* ludek = GetPawn();
+		FVector PlayerLoc = ludek->GetActorLocation();
 		FVector CursorLocation = cachedDest_attack;
 		FRotator PlayerRotation = UKismetMathLibrary::FindLookAtRotation(CursorLocation, PlayerLoc);
-		FRotator newPlayerRotation = FRotator(instigatorPawn->GetActorRotation().Pitch, PlayerRotation.Yaw - 180, instigatorPawn->GetActorRotation().Roll);
-		instigatorPawn->SetActorRotation(newPlayerRotation);
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
+		FRotator newPlayerRotation = FRotator(ludek->GetActorRotation().Pitch, PlayerRotation.Yaw - 180, ludek->GetActorRotation().Roll);
+		ludek->SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
+		*/
+		PlayerCharacter->rotatePlayer(cachedDest_attack);
 
 		PlayerCharacter->AutoAttack();
 
@@ -121,12 +127,28 @@ void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 {
 	if (canRoll)
 	{
+		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());
+		isRolling = true;
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());
+		cachedDest = PlayerCharacter->GetActorLocation();
+		//StopMovement();
+		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::enableMovement);
+		FTimerHandle mTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, rollingTime, false);
 		PlayerCharacter->roll();
+		if (!isRolling)
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("false"));
 	}
 	canRoll = false;
 	FTimerDelegate qDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastQ, true);
 	FTimerHandle qTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(qTimerHandle, qDelegate, QCooldown, false);
+}
+
+void AHnS_PlayerController::enableMovement()
+{
+	isRolling = false;
+	PlayerCharacter->updateRoll();
 }
 
 void AHnS_PlayerController::setCanFire(bool Value)

@@ -46,9 +46,19 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool playRollAnimation = false;
 
+	float globalDeltaTime;
+	float Zpos;
+	FVector destVector;
+
+	FVector cachedDest_roll;
+
 	AHnS_Character();
 	float roll();
 	AActor* AutoAttack();
+
+	void updateRoll();
+
+	void rotatePlayer(FVector destination);
 
 protected:
 	// Called when the game starts or when spawned
@@ -57,6 +67,7 @@ protected:
 	void SetupMesh();
 	void SetupMovement();
 	void CreateWeapon();
+	void enableMovement();
 
 	UPROPERTY(EditAnywhere);
 	UChildActorComponent* Weapon;
@@ -67,6 +78,15 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<AHnS_Bullet> BulletToSpawn;
+
+	UPROPERTY(EditAnywhere, Category="Interp")
+	float WaitTime;
+
+	UPROPERTY(EditAnywhere, Category = "Interp")
+	float InterpSpeed;
+
+	UPROPERTY(EditAnywhere, Category = "Interp")
+	float Distance;
 
 public:	
 	// Called every frame
