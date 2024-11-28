@@ -190,9 +190,11 @@ float AHnS_Character::roll()
 	//destVector.X *= -1;
 	//rotVector = rotVector * -1;
 	playRollAnimation = true;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+}
 	//GetCharacterMovement()->DisableMovement();
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(InterpSpeed));
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(cachedDest_roll.ToString()));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(InterpSpeed));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(cachedDest_roll.ToString()));
 	Zpos = GetActorLocation().Z;
 	//SetActorLocation(FVector(cachedDest_roll.X, cachedDest_roll.Y,Zpos));
 
