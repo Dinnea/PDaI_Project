@@ -86,27 +86,6 @@ AHnS_Character::AHnS_Character()
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	SetupMovement();
-	
-}
-
-
-float AHnS_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{
-	//DamageAmount = 10;
-	HP -= DamageAmount;
-	if (HP <= 0)
-	{
-		Destroy();
-	}
-	return DamageAmount;
-}
-
-// Sets default values
-AHnS_Character::AHnS_Character()
-{
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	SetupMovement();
 	SetupHPBar();
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));

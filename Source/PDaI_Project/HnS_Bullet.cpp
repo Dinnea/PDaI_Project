@@ -54,8 +54,7 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Instigator nullptr"));
 	}
 	AController* PlayerC = GetInstigator()->GetController(); //Instigator - Object which created the actor/event (player created bullet)
-	AHnS_Character* TargetPlayer;
-	if ((TargetPlayer = Cast<AHnS_Character>(OtherActor)))
+	if (AHnS_Character* const TargetPlayer = Cast<AHnS_Character>(OtherActor))
 	{
 		if (OtherActor != PlayerC->GetPawn() && !TargetPlayer->invulnerable)
 		{
