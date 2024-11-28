@@ -46,6 +46,8 @@ public:
 	AHnS_Character();
 	AActor* AutoAttack();
 
+	void TestAbility();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -53,16 +55,17 @@ protected:
 	void SetupMesh();
 	void SetupMovement();
 	void CreateWeapon();
+	void SetupHPBar();
 
-	UPROPERTY(EditAnywhere);
+	UPROPERTY(EditAnywhere, Category="Abilities");
 	UChildActorComponent* Weapon;
+
+	UPROPERTY(EditAnywhere, Category = "Abilities");
+	UChildActorComponent* testAbility;
 
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AHnS_Bullet> BulletToSpawn;
 
 public:	
 	// Called every frame

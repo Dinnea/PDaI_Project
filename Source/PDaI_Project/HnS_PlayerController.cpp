@@ -44,6 +44,10 @@ void AHnS_PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(setDestination, ETriggerEvent::Canceled, this, &AHnS_PlayerController::OnSetDestinationReleased);
 		//Setup basic attack input events
 		EnhancedInputComponent->BindAction(autoAttack, ETriggerEvent::Started, this, &AHnS_PlayerController::autoAttackBullet);
+		//ability input events
+		EnhancedInputComponent->BindAction(ability1, ETriggerEvent::Started, this, &AHnS_PlayerController::OnAbility1);
+
+
 	}
 	else
 	{
@@ -113,6 +117,15 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 
 		PlayerCharacter->AutoAttack();
 
+	}
+}
+
+void AHnS_PlayerController::OnAbility1()
+{
+	if (PlayerCharacter) 
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "AAAAA");
+		PlayerCharacter->TestAbility();
 	}
 }
 

@@ -26,11 +26,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* setDestination;
 
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
 	float shortPressThreshold;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* autoAttack;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* ability1;
 	
 protected:
 
@@ -42,6 +46,7 @@ protected:
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
 	void autoAttackBullet(const FInputActionValue &value);
+	void OnAbility1();
 
 	class AHnS_Character* PlayerCharacter;
 
