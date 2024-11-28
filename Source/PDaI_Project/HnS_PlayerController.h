@@ -52,11 +52,16 @@ protected:
 	void q_ability(const FInputActionValue& value);
 	void OnAbility1();
 	void enableMovement();
+	void setTimeBetweenFires();
 
 	class AHnS_Character* PlayerCharacter;
 
 
 	bool isRolling = false;
+
+	float prevTimeBetweenFires = 0.f;
+
+	//FTimerHandle qTimerHandle;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool canRoll = true;
