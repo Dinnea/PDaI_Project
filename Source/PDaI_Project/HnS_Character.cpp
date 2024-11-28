@@ -7,7 +7,7 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "HealthBarWidget.h"
-//#include <HnS_Ability.cpp>
+#include <HnS_Ability.h>
 
 void AHnS_Character::SetupMesh()
 {
@@ -76,6 +76,8 @@ AHnS_Character::AHnS_Character()
 	SetupHPBar();
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
+	testAbility = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityTest"));
+	testAbility->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
 }
@@ -92,6 +94,7 @@ void AHnS_Character::BeginPlay()
 		weaponPtr->SetPlayerPointer(this);
 		weaponPtr->SetProjectileSpawnLocation(SpawnLocation);
 	}
+
 	
 }
 
@@ -132,6 +135,6 @@ AActor* AHnS_Character::AutoAttack()
 
 void AHnS_Character::TestAbility()
 {
-	//if(AHnS_Ability* abilityPtr = Cast<AHnS_Ability>(testAbility->GetChildActor())) abilityPtr->Execute();
+	if(AHnS_Ability* abilityPtr = Cast<AHnS_Ability>(testAbility->GetChildActor())) abilityPtr->Execute();
 }
 

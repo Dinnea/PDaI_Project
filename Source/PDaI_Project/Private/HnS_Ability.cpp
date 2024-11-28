@@ -11,6 +11,27 @@ AHnS_Ability::AHnS_Ability()
 
 }
 
+void AHnS_Ability::SetReady(bool value)
+{
+	ready = value;
+}
+
+
+bool AHnS_Ability::Execute()
+{
+	if (!ready) 
+	{ 
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
+		return false; 
+	}
+
+	SetReady(false);
+	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Ability::SetReady, true);
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, cooldown, false);
+	return true;
+}
+
 // Called when the game starts or when spawned
 void AHnS_Ability::BeginPlay()
 {
