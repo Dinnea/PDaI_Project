@@ -7,6 +7,7 @@
 #include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "HealthBarWidget.h"
+//#include <HnS_Ability.cpp>
 
 void AHnS_Character::SetupMesh()
 {
@@ -30,23 +31,8 @@ void AHnS_Character::CreateWeapon()
 	SpawnLocation->SetupAttachment(GetMesh());
 }
 
-float AHnS_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+void AHnS_Character::SetupHPBar()
 {
-	//DamageAmount = 10;
-	HP -= DamageAmount;
-	if (HP <= 0)
-	{
-		Destroy();
-	}
-	return DamageAmount;
-}
-
-// Sets default values
-AHnS_Character::AHnS_Character()
-{
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-	SetupMovement();
 	springArm1 = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm 1"));
 	springArm1->SetupAttachment(RootComponent);
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthValue"));
@@ -67,6 +53,27 @@ AHnS_Character::AHnS_Character()
 			WidgetComponent->SetWidgetClass((WidgetClass.Class));
 		}
 	}
+}
+
+
+float AHnS_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	//DamageAmount = 10;
+	HP -= DamageAmount;
+	if (HP <= 0)
+	{
+		Destroy();
+	}
+	return DamageAmount;
+}
+
+// Sets default values
+AHnS_Character::AHnS_Character()
+{
+ 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+	SetupMovement();
+	SetupHPBar();
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
@@ -121,5 +128,10 @@ AActor* AHnS_Character::AutoAttack()
 	if (AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor())) return weaponPtr->Attack();
 
 	return nullptr;
+}
+
+void AHnS_Character::TestAbility()
+{
+	//if(AHnS_Ability* abilityPtr = Cast<AHnS_Ability>(testAbility->GetChildActor())) abilityPtr->Execute();
 }
 

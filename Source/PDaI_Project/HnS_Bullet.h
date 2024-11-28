@@ -14,7 +14,6 @@ class PDAI_PROJECT_API AHnS_Bullet : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AHnS_Bullet();
-	void WeaponShoot();
 
 protected:
 	// Called when the game starts or when spawned
