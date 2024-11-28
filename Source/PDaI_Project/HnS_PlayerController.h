@@ -47,11 +47,16 @@ protected:
 	void autoAttackBullet(const FInputActionValue &value);
 	void q_ability(const FInputActionValue& value);
 	void enableMovement();
+	void setTimeBetweenFires();
 
 	class AHnS_Character* PlayerCharacter;
 
 
 	bool isRolling = false;
+
+	float prevTimeBetweenFires = 0.f;
+
+	//FTimerHandle qTimerHandle;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool canRoll = true;

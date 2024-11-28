@@ -123,10 +123,10 @@ void AHnS_Character::Tick(float DeltaTime)
 	}
 	if (playRollAnimation)
 	{
-		SetActorLocation(FMath::VInterpTo(GetActorLocation(), destVector, DeltaTime, InterpSpeed));
+		SetActorLocation(FMath::VInterpConstantTo(GetActorLocation(), destVector, DeltaTime, InterpSpeed));
 		//FVector(cachedDest_roll.X, cachedDest_roll.Y, Zpos)
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(GetActorRotation().Vector().ToString()));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(GetActorRotation().Vector().ToString()));
 
 }
 
@@ -156,6 +156,7 @@ AActor* AHnS_Character::AutoAttack()
 
 float AHnS_Character::roll()
 {
+	invulnerable = true;
 	FHitResult attackHit;
 	bool attackHitSuccessful = false;
 

@@ -49,6 +49,7 @@ public:
 	float globalDeltaTime;
 	float Zpos;
 	FVector destVector;
+	bool invulnerable = false;
 
 	FVector cachedDest_roll;
 
@@ -87,6 +88,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Interp")
 	float Distance;
+
+	UPROPERTY(BlueprintReadWrite,EditAnywhere)
+	UCurveFloat* Timeline;
 
 public:	
 	// Called every frame

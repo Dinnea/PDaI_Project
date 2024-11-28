@@ -59,8 +59,8 @@ void AHnS_PlayerController::OnInputStarted()
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
-	if (!isRolling)
-	{
+	//if (!isRolling)
+	//{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 		followTime += GetWorld()->GetDeltaSeconds();
@@ -78,13 +78,13 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 			FVector direction = (cachedDest - controlledPawn->GetActorLocation()).GetSafeNormal();
 			controlledPawn->AddMovementInput(direction, 1.0, false);
 		}
-	}
+	//}
 }
 
 void AHnS_PlayerController::OnSetDestinationReleased()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(followTime));
-	if (followTime <= shortPressThreshold)
+	if (followTime <= shortPressThreshold && !isRolling)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Navigation movement debug"));
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
@@ -125,12 +125,12 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 
 void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, canRoll ? TEXT("True") : TEXT("False"));
 	if (canRoll)
 	{
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());
 		isRolling = true;
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());
-		cachedDest = PlayerCharacter->GetActorLocation();
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation()); //Overwrite old move destination to stop movement on Q pressed event
 		//StopMovement();
 		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::enableMovement);
 		FTimerHandle mTimerHandle;
@@ -138,17 +138,34 @@ void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 		PlayerCharacter->roll();
 		if (!isRolling)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("false"));
+		cachedDest = PlayerCharacter->destVector;
+		canRoll = false;
+		//GetWorldTimerManager().ClearTimer(qTimerHandle);
+		FTimerDelegate qDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastQ, true);
+		FTimerHandle qTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(qTimerHandle, qDelegate, QCooldown, false);
 	}
-	canRoll = false;
-	FTimerDelegate qDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastQ, true);
-	FTimerHandle qTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(qTimerHandle, qDelegate, QCooldown, false);
 }
 
 void AHnS_PlayerController::enableMovement()
 {
 	isRolling = false;
 	PlayerCharacter->updateRoll();
+	PlayerCharacter->invulnerable = false;
+	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
+	prevTimeBetweenFires = timeBetweenFires;
+	timeBetweenFires = timeBetweenFires - 0.3;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
+
+	FTimerDelegate tDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setTimeBetweenFires);
+	FTimerHandle tTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(tTimerHandle, tDelegate, 2, false);
+}
+
+void AHnS_PlayerController::setTimeBetweenFires()
+{
+	timeBetweenFires = prevTimeBetweenFires;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
 }
 
 void AHnS_PlayerController::setCanFire(bool Value)
@@ -159,5 +176,6 @@ void AHnS_PlayerController::setCanFire(bool Value)
 void AHnS_PlayerController::setCanCastQ(bool Value)
 {
 	canRoll = true;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(GetWorldTimerManager().GetTimerElapsed(qTimerHandle)));
 }
 
