@@ -25,6 +25,8 @@ public:
 	UBehaviorTree* GetBehaviorTree() const;	
 	APatrolPath* GetPatrolPath() const;
 
+	float GetAttackRange() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -34,6 +36,9 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	APatrolPath* patrolPath;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
+	float attackRange;
 
 	
 };

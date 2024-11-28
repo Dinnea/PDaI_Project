@@ -32,6 +32,11 @@ APatrolPath* AHnS_BaseEnemy::GetPatrolPath() const
 	return patrolPath;
 }
 
+float AHnS_BaseEnemy::GetAttackRange() const
+{
+	return attackRange;
+}
+
 void AHnS_BaseEnemy::BeginPlay()
 {
 	Super::BeginPlay();
