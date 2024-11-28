@@ -59,8 +59,8 @@ void AHnS_PlayerController::OnInputStarted()
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
-	//if (!isRolling)
-	//{
+	if (!isRolling)
+	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 		followTime += GetWorld()->GetDeltaSeconds();
@@ -78,7 +78,7 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 			FVector direction = (cachedDest - controlledPawn->GetActorLocation()).GetSafeNormal();
 			controlledPawn->AddMovementInput(direction, 1.0, false);
 		}
-	//}
+	}
 }
 
 void AHnS_PlayerController::OnSetDestinationReleased()
@@ -155,7 +155,7 @@ void AHnS_PlayerController::enableMovement()
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
 	prevTimeBetweenFires = timeBetweenFires;
 	timeBetweenFires = timeBetweenFires - 0.3;
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
 
 	FTimerDelegate tDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setTimeBetweenFires);
 	FTimerHandle tTimerHandle;
@@ -165,13 +165,15 @@ void AHnS_PlayerController::enableMovement()
 void AHnS_PlayerController::setTimeBetweenFires()
 {
 	timeBetweenFires = prevTimeBetweenFires;
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
 }
 
+/*
 void AHnS_PlayerController::setCanFire(bool Value)
 {
 	canFire = true;
 }
+*/
 
 void AHnS_PlayerController::setCanCastQ(bool Value)
 {
