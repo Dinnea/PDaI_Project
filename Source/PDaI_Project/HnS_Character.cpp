@@ -4,10 +4,13 @@
 #include "HnS_Character.h"
 #include "HnS_Weapon.h"
 #include "HnS_Bullet.h"
+#include "EnhancedInputSubsystems.h"
+#include "EnhancedInputComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "HealthBarWidget.h"
 #include <HnS_Ability.h>
+#include "Kismet/KismetMathLibrary.h"
 
 void AHnS_Character::SetupMesh()
 {
@@ -31,9 +34,31 @@ void AHnS_Character::CreateWeapon()
 	SpawnLocation->SetupAttachment(GetMesh());
 }
 
+void AHnS_Character::enableMovement()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Enable movement"));
+	GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
+}
+
+void AHnS_Character::updateRoll()
+{
+	playRollAnimation = false;
+}
+
+float AHnS_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	//DamageAmount = 10;
+	HP -= DamageAmount;
+	if (HP <= 0)
+	{
+		Destroy();
+	}
+	return DamageAmount;
+}
+
 void AHnS_Character::SetupHPBar()
 {
-	springArm1 = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm 1"));
+    springArm1 = CreateDefaultSubobject<USpringArmComponent>(TEXT("Spring Arm 1"));
 	springArm1->SetupAttachment(RootComponent);
 	WidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthValue"));
 	if (WidgetComponent)
@@ -53,18 +78,6 @@ void AHnS_Character::SetupHPBar()
 			WidgetComponent->SetWidgetClass((WidgetClass.Class));
 		}
 	}
-}
-
-
-float AHnS_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
-{
-	//DamageAmount = 10;
-	HP -= DamageAmount;
-	if (HP <= 0)
-	{
-		Destroy();
-	}
-	return DamageAmount;
 }
 
 // Sets default values
@@ -107,6 +120,22 @@ void AHnS_Character::Tick(float DeltaTime)
 		widget->SetBarValuePercent(HP/MaxHP);
 	}
 
+	FVector v1 = GetActorLocation() + Distance;
+
+	globalDeltaTime = DeltaTime;
+
+	if (WaitTime > 0)
+	{
+		WaitTime = WaitTime - DeltaTime;
+		return;
+	}
+	if (playRollAnimation)
+	{
+		SetActorLocation(FMath::VInterpConstantTo(GetActorLocation(), destVector, DeltaTime, InterpSpeed));
+		//FVector(cachedDest_roll.X, cachedDest_roll.Y, Zpos)
+	}
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(GetActorRotation().Vector().ToString()));
+
 }
 
 // Called to bind functionality to input
@@ -136,5 +165,49 @@ AActor* AHnS_Character::AutoAttack()
 void AHnS_Character::TestAbility()
 {
 	if(AHnS_Ability* abilityPtr = Cast<AHnS_Ability>(testAbility->GetChildActor())) abilityPtr->Execute();
+}
+float AHnS_Character::roll()
+{
+	invulnerable = true;
+	FHitResult attackHit;
+	bool attackHitSuccessful = false;
+
+	FVector ActorLocation = GetActorLocation();
+
+	attackHitSuccessful = Cast<APlayerController>(GetController())->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
+
+	if (attackHitSuccessful) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Debug test"));
+		cachedDest_roll = attackHit.Location;
+	}
+	rotatePlayer(cachedDest_roll);
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+	}
+	FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(cachedDest_roll, ActorLocation);
+	destVector = GetActorLocation() + GetActorForwardVector()*Distance;
+	//destVector.X *= -1;
+	//rotVector = rotVector * -1;
+	playRollAnimation = true;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+}
+	//GetCharacterMovement()->DisableMovement();
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(InterpSpeed));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(cachedDest_roll.ToString()));
+	Zpos = GetActorLocation().Z;
+	//SetActorLocation(FVector(cachedDest_roll.X, cachedDest_roll.Y,Zpos));
+
+	return 0.0f;
+}
+
+void AHnS_Character::rotatePlayer(FVector destination)
+{
+	FVector PlayerLoc = GetActorLocation();
+	//FVector CursorLocation = cachedDest_attack;
+	FRotator PlayerRotation = UKismetMathLibrary::FindLookAtRotation(destination, PlayerLoc);
+	FRotator newPlayerRotation = FRotator(GetActorRotation().Pitch, PlayerRotation.Yaw - 180, GetActorRotation().Roll);
+	SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
 }
 

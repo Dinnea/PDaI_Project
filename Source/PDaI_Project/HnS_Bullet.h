@@ -48,10 +48,12 @@ protected:
 
 	bool canDestroy = false;
 
+
 	UPROPERTY(EditAnywhere)
 	float timeToDestroy = 5.f;
 
 	void bulletDestroy(bool Value);
+
 
 public:	
 	// Called every frame
