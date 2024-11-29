@@ -87,8 +87,10 @@ AHnS_Character::AHnS_Character()
 	PrimaryActorTick.bCanEverTick = true;
 	SetupMovement();
 	SetupHPBar();
+
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
+
 	testAbility = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityTest"));
 	testAbility->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
@@ -104,11 +106,9 @@ void AHnS_Character::BeginPlay()
 	MaxHP = HP;
 	if(auto* const weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor()))
 	{
-		weaponPtr->SetPlayerPointer(this);
+		weaponPtr->SetOwner(this);
 		weaponPtr->SetProjectileSpawnLocation(SpawnLocation);
 	}
-
-	
 }
 
 // Called every frame
@@ -150,16 +150,10 @@ USceneComponent* AHnS_Character::GetProjectileSpawnLocation()
 	return SpawnLocation;
 }
 
-AActor* AHnS_Character::AutoAttack()
+bool AHnS_Character::AutoAttack()
 {
-	//FActorSpawnParameters SpawnParams;
-	//SpawnParams.Instigator = this;
-	//SpawnParams.Owner = this;
-	//AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation() + FVector(0, 0, 0) , GetActorRotation(), SpawnParams);
-
-	if (AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor())) return weaponPtr->Attack();
-
-	return nullptr;
+	if (AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor())) return weaponPtr->Execute();
+	return false;
 }
 
 void AHnS_Character::TestAbility()
@@ -191,15 +185,12 @@ float AHnS_Character::roll()
 	//rotVector = rotVector * -1;
 	playRollAnimation = true;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+	return 0;
 }
 	//GetCharacterMovement()->DisableMovement();
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(InterpSpeed));
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(cachedDest_roll.ToString()));
-	Zpos = GetActorLocation().Z;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(cachedDest_roll.ToString()))
 	//SetActorLocation(FVector(cachedDest_roll.X, cachedDest_roll.Y,Zpos));
-
-	return 0.0f;
-}
 
 void AHnS_Character::rotatePlayer(FVector destination)
 {

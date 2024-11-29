@@ -16,12 +16,17 @@ void AHnS_Ability::SetReady(bool value)
 	ready = value;
 }
 
+void AHnS_Ability::SetOwner(ACharacter* pOwner)
+{
+	owner = pOwner;
+}
+
 
 bool AHnS_Ability::Execute()
 {
 	if (!ready) 
 	{ 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
 		return false; 
 	}
 

@@ -55,7 +55,7 @@ public:
 
 	AHnS_Character();
 	float roll();
-	AActor* AutoAttack();
+	bool AutoAttack();
 
 	void TestAbility();
 
@@ -95,8 +95,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Interp")
 	float Distance;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere)
-	UCurveFloat* Timeline;
 
 public:	
 	// Called every frame

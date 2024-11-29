@@ -138,7 +138,7 @@ void AHnS_PlayerController::OnAbility1()
 }
 void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, canRoll ? TEXT("True") : TEXT("False"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, canRoll ? TEXT("True") : TEXT("False"));
 	if (canRoll)
 	{
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());
