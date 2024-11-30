@@ -57,7 +57,7 @@ public:
 	float roll();
 	bool AutoAttack();
 
-	void TestAbility();
+	bool AbilityQ();
 
 	void updateRoll();
 
@@ -77,7 +77,7 @@ protected:
 	UChildActorComponent* Weapon;
 
 	UPROPERTY(EditAnywhere, Category = "Abilities");
-	UChildActorComponent* testAbility;
+	UChildActorComponent* abilityQ;
 
 
 	UPROPERTY(EditAnywhere);

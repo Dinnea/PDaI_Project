@@ -11,6 +11,7 @@
 #include "HealthBarWidget.h"
 #include <HnS_Ability.h>
 #include "Kismet/KismetMathLibrary.h"
+#include <TestChildAbility.h>
 
 void AHnS_Character::SetupMesh()
 {
@@ -91,8 +92,9 @@ AHnS_Character::AHnS_Character()
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
 
-	testAbility = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityTest"));
-	testAbility->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+	abilityQ = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityQ"));
+	abilityQ->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
 }
@@ -156,9 +158,10 @@ bool AHnS_Character::AutoAttack()
 	return false;
 }
 
-void AHnS_Character::TestAbility()
+bool AHnS_Character::AbilityQ()
 {
-	if(AHnS_Ability* abilityPtr = Cast<AHnS_Ability>(testAbility->GetChildActor())) abilityPtr->Execute();
+	if (auto* abilityPtr = Cast<ATestChildAbility>(abilityQ->GetChildActor())) return abilityPtr->Execute();
+	return false;
 }
 float AHnS_Character::roll()
 {
@@ -187,10 +190,6 @@ float AHnS_Character::roll()
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
 	return 0;
 }
-	//GetCharacterMovement()->DisableMovement();
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(InterpSpeed));
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(cachedDest_roll.ToString()))
-	//SetActorLocation(FVector(cachedDest_roll.X, cachedDest_roll.Y,Zpos));
 
 void AHnS_Character::rotatePlayer(FVector destination)
 {

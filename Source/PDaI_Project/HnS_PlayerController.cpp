@@ -47,8 +47,6 @@ void AHnS_PlayerController::SetupInputComponent()
 	
 		//ability input events
 		EnhancedInputComponent->BindAction(ability1, ETriggerEvent::Started, this, &AHnS_PlayerController::OnAbility1);
-	EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
-
 		EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
 	}
 	else
@@ -133,7 +131,7 @@ void AHnS_PlayerController::OnAbility1()
 	if (PlayerCharacter) 
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "AAAAA");
-		PlayerCharacter->TestAbility();
+		PlayerCharacter->AbilityQ();
 	}
 }
 void AHnS_PlayerController::q_ability(const FInputActionValue& value)
