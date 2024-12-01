@@ -59,6 +59,8 @@ public:
 
 	bool AbilityQ();
 
+	bool UseAbility(int index);
+
 	void updateRoll();
 
 	void rotatePlayer(FVector destination);
@@ -79,12 +81,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Abilities");
 	UChildActorComponent* abilityQ;
 
+	UPROPERTY(EditAnywhere, Category = "Abilities");
+	TArray<UChildActorComponent*> abilities;
+
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AHnS_Bullet> BulletToSpawn;
 
 	UPROPERTY(EditAnywhere, Category="Interp")
 	float WaitTime;

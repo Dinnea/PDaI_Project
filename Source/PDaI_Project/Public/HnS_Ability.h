@@ -19,7 +19,7 @@ public:
 	virtual bool Execute();
 
 	void SetReady(bool value);
-	void SetOwner(ACharacter* pOwner);
+	void SetUser(ACharacter* pUser);
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,7 +32,7 @@ protected:
 	float damage = 0;
 
 	bool ready = true;
-	ACharacter* owner;
+	ACharacter* user;
 
 public:	
 	// Called every frame

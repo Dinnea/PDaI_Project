@@ -16,19 +16,14 @@ AHnS_Weapon::AHnS_Weapon()
 
 }
 
-void AHnS_Weapon::SetReady(bool value)
-{
-	ready = value;
-}
-
 bool AHnS_Weapon::Execute()
 {
 	if(!Super::Execute()) return false;
 
 	FActorSpawnParameters SpawnParams;
-	SpawnParams.Instigator = owner;
+	SpawnParams.Instigator = user;
 	SpawnParams.Owner = this;
-	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn, spawnLocation->GetComponentLocation(), owner->GetActorRotation(), SpawnParams);
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn, spawnLocation->GetComponentLocation(), user->GetActorRotation(), SpawnParams);
 
 	return true;
 }

@@ -18,8 +18,6 @@ public:
 	AHnS_Weapon();
 	void SetProjectileSpawnLocation(USceneComponent* pSpawnLocation);
 
-	void SetReady(bool value);
-
 	virtual bool Execute() override;
 
 protected:

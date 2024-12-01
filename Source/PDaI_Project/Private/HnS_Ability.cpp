@@ -16,9 +16,9 @@ void AHnS_Ability::SetReady(bool value)
 	ready = value;
 }
 
-void AHnS_Ability::SetOwner(ACharacter* pOwner)
+void AHnS_Ability::SetUser(ACharacter* pUser)
 {
-	owner = pOwner;
+	user = pUser;
 }
 
 
@@ -26,7 +26,7 @@ bool AHnS_Ability::Execute()
 {
 	if (!ready) 
 	{ 
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
 		return false; 
 	}
 

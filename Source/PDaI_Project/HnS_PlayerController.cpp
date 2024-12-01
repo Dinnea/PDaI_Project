@@ -130,8 +130,8 @@ void AHnS_PlayerController::OnAbility1()
 {
 	if (PlayerCharacter) 
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "AAAAA");
-		PlayerCharacter->AbilityQ();
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability 1 key");
+		PlayerCharacter->UseAbility(0);
 	}
 }
 void AHnS_PlayerController::q_ability(const FInputActionValue& value)

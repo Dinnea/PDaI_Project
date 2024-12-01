@@ -92,6 +92,15 @@ AHnS_Character::AHnS_Character()
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
 
+	//attach all possible slots
+	for (int i = 1; i < 4; i++) 
+	{
+		FString componentName = "Ability " + FString::FromInt(i);
+
+		abilities.Add(CreateDefaultSubobject<UChildActorComponent>(*componentName));
+		abilities.Last()->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+	}
+
 	abilityQ = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityQ"));
 	abilityQ->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
 
@@ -108,9 +117,22 @@ void AHnS_Character::BeginPlay()
 	MaxHP = HP;
 	if(auto* const weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor()))
 	{
-		weaponPtr->SetOwner(this);
+		weaponPtr->SetUser(this);
 		weaponPtr->SetProjectileSpawnLocation(SpawnLocation);
 	}
+
+	for (UChildActorComponent* ability : abilities) 
+	{
+		if (auto* abilityPtr = Cast<AHnS_Ability>(ability->GetChildActor()))
+		{
+			abilityPtr->SetUser(this);
+		}
+	}
+
+	/*if (auto* abilityPtr = Cast<AHnS_Ability>(abilityQ->GetChildActor())) 
+	{
+		abilityPtr->SetUser(this);
+	}*/
 }
 
 // Called every frame
@@ -154,15 +176,22 @@ USceneComponent* AHnS_Character::GetProjectileSpawnLocation()
 
 bool AHnS_Character::AutoAttack()
 {
-	if (AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor())) return weaponPtr->Execute();
+	if (auto* weaponPtr = Cast<AHnS_Ability>(Weapon->GetChildActor())) return weaponPtr->Execute();
 	return false;
 }
 
 bool AHnS_Character::AbilityQ()
 {
-	if (auto* abilityPtr = Cast<ATestChildAbility>(abilityQ->GetChildActor())) return abilityPtr->Execute();
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityQ->GetChildActor())) return abilityPtr->Execute();
 	return false;
 }
+
+bool AHnS_Character::UseAbility(int index)
+{
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilities[index]->GetChildActor())) return abilityPtr->Execute();
+	return false;
+}
+
 float AHnS_Character::roll()
 {
 	invulnerable = true;
