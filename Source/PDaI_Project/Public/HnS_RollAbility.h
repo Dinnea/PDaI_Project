@@ -13,5 +13,6 @@ UCLASS()
 class PDAI_PROJECT_API AHnS_RollAbility : public AHnS_Ability
 {
 	GENERATED_BODY()
-	
+public:
+	virtual bool Execute() override;
 };

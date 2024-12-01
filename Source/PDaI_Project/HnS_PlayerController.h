@@ -38,6 +38,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ability1;
+
+	void SetStopMovement(bool value);
 	
 protected:
 
@@ -57,7 +59,7 @@ protected:
 	class AHnS_Character* PlayerCharacter;
 
 
-	bool isRolling = false;
+	bool stopMovement = false;
 
 	float prevTimeBetweenFires = 0.f;
 
@@ -75,7 +77,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float rollingTime;
 
-	void setCanFire(bool Value);
 	void setCanCastQ(bool Value);
 
 private:

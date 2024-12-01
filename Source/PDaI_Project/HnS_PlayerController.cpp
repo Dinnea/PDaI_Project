@@ -26,6 +26,11 @@ void AHnS_PlayerController::BeginPlay()
 	PlayerCharacter = Cast<AHnS_Character>(GetPawn());
 }
 
+void AHnS_PlayerController::SetStopMovement(bool value)
+{
+	stopMovement = value;
+}
+
 void AHnS_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
@@ -62,7 +67,7 @@ void AHnS_PlayerController::OnInputStarted()
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
-	if (!isRolling)
+	if (!stopMovement)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
@@ -87,7 +92,7 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 void AHnS_PlayerController::OnSetDestinationReleased()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(followTime));
-	if (followTime <= shortPressThreshold && !isRolling)
+	if (followTime <= shortPressThreshold && !stopMovement)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Navigation movement debug"));
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
@@ -140,14 +145,14 @@ void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 	if (canRoll)
 	{
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());
-		isRolling = true;
+		stopMovement = true;
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation()); //Overwrite old move destination to stop movement on Q pressed event
 		//StopMovement();
 		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::enableMovement);
 		FTimerHandle mTimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, rollingTime, false);
 		PlayerCharacter->roll();
-		if (!isRolling)
+		if (!stopMovement)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("false"));
 		cachedDest = PlayerCharacter->destVector;
 		canRoll = false;
@@ -160,7 +165,7 @@ void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 
 void AHnS_PlayerController::enableMovement()
 {
-	isRolling = false;
+	stopMovement = false;
 	PlayerCharacter->updateRoll();
 	PlayerCharacter->invulnerable = false;
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
