@@ -155,7 +155,7 @@ void AHnS_Character::Tick(float DeltaTime)
 	}
 	if (isRolling)
 	{
-		SetActorLocation(FMath::VInterpConstantTo(GetActorLocation(), destVector, DeltaTime, InterpSpeed));
+		//SetActorLocation(FMath::VInterpConstantTo(GetActorLocation(), destVector, DeltaTime, InterpSpeed));
 		//FVector(cachedDest_roll.X, cachedDest_roll.Y, Zpos)
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(GetActorRotation().Vector().ToString()));
@@ -176,19 +176,19 @@ USceneComponent* AHnS_Character::GetProjectileSpawnLocation()
 
 bool AHnS_Character::AutoAttack()
 {
-	if (auto* weaponPtr = Cast<AHnS_Ability>(Weapon->GetChildActor())) return weaponPtr->Execute();
+	if (auto* weaponPtr = Cast<AHnS_Ability>(Weapon->GetChildActor())) { weaponPtr->Execute(); return true; }
 	return false;
 }
 
 bool AHnS_Character::AbilityQ()
 {
-	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityQ->GetChildActor())) return abilityPtr->Execute();
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityQ->GetChildActor())) { abilityPtr->Execute(); return true; }
 	return false;
 }
 
 bool AHnS_Character::UseAbility(int index)
 {
-	if (auto* abilityPtr = Cast<AHnS_Ability>(abilities[index]->GetChildActor())) return abilityPtr->Execute();
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilities[index]->GetChildActor())) { abilityPtr->Execute(); return true; }
 	return false;
 }
 

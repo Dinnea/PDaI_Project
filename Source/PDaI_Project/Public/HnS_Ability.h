@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <PDaI_Project/HnS_Character.h>
 #include "HnS_Ability.generated.h"
+
 
 UCLASS()
 class PDAI_PROJECT_API AHnS_Ability : public AActor
@@ -19,7 +21,7 @@ public:
 	virtual bool Execute();
 
 	void SetReady(bool value);
-	void SetUser(ACharacter* pUser);
+	void SetUser(AHnS_Character* pUser);
 
 protected:
 	// Called when the game starts or when spawned
@@ -32,7 +34,8 @@ protected:
 	float damage = 0;
 
 	bool ready = true;
-	ACharacter* user;
+	UPROPERTY()
+	AHnS_Character* user;
 
 public:	
 	// Called every frame

@@ -65,11 +65,6 @@ public:
 
 	void rotatePlayer(FVector destination);
 	void SetInvulnerable(bool value);
-	void SaveRollDestination(FVector location);
-
-	FVector GetSavedRollDestination();
-
-	void MovementInterp();
 
 protected:
 	// Called when the game starts or when spawned

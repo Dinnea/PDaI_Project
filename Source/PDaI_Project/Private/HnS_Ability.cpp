@@ -16,7 +16,7 @@ void AHnS_Ability::SetReady(bool value)
 	ready = value;
 }
 
-void AHnS_Ability::SetUser(ACharacter* pUser)
+void AHnS_Ability::SetUser(AHnS_Character* pUser)
 {
 	user = pUser;
 }
@@ -26,15 +26,18 @@ bool AHnS_Ability::Execute()
 {
 	if (!ready) 
 	{ 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
 		return false; 
 	}
+	else {
+		SetReady(false);
+		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Ability::SetReady, true);
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, cooldown, false);
+		return true;
+	}
 
-	SetReady(false);
-	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Ability::SetReady, true);
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, cooldown, false);
-	return true;
+	
 }
 
 // Called when the game starts or when spawned

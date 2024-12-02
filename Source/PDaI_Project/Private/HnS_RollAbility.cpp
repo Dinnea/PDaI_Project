@@ -10,58 +10,73 @@
 
 bool AHnS_RollAbility::Execute()
 {
-	if (!Super::Execute()) return false;
-	
-	if (auto* controller = Cast< AHnS_PlayerController>(userPtr->GetController()))
+	if (!Super::Execute())
 	{
-		controller->SetStopMovement(true);
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(controller, userPtr->GetActorLocation());
-		//enable movement code was here
-
-		//character roll function
-		userPtr->SetInvulnerable(true);
-		FHitResult attackHit;
-		bool attackHitSuccessful = false;
-
-		FVector ActorLocation = userPtr->GetActorLocation();
-
-		attackHitSuccessful = controller->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
-
-		if (attackHitSuccessful) {
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Debug test"));
-			cachedDest_roll = attackHit.Location;
-		}
-
-		userPtr->rotatePlayer(cachedDest_roll);
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
-		}
-		FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(cachedDest_roll, ActorLocation);
-		destVector = GetActorLocation() + GetActorForwardVector() * Distance;
-
-
-
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("on cooldown"));
+		return false;
 	}
-	return true;
+	
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("off cooldown"));
+		if (auto* controller = Cast< AHnS_PlayerController>(user->GetController()))
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Got controller"));
+			controller->SetStopMovement(true);
+			UAIBlueprintHelperLibrary::SimpleMoveToLocation(controller, user->GetActorLocation());
+			//enable movement code was here
+			FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_RollAbility::EndRoll);
+			FTimerHandle mTimerHandle;
+			GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, rollingDuration, false);
+			//character roll function
+			user->SetInvulnerable(true);
+			FHitResult attackHit;
+			bool attackHitSuccessful = false;
+
+			FVector ActorLocation = user->GetActorLocation();
+			attackHitSuccessful = controller->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
+
+			if (attackHitSuccessful) {
+				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Debug test"));
+				cachedDest_roll = attackHit.Location;
+			}
+
+			user->rotatePlayer(cachedDest_roll);
+			if (GEngine)
+			{
+				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+			}
+			FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(cachedDest_roll, ActorLocation);
+			destVector = user->GetActorLocation() + user->GetActorForwardVector() * Distance;
+			user->isRolling = true;
+
+		}
+		return true;
+	}
 }
 
 void AHnS_RollAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (userPtr->isRolling) 
+	if (user->isRolling) 
 	{
-		SetActorLocation(FMath::VInterpConstantTo(userPtr->GetActorLocation(), destVector, DeltaTime, InterpSpeed));
+		user->SetActorLocation(FMath::VInterpConstantTo(user->GetActorLocation(), destVector, DeltaTime, InterpSpeed));
 	}
 
 }
 
 void AHnS_RollAbility::BeginPlay()
 {
-	if(userPtr = Cast<AHnS_Character>(user)){}
-	else 
+	Super::BeginPlay();
+}
+
+void AHnS_RollAbility::EndRoll()
+{
+	if (auto* controller = Cast< AHnS_PlayerController>(user->GetController()))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Error. Roll user not assigned"));
+		controller->SetStopMovement(false);
+		user->isRolling = false;
+		user->invulnerable = false;
 	}
 }

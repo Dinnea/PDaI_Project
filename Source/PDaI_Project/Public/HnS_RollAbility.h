@@ -33,10 +33,8 @@ protected:
 	float InterpSpeed;
 
 private:
+	void EndRoll();
 	FVector destVector;
 	FVector cachedDest_roll;
-
-	AHnS_Character* userPtr;
-
 	
 };
