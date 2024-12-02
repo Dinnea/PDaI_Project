@@ -57,7 +57,7 @@ public:
 	float roll();
 	bool AutoAttack();
 
-	bool AbilityQ();
+	bool AbilityW();
 
 	bool UseAbility(int index);
 

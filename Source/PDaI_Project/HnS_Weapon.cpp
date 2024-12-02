@@ -35,7 +35,7 @@ void AHnS_Weapon::BeginPlay()
 	
 }
 
-void AHnS_Weapon::SetProjectileSpawnLocation(USceneComponent* pSpawnLocation)
+void AHnS_Weapon::SetAbilitySpawnLocation(USceneComponent* pSpawnLocation)
 {
 	this->spawnLocation = pSpawnLocation;
 }

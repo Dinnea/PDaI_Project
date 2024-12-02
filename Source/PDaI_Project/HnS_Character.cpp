@@ -101,8 +101,8 @@ AHnS_Character::AHnS_Character()
 		abilities.Last()->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
 	}
 
-	abilityQ = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityQ"));
-	abilityQ->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+	abilityW = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityQ"));
+	abilityW->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
 
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
@@ -118,21 +118,29 @@ void AHnS_Character::BeginPlay()
 	if(auto* const weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor()))
 	{
 		weaponPtr->SetUser(this);
-		weaponPtr->SetProjectileSpawnLocation(SpawnLocation);
+		weaponPtr->SetAbilitySpawnLocation(SpawnLocation);
 	}
 
 	for (UChildActorComponent* ability : abilities) 
 	{
-		if (auto* abilityPtr = Cast<AHnS_Ability>(ability->GetChildActor()))
+		if (auto* weaponPtr = Cast<AHnS_Weapon>(ability->GetChildActor()))
+		{
+			weaponPtr->SetUser(this);
+			weaponPtr-> SetAbilitySpawnLocation(SpawnLocation);
+
+		}
+		else if (auto* abilityPtr = Cast<AHnS_Ability>(ability->GetChildActor()))
 		{
 			abilityPtr->SetUser(this);
+			
 		}
 	}
 
-	/*if (auto* abilityPtr = Cast<AHnS_Ability>(abilityQ->GetChildActor())) 
+	if (auto* abilityPtr = Cast<AHnS_Weapon>(abilityW->GetChildActor())) 
 	{
 		abilityPtr->SetUser(this);
-	}*/
+		abilityPtr->SetAbilitySpawnLocation(SpawnLocation);
+	}
 }
 
 // Called every frame
@@ -180,9 +188,9 @@ bool AHnS_Character::AutoAttack()
 	return false;
 }
 
-bool AHnS_Character::AbilityQ()
+bool AHnS_Character::AbilityW()
 {
-	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityQ->GetChildActor())) return abilityPtr->Execute();
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityW->GetChildActor())) return abilityPtr->Execute();
 	return false;
 }
 

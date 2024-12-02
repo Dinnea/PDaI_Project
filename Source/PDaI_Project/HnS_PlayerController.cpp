@@ -128,10 +128,21 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 
 void AHnS_PlayerController::OnAbility1()
 {
+	FHitResult attackHit;
+	bool attackHitSuccessful = false;
+
+	attackHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
+
+	if (attackHitSuccessful) {
+		cachedDest_attack = attackHit.Location;
+	}
 	if (PlayerCharacter) 
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability 1 key");
-		PlayerCharacter->UseAbility(0);
+		GetCharacter()->GetCharacterMovement()->DisableMovement();
+		PlayerCharacter->rotatePlayer(cachedDest_attack);
+
+		PlayerCharacter->AbilityW();
 	}
 }
 void AHnS_PlayerController::q_ability(const FInputActionValue& value)

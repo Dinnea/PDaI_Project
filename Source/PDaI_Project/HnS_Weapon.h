@@ -16,7 +16,7 @@ class PDAI_PROJECT_API AHnS_Weapon : public AHnS_Ability
 public:	
 	// Sets default values for this actor's properties
 	AHnS_Weapon();
-	void SetProjectileSpawnLocation(USceneComponent* pSpawnLocation);
+	void SetAbilitySpawnLocation(USceneComponent* pSpawnLocation);
 
 	virtual bool Execute() override;
 
@@ -33,8 +33,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* WeaponMesh;
 
-	UPROPERTY()
-	USceneComponent* spawnLocation;
+	
 
 public:	
 	// Called every frame

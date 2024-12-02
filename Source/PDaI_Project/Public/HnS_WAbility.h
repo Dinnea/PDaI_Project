@@ -4,23 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "HnS_Bullet.generated.h"
+#include "HnS_WAbility.generated.h"
 
 UCLASS()
-class PDAI_PROJECT_API AHnS_Bullet : public AActor
+class PDAI_PROJECT_API AHnS_WAbility : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
-	AHnS_Bullet();
+	AHnS_WAbility();
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly)
-	class UNiagaraComponent* BulletFX;
+	class UNiagaraComponent* W_FX;
 
 	UPROPERTY(EditDefaultsOnly)
 	class USphereComponent* CollisionSphere;
@@ -28,41 +28,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class UProjectileMovementComponent* ProjectileMovement;
 
+	UPROPERTY(EditDefaultsOnly)
+	class UNiagaraSystem* Particle;
+
 	UFUNCTION()
 	void BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
-	virtual void BulletHit();
 
-	UPROPERTY(EditDefaultsOnly)
-	class UNiagaraSystem* impactParticles;
-
-	UPROPERTY(EditDefaultsOnly)
-	class UNiagaraSystem* deathImpactParticles;
-
-	UPROPERTY(EditDefaultsOnly)
-	float BaseDamage;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<UDamageType> DamageType;
-
-	bool canDestroy = false;
-
-
-	UPROPERTY(EditAnywhere)
-	float timeToDestroy = 5.f;
-
-	UPROPERTY(EditAnywhere)
-	bool hurtsEnemies = true;
-
-	void bulletDestroy(bool Value);
-
-
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	UPROPERTY(EditDefaultsOnly)
-	float Speed;
 
 };

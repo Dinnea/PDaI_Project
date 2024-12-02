@@ -31,6 +31,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float damage = 0;
 
+	UPROPERTY()
+	USceneComponent* spawnLocation;
+
 	bool ready = true;
 	ACharacter* user;
 

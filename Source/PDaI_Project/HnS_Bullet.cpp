@@ -1,9 +1,4 @@
 #include "HnS_Bullet.h"
-#include "HnS_Bullet.h"
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "HnS_Bullet.h"
 #include "HnS_Character.h"
 #include "Components/SphereComponent.h"
 #include "NiagaraComponent.h"
@@ -54,9 +49,12 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Instigator nullptr"));
 	}
 	AController* PlayerC = GetInstigator()->GetController(); //Instigator - Object which created the actor/event (player created bullet)
+
+
+
 	if (AHnS_Character* const TargetPlayer = Cast<AHnS_Character>(OtherActor))
 	{
-		if (OtherActor != PlayerC->GetPawn() && !TargetPlayer->invulnerable)
+		if (OtherActor != PlayerC->GetPawn() && !TargetPlayer->invulnerable) //(OtherActor->GetClass() != PlayerC->GetPawn()->GetClass() && !TargetPlayer->invulnerable)
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, OtherActor->GetFName().ToString());
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, impactParticles, GetActorLocation());
