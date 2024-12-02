@@ -47,8 +47,6 @@ void AHnS_PlayerController::SetupInputComponent()
 	
 		//ability input events
 		EnhancedInputComponent->BindAction(ability1, ETriggerEvent::Started, this, &AHnS_PlayerController::OnAbility1);
-	EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
-
 		EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
 	}
 	else
@@ -132,13 +130,13 @@ void AHnS_PlayerController::OnAbility1()
 {
 	if (PlayerCharacter) 
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "AAAAA");
-		PlayerCharacter->TestAbility();
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability 1 key");
+		PlayerCharacter->UseAbility(0);
 	}
 }
 void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, canRoll ? TEXT("True") : TEXT("False"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, canRoll ? TEXT("True") : TEXT("False"));
 	if (canRoll)
 	{
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());

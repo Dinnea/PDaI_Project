@@ -11,6 +11,7 @@
 #include "HealthBarWidget.h"
 #include <HnS_Ability.h>
 #include "Kismet/KismetMathLibrary.h"
+#include <TestChildAbility.h>
 
 void AHnS_Character::SetupMesh()
 {
@@ -87,10 +88,22 @@ AHnS_Character::AHnS_Character()
 	PrimaryActorTick.bCanEverTick = true;
 	SetupMovement();
 	SetupHPBar();
+
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
-	testAbility = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityTest"));
-	testAbility->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+
+	//attach all possible slots
+	for (int i = 1; i < 4; i++) 
+	{
+		FString componentName = "Ability " + FString::FromInt(i);
+
+		abilities.Add(CreateDefaultSubobject<UChildActorComponent>(*componentName));
+		abilities.Last()->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+	}
+
+	abilityQ = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityQ"));
+	abilityQ->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
 }
@@ -104,11 +117,22 @@ void AHnS_Character::BeginPlay()
 	MaxHP = HP;
 	if(auto* const weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor()))
 	{
-		weaponPtr->SetPlayerPointer(this);
+		weaponPtr->SetUser(this);
 		weaponPtr->SetProjectileSpawnLocation(SpawnLocation);
 	}
 
-	
+	for (UChildActorComponent* ability : abilities) 
+	{
+		if (auto* abilityPtr = Cast<AHnS_Ability>(ability->GetChildActor()))
+		{
+			abilityPtr->SetUser(this);
+		}
+	}
+
+	/*if (auto* abilityPtr = Cast<AHnS_Ability>(abilityQ->GetChildActor())) 
+	{
+		abilityPtr->SetUser(this);
+	}*/
 }
 
 // Called every frame
@@ -150,22 +174,24 @@ USceneComponent* AHnS_Character::GetProjectileSpawnLocation()
 	return SpawnLocation;
 }
 
-AActor* AHnS_Character::AutoAttack()
+bool AHnS_Character::AutoAttack()
 {
-	//FActorSpawnParameters SpawnParams;
-	//SpawnParams.Instigator = this;
-	//SpawnParams.Owner = this;
-	//AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn,SpawnLocation->GetComponentLocation() + FVector(0, 0, 0) , GetActorRotation(), SpawnParams);
-
-	if (AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor())) return weaponPtr->Attack();
-
-	return nullptr;
+	if (auto* weaponPtr = Cast<AHnS_Ability>(Weapon->GetChildActor())) return weaponPtr->Execute();
+	return false;
 }
 
-void AHnS_Character::TestAbility()
+bool AHnS_Character::AbilityQ()
 {
-	if(AHnS_Ability* abilityPtr = Cast<AHnS_Ability>(testAbility->GetChildActor())) abilityPtr->Execute();
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityQ->GetChildActor())) return abilityPtr->Execute();
+	return false;
 }
+
+bool AHnS_Character::UseAbility(int index)
+{
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilities[index]->GetChildActor())) return abilityPtr->Execute();
+	return false;
+}
+
 float AHnS_Character::roll()
 {
 	invulnerable = true;
@@ -191,14 +217,7 @@ float AHnS_Character::roll()
 	//rotVector = rotVector * -1;
 	playRollAnimation = true;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
-}
-	//GetCharacterMovement()->DisableMovement();
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(InterpSpeed));
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(cachedDest_roll.ToString()));
-	Zpos = GetActorLocation().Z;
-	//SetActorLocation(FVector(cachedDest_roll.X, cachedDest_roll.Y,Zpos));
-
-	return 0.0f;
+	return 0;
 }
 
 void AHnS_Character::rotatePlayer(FVector destination)

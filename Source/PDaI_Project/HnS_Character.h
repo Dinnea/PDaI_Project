@@ -55,9 +55,11 @@ public:
 
 	AHnS_Character();
 	float roll();
-	AActor* AutoAttack();
+	bool AutoAttack();
 
-	void TestAbility();
+	bool AbilityQ();
+
+	bool UseAbility(int index);
 
 	void updateRoll();
 
@@ -77,14 +79,14 @@ protected:
 	UChildActorComponent* Weapon;
 
 	UPROPERTY(EditAnywhere, Category = "Abilities");
-	UChildActorComponent* testAbility;
+	UChildActorComponent* abilityQ;
+
+	UPROPERTY(EditAnywhere, Category = "Abilities");
+	TArray<UChildActorComponent*> abilities;
 
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;
-
-	UPROPERTY(EditDefaultsOnly)
-	TSubclassOf<AHnS_Bullet> BulletToSpawn;
 
 	UPROPERTY(EditAnywhere, Category="Interp")
 	float WaitTime;
@@ -95,8 +97,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Interp")
 	float Distance;
 
-	UPROPERTY(BlueprintReadWrite,EditAnywhere)
-	UCurveFloat* Timeline;
 
 public:	
 	// Called every frame

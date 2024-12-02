@@ -17,7 +17,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool Execute();
+
 	void SetReady(bool value);
+	void SetUser(ACharacter* pUser);
 
 protected:
 	// Called when the game starts or when spawned
@@ -30,11 +32,11 @@ protected:
 	float damage = 0;
 
 	bool ready = true;
-
-	ACharacter* owner;
+	ACharacter* user;
 
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 };
+

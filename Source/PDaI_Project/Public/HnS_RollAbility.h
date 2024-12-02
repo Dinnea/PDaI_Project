@@ -4,17 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "HnS_Ability.h"
-#include "TestChildAbility.generated.h"
+#include "HnS_RollAbility.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class PDAI_PROJECT_API ATestChildAbility : public AHnS_Ability
+class PDAI_PROJECT_API AHnS_RollAbility : public AHnS_Ability
 {
 	GENERATED_BODY()
-
-public:
-	virtual bool Execute() override;
 	
 };

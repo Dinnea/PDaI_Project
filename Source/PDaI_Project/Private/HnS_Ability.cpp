@@ -16,6 +16,11 @@ void AHnS_Ability::SetReady(bool value)
 	ready = value;
 }
 
+void AHnS_Ability::SetUser(ACharacter* pUser)
+{
+	user = pUser;
+}
+
 
 bool AHnS_Ability::Execute()
 {
