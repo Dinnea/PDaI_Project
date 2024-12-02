@@ -44,7 +44,7 @@ public:
 	float MaxHP;
 
 	UPROPERTY(BlueprintReadOnly)
-	bool playRollAnimation = false;
+	bool isRolling = false;
 
 	float globalDeltaTime;
 	float Zpos;
@@ -64,6 +64,12 @@ public:
 	void updateRoll();
 
 	void rotatePlayer(FVector destination);
+	void SetInvulnerable(bool value);
+	void SaveRollDestination(FVector location);
+
+	FVector GetSavedRollDestination();
+
+	void MovementInterp();
 
 protected:
 	// Called when the game starts or when spawned

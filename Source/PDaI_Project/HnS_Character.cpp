@@ -43,7 +43,7 @@ void AHnS_Character::enableMovement()
 
 void AHnS_Character::updateRoll()
 {
-	playRollAnimation = false;
+	isRolling = false;
 }
 
 float AHnS_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -144,7 +144,7 @@ void AHnS_Character::Tick(float DeltaTime)
 		widget->SetBarValuePercent(HP/MaxHP);
 	}
 
-	FVector v1 = GetActorLocation() + Distance;
+	//FVector v1 = GetActorLocation() + Distance;
 
 	globalDeltaTime = DeltaTime;
 
@@ -153,7 +153,7 @@ void AHnS_Character::Tick(float DeltaTime)
 		WaitTime = WaitTime - DeltaTime;
 		return;
 	}
-	if (playRollAnimation)
+	if (isRolling)
 	{
 		SetActorLocation(FMath::VInterpConstantTo(GetActorLocation(), destVector, DeltaTime, InterpSpeed));
 		//FVector(cachedDest_roll.X, cachedDest_roll.Y, Zpos)
@@ -215,7 +215,7 @@ float AHnS_Character::roll()
 	destVector = GetActorLocation() + GetActorForwardVector()*Distance;
 	//destVector.X *= -1;
 	//rotVector = rotVector * -1;
-	playRollAnimation = true;
+	isRolling = true;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
 	return 0;
 }
@@ -226,7 +226,12 @@ void AHnS_Character::rotatePlayer(FVector destination)
 	//FVector CursorLocation = cachedDest_attack;
 	FRotator PlayerRotation = UKismetMathLibrary::FindLookAtRotation(destination, PlayerLoc);
 	FRotator newPlayerRotation = FRotator(GetActorRotation().Pitch, PlayerRotation.Yaw - 180, GetActorRotation().Roll);
-	SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
+	SetActorRotation(newPlayerRotation);
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
+}
+
+void AHnS_Character::SetInvulnerable(bool value)
+{
+	invulnerable = value;
 }
 

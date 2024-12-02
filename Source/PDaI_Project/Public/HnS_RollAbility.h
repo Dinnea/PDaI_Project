@@ -15,4 +15,28 @@ class PDAI_PROJECT_API AHnS_RollAbility : public AHnS_Ability
 	GENERATED_BODY()
 public:
 	virtual bool Execute() override;
+
+protected:
+	virtual void Tick(float DeltaTime) override;
+	virtual void BeginPlay() override;
+
+	UPROPERTY(EditAnywhere, Category="Stats")
+	float rollingDuration = 1.012;
+
+	UPROPERTY(EditAnywhere, Category = "Stats")
+	float Distance;
+
+	UPROPERTY(EditAnywhere, Category = "Interp")
+	float WaitTime;
+
+	UPROPERTY(EditAnywhere, Category = "Interp")
+	float InterpSpeed;
+
+private:
+	FVector destVector;
+	FVector cachedDest_roll;
+
+	AHnS_Character* userPtr;
+
+	
 };

@@ -28,7 +28,7 @@ void AHnS_PlayerController::BeginPlay()
 
 void AHnS_PlayerController::SetStopMovement(bool value)
 {
-	stopMovement = value;
+	movementBlocked = value;
 }
 
 void AHnS_PlayerController::SetupInputComponent()
@@ -67,7 +67,7 @@ void AHnS_PlayerController::OnInputStarted()
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
-	if (!stopMovement)
+	if (!movementBlocked)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
@@ -92,7 +92,7 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 void AHnS_PlayerController::OnSetDestinationReleased()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(followTime));
-	if (followTime <= shortPressThreshold && !stopMovement)
+	if (followTime <= shortPressThreshold && !movementBlocked)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Navigation movement debug"));
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
@@ -145,14 +145,14 @@ void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 	if (canRoll)
 	{
 		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());
-		stopMovement = true;
+		movementBlocked = true;
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation()); //Overwrite old move destination to stop movement on Q pressed event
 		//StopMovement();
 		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::enableMovement);
 		FTimerHandle mTimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, rollingTime, false);
 		PlayerCharacter->roll();
-		if (!stopMovement)
+		if (!movementBlocked)
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("false"));
 		cachedDest = PlayerCharacter->destVector;
 		canRoll = false;
@@ -165,7 +165,7 @@ void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 
 void AHnS_PlayerController::enableMovement()
 {
-	stopMovement = false;
+	movementBlocked = false;
 	PlayerCharacter->updateRoll();
 	PlayerCharacter->invulnerable = false;
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);

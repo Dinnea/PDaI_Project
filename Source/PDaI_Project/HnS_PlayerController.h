@@ -40,6 +40,7 @@ public:
 	class UInputAction* ability1;
 
 	void SetStopMovement(bool value);
+	void SetChachedDest(FVector value);
 	
 protected:
 
@@ -55,11 +56,12 @@ protected:
 	void OnAbility1();
 	void enableMovement();
 	void setTimeBetweenFires();
+	
 
 	class AHnS_Character* PlayerCharacter;
 
 
-	bool stopMovement = false;
+	bool movementBlocked = false;
 
 	float prevTimeBetweenFires = 0.f;
 
