@@ -25,7 +25,10 @@ protected:
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Stats")
-	TSubclassOf<AHnS_Bullet> BulletToSpawn;
+	TSubclassOf<AActor> objectToSpawn;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	FVector Offset;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* WeaponMesh;

@@ -1,6 +1,5 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
 #include "HnS_Weapon.h"
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
@@ -23,7 +22,7 @@ bool AHnS_Weapon::Execute()
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = user;
 	SpawnParams.Owner = this;
-	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_Bullet>(BulletToSpawn, spawnLocation->GetComponentLocation(), user->GetActorRotation(), SpawnParams);
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, user->GetActorRotation(), SpawnParams);
 
 	return true;
 }
