@@ -39,6 +39,23 @@ void AHnS_Character::enableMovement()
 	GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 }
 
+FVector AHnS_Character::getClickLocation()
+{
+	FHitResult attackHit;
+	bool attackHitSuccessful = false;
+
+	attackHitSuccessful = Cast<APlayerController>(GetController())->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
+
+	if (attackHitSuccessful) {
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Debug test"));
+		return attackHit.Location;
+	}
+	else
+	{
+		return FVector::ZeroVector;
+	}
+}
+
 void AHnS_Character::updateRoll()
 {
 	playRollAnimation = false;
@@ -157,17 +174,11 @@ AActor* AHnS_Character::AutoAttack()
 float AHnS_Character::roll()
 {
 	invulnerable = true;
-	FHitResult attackHit;
-	bool attackHitSuccessful = false;
 
 	FVector ActorLocation = GetActorLocation();
 
-	attackHitSuccessful = Cast<APlayerController>(GetController())->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
+	cachedDest_roll = getClickLocation();
 
-	if (attackHitSuccessful) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Debug test"));
-		cachedDest_roll = attackHit.Location;
-	}
 	rotatePlayer(cachedDest_roll);
 	if (GEngine)
 	{
@@ -177,7 +188,12 @@ float AHnS_Character::roll()
 	destVector = GetActorLocation() + GetActorForwardVector()*Distance;
 	//destVector.X *= -1;
 	//rotVector = rotVector * -1;
-	playRollAnimation = true;
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, *(GetFName().ToString()));
+	
+	if (IsPlayerControlled())
+	{
+		playRollAnimation = true;
+	}
 	//GetCharacterMovement()->DisableMovement();
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(InterpSpeed));
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(cachedDest_roll.ToString()));
@@ -185,6 +201,22 @@ float AHnS_Character::roll()
 	//SetActorLocation(FVector(cachedDest_roll.X, cachedDest_roll.Y,Zpos));
 
 	return 0.0f;
+}
+
+AActor* AHnS_Character::useW()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("W pressed"));
+	if (AHnS_Weapon* weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor()))
+	{
+		//cachedDest_W = getClickLocation();
+		//rotatePlayer(cachedDest_W);
+		return weaponPtr->W();
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("nullptr"));
+	}
+	return nullptr;
 }
 
 void AHnS_Character::rotatePlayer(FVector destination)

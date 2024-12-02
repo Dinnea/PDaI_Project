@@ -53,9 +53,14 @@ public:
 
 	FVector cachedDest_roll;
 
+	FVector cachedDest_W;
+
 	AHnS_Character();
+	FVector getClickLocation();
 	float roll();
+	AActor* useW();
 	AActor* AutoAttack();
+
 
 	void updateRoll();
 

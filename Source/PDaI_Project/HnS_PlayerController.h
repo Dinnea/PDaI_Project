@@ -34,6 +34,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* QAbility;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* WAbility;
 	
 protected:
 
@@ -46,6 +49,7 @@ protected:
 	void OnSetDestinationReleased();
 	void autoAttackBullet(const FInputActionValue &value);
 	void q_ability(const FInputActionValue& value);
+	void w_ability(const FInputActionValue& value);
 	void enableMovement();
 	void setTimeBetweenFires();
 
@@ -70,8 +74,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float rollingTime;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool canCastW = true;
+
 	void setCanFire(bool Value);
 	void setCanCastQ(bool Value);
+	void setCanCastW(bool Value);
 
 private:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)

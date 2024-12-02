@@ -7,6 +7,8 @@
 #include "InputActionValue.h"
 #include "HnS_Weapon.generated.h"
 
+class AHnS_Bullet;
+class AHnS_WAbility;
 UCLASS()
 class PDAI_PROJECT_API AHnS_Weapon : public AActor
 {
@@ -21,6 +23,7 @@ public:
 	void SetReady(bool value);
 	UFUNCTION(BlueprintCallable)
 	AActor* Attack();
+	AActor* W();
 
 	//UPROPERTY(EditDefaultsOnly)
 	//float damage;
@@ -39,13 +42,20 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Stats")
 	TSubclassOf<AHnS_Bullet> BulletToSpawn;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	TSubclassOf<AHnS_WAbility> WToSpawn;
+
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* WeaponMesh;
 
 	ACharacter* Player;
 
+	class AHns_CharacterPlayer* controlledPlayer;
+
 	UPROPERTY()
 	USceneComponent* spawnLocation;
+
+	FVector cachedDest_W;
 
 private:
 	bool ready = true;

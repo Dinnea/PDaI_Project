@@ -5,6 +5,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameFramework/Character.h"
 #include "HnS_Bullet.h"
+#include "HnS_WAbility.h"
 #include "Hns_CharacterPlayer.h"
 
 // Sets default values
@@ -44,6 +45,23 @@ AActor* AHnS_Weapon::Attack()
 		return SpawnedActor;
 	}
 	return nullptr;
+}
+
+AActor* AHnS_Weapon::W()
+{
+	cachedDest_W = controlledPlayer->getClickLocation();
+	//cachedDest_W = FVector::ZeroVector;
+	controlledPlayer->rotatePlayer(cachedDest_W);
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Instigator = Player;
+	SpawnParams.Owner = this;
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(spawnLocation->GetComponentLocation()).ToString());
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_WAbility>(WToSpawn, spawnLocation->GetComponentLocation() + FVector(0, 0, 250), Player->GetActorRotation(), SpawnParams);
+	if (SpawnedActor == nullptr)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("W nullptr"));
+	}
+	return SpawnedActor;
 }
 
 // Called when the game starts or when spawned

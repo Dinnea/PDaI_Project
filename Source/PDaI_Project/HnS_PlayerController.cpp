@@ -45,6 +45,7 @@ void AHnS_PlayerController::SetupInputComponent()
 		//Setup basic attack input events
 		EnhancedInputComponent->BindAction(autoAttack, ETriggerEvent::Started, this, &AHnS_PlayerController::autoAttackBullet);
 		EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
+		EnhancedInputComponent->BindAction(WAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::w_ability);
 	}
 	else
 	{
@@ -145,6 +146,19 @@ void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 		FTimerHandle qTimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(qTimerHandle, qDelegate, QCooldown, false);
 	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Abiity is not ready yet!"));
+	}
+}
+
+void AHnS_PlayerController::w_ability(const FInputActionValue& value)
+{
+	if (canCastW && !isRolling)
+	{
+		GetCharacter()->GetCharacterMovement()->DisableMovement();
+		PlayerCharacter->useW();
+	}
 }
 
 void AHnS_PlayerController::enableMovement()
@@ -179,5 +193,10 @@ void AHnS_PlayerController::setCanCastQ(bool Value)
 {
 	canRoll = true;
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(GetWorldTimerManager().GetTimerElapsed(qTimerHandle)));
+}
+
+void AHnS_PlayerController::setCanCastW(bool Value)
+{
+	canCastW = true;
 }
 
