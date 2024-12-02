@@ -44,9 +44,10 @@ void ABaseEnemyController::SetUpPerceptionSystem()
 		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
 		sight->SightRadius = 500.f;
 		sight->LoseSightRadius = sight->SightRadius + 25.f;
-		sight->PeripheralVisionAngleDegrees = 90;
+		sight->PeripheralVisionAngleDegrees = 360;
 		sight->SetMaxAge(5.f); //after 5 s the stimulus is forgotten
 		sight->AutoSuccessRangeFromLastSeenLocation = 520.f;
+	
 
 		//Affiliation system not actively used in game, so to ensure no problems, all set to true
 		sight->DetectionByAffiliation.bDetectEnemies = true;

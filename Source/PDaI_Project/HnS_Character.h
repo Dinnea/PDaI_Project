@@ -59,8 +59,6 @@ public:
 
 	bool AbilityW();
 
-	bool UseAbility(int index);
-
 	void updateRoll();
 
 	void rotatePlayer(FVector destination);
@@ -79,11 +77,7 @@ protected:
 	UChildActorComponent* Weapon;
 
 	UPROPERTY(EditAnywhere, Category = "Abilities");
-	UChildActorComponent* abilityQ;
-
-	UPROPERTY(EditAnywhere, Category = "Abilities");
-	TArray<UChildActorComponent*> abilities;
-
+	UChildActorComponent* abilityW;
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;
@@ -104,8 +98,5 @@ public:
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-	
-	USceneComponent* GetProjectileSpawnLocation();
 
 };
