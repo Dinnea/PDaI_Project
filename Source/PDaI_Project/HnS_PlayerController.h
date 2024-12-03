@@ -38,6 +38,8 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ability1;
+
+	FVector cachedDest_attack;
 	
 protected:
 
@@ -81,6 +83,5 @@ protected:
 private:
 	//UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FVector cachedDest;
-	FVector cachedDest_attack;
 	float followTime;
 };

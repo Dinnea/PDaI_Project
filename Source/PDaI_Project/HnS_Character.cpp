@@ -11,6 +11,7 @@
 #include "HealthBarWidget.h"
 #include <HnS_Ability.h>
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include <TestChildAbility.h>
 
 void AHnS_Character::SetupMesh()
@@ -39,6 +40,12 @@ void AHnS_Character::enableMovement()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Enable movement"));
 	GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
+}
+
+void AHnS_Character::onFire()
+{
+	//FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Character::applyFireDamage);
+	//GetWorld()->GetTimerManager().SetTimer(fTimerHandle, Delegate, damageInterval, false, 1.f);
 }
 
 void AHnS_Character::updateRoll()

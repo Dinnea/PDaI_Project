@@ -7,6 +7,11 @@
 #include "NiagaraFunctionLibrary.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
+#include "Components/BoxComponent.h"
+#include <PDaI_Project/HnS_PlayerController.h>
+#include <PDaI_Project/HnS_Character.h>
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 AHnS_WAbility::AHnS_WAbility()
@@ -15,8 +20,8 @@ AHnS_WAbility::AHnS_WAbility()
 	PrimaryActorTick.bCanEverTick = true;
 	W_FX = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Effects"));
 	SetRootComponent(W_FX);
-	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
-	CollisionSphere->SetupAttachment(W_FX);
+	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));
+	CollisionBox->SetupAttachment(W_FX);
 	//ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComponent"));
 	//ProjectileMovement->ProjectileGravityScale = 0;
 
@@ -25,20 +30,85 @@ AHnS_WAbility::AHnS_WAbility()
 // Called when the game starts or when spawned
 void AHnS_WAbility::BeginPlay()
 {
+	pController = Cast<AHnS_PlayerController>(GetInstigator()->GetController());
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("W casted"));
-	//CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
+	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
 	Super::BeginPlay();
 	//CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
 	//UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, Particle, GetActorLocation());
+	FVector wActorLocation = GetActorLocation();
+	//pController->cachedDest_attack;
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *(pController->cachedDest_attack.ToString()));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *(pController->cachedDest_attack.ToString()));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(pController->HP));
+	FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(pController->cachedDest_attack, wActorLocation);
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *(rotVector).ToString());
+	wDestVector = wActorLocation + GetActorForwardVector() * WDistance;
+	SetActorLocation(wDestVector);
+	/*
+	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::setLocationAfterDelay);
+	FTimerHandle mTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, 1, false);
+	*/
+	//UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, Particle, Cast<AHnS_Character>(GetInstigator())->GetActorLocation());
 }
 
 void AHnS_WAbility::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("W overlap"));
+	prevFireTicks = fireTicks;
+	AController* PlayerC = GetInstigator()->GetController(); //Instigator - Object which created the actor/event (player created bullet)
+
+
+
+	if (AHnS_Character* const TargetPlayer = Cast<AHnS_Character>(OtherActor))
+	{
+		if (OtherActor != PlayerC->GetPawn() && !TargetPlayer->invulnerable)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, PlayerC->GetPawn()->GetFName().ToString());
+			if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass())
+			{
+				FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::fireDamage, OtherActor, PlayerC);
+				GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, damageInterval, true);
+			}
+			//UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
+			//Destroy();
+		}
+		/*
+		if (AHnS_Character* tempCharacter = Cast<AHnS_Character>(OtherActor))
+		{
+			if (tempCharacter->HP <= 0)
+			{
+				UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, deathImpactParticles, GetActorLocation());
+			}
+		}
+		*/
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("[W Ability] AActor to AHnS_Character cast failed"));
+	}
+}
+
+void AHnS_WAbility::setLocationAfterDelay()
+{
+	SetActorLocation(wDestVector);
 }
 // Called every frame
 void AHnS_WAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
 
+void AHnS_WAbility::fireDamage(AActor* actorToDamage, AController* damageInstigator)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Timer test"));
+	fireTicks = fireTicks - 1;
+	UGameplayStatics::ApplyDamage(actorToDamage, BaseDamage, damageInstigator, this, DamageType);
+	if (fireTicks <= 0)
+	{
+		fireTicks = prevFireTicks;
+		GetWorldTimerManager().ClearTimer(mTimerHandle);
+	}
 }
 

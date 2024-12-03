@@ -72,6 +72,7 @@ protected:
 	void CreateWeapon();
 	void SetupHPBar();
 	void enableMovement();
+	void onFire();
 
 	UPROPERTY(EditAnywhere, Category="Abilities");
 	UChildActorComponent* Weapon;
@@ -90,6 +91,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Interp")
 	float Distance;
+
+	FTimerHandle fTimerHandle;
 
 
 public:	
