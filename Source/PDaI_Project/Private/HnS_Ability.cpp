@@ -26,7 +26,7 @@ bool AHnS_Ability::Execute()
 {
 	if (!ready) 
 	{ 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
 		return false; 
 	}
 

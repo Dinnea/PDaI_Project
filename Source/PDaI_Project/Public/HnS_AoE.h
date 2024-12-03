@@ -29,6 +29,12 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category="Stats")
 	float lifeTime;
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	float damage;
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	float angle;
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	float range;
 
 	UFUNCTION()
 	void BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor,

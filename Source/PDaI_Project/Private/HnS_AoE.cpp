@@ -16,12 +16,12 @@ AHnS_AoE::AHnS_AoE()
 
 	vfx = CreateDefaultSubobject<UNiagaraComponent>(TEXT("VFX"));
 	SetRootComponent(vfx);
+
+	
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
 	CollisionSphere->SetupAttachment(vfx);
 
-	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_AoE::OnTimeout);
-	FTimerHandle TimerHandle;
-	//GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, lifeTime, false);
+	
 
 }
 
@@ -29,7 +29,15 @@ AHnS_AoE::AHnS_AoE()
 void AHnS_AoE::BeginPlay()
 {
 	Super::BeginPlay();
-	//CollisionSphere->OnComponentBeginOverlap.AddDynamic(this,);
+	vfx->SetNiagaraVariableFloat(FString("angle"), angle);
+	vfx->SetNiagaraVariableFloat(FString("length"), range);
+	vfx->SetNiagaraVariableFloat(FString("lifetime"), lifeTime-.5f);
+	CollisionSphere->SetSphereRadius(range);
+
+	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_AoE::OnTimeout);
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, lifeTime, false);
+	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_AoE::BeginOverlap);
 	
 }
 
@@ -37,7 +45,7 @@ void AHnS_AoE::BeginPlay()
 
 void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//UGameplayStatics::Apply
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
 }
 
 void AHnS_AoE::OnTimeout()
