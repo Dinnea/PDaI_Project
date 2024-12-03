@@ -54,13 +54,13 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 
 	if (AHnS_Character* const TargetPlayer = Cast<AHnS_Character>(OtherActor))
 	{
-		if (OtherActor != PlayerC->GetPawn() && !TargetPlayer->invulnerable) //(OtherActor->GetClass() != PlayerC->GetPawn()->GetClass() && !TargetPlayer->invulnerable)
+		if (OtherActor != PlayerC->GetPawn() && !TargetPlayer->invulnerable) 
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, OtherActor->GetFName().ToString());
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, impactParticles, GetActorLocation());
 			//BulletHit();
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, PlayerC->GetPawn()->GetFName().ToString());
-			UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
+			if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass()) UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
 			Destroy();
 		}
 		if (AHnS_Character* tempCharacter = Cast<AHnS_Character>(OtherActor))
