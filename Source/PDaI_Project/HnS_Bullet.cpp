@@ -37,7 +37,7 @@ void AHnS_Bullet::BeginPlay()
 
 void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
 	//OtherActor->GetFName().ToString() != "BP_HnS_PlayerChar_C_0"
 	//GetOwner()->GetFName().ToString();
 	if (GetOwner() == nullptr)
@@ -60,7 +60,8 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, impactParticles, GetActorLocation());
 			//BulletHit();
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, PlayerC->GetPawn()->GetFName().ToString());
-			if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass()) UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
+			//if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass()) 
+			UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
 			Destroy();
 		}
 		if (AHnS_Character* tempCharacter = Cast<AHnS_Character>(OtherActor))

@@ -7,6 +7,7 @@
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include <PDaI_Project/HnS_Character.h>
 
 // Sets default values
 AHnS_AoE::AHnS_AoE()
@@ -29,6 +30,7 @@ AHnS_AoE::AHnS_AoE()
 void AHnS_AoE::BeginPlay()
 {
 	Super::BeginPlay();
+	SetActorLocation(GetActorLocation() + FVector(0, 0, 10000));
 	vfx->SetNiagaraVariableFloat(FString("angle"), angle);
 	vfx->SetNiagaraVariableFloat(FString("length"), range);
 	vfx->SetNiagaraVariableFloat(FString("lifetime"), lifeTime-.5f);
@@ -38,6 +40,10 @@ void AHnS_AoE::BeginPlay()
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, lifeTime, false);
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_AoE::BeginOverlap);
+
+	FTimerDelegate collisionDelegate = FTimerDelegate::CreateUObject(this, &AHnS_AoE::StartCollisionChecking);
+
+	GetWorld()->GetTimerManager().SetTimerForNextTick(collisionDelegate);
 	
 }
 
@@ -45,7 +51,36 @@ void AHnS_AoE::BeginPlay()
 
 void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
+	AActor* caster = GetInstigator();
+	if (OtherActor != caster && Cast<AHnS_Character>(OtherActor))
+	{
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
+
+		FVector casterLocation = caster->GetActorLocation();
+		FVector targetLocation = OtherActor->GetActorLocation();
+
+		FVector directionVector = targetLocation-casterLocation;
+
+
+		directionVector.Normalize();
+		FVector forward = caster->GetActorForwardVector();
+
+		float dot = forward.Dot(directionVector);
+
+		float angleDegrees = acos(dot) * (180.0 / 3.141592653589793238463f);
+
+
+		if (angleDegrees <= angle / 2.f)
+		{
+			UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
+		}
+	}
+}
+
+void AHnS_AoE::StartCollisionChecking()
+{
+	SetActorLocation(GetActorLocation() - FVector(0, 0, 10000));
 }
 
 void AHnS_AoE::OnTimeout()

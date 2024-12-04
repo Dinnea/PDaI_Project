@@ -27,6 +27,8 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class USphereComponent* CollisionSphere;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	TSubclassOf<UDamageType> DamageType;
 	UPROPERTY(EditDefaultsOnly, Category="Stats")
 	float lifeTime;
 	UPROPERTY(EditDefaultsOnly, Category = "Stats")
@@ -41,6 +43,7 @@ protected:
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
 
+	void StartCollisionChecking();
 private:
 
 	void OnTimeout();

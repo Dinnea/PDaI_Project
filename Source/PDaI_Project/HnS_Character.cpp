@@ -72,6 +72,7 @@ void AHnS_Character::SetupHPBar()
 		WidgetComponent->SetWidgetSpace(EWidgetSpace::World);
 		WidgetComponent->SetRelativeLocation(FVector(0.f, 0.f, 125.f)); //Attach healthbar (from widget) above players/enemies head
 		WidgetComponent->SetRelativeRotation(FRotator(180.f, 75.f, 180.f));
+		WidgetComponent->SetCollisionProfileName(TEXT("NoCollision"));
 		static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass{ TEXT("/Game/WBP_NPCHealthBar") }; //Choose blueprint to attach the healthbar from
 		if (WidgetClass.Succeeded())
 		{
