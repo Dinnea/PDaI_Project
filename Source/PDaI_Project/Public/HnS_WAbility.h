@@ -43,6 +43,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float BaseDamage;
 
+	UPROPERTY(EditAnywhere)
+	float duration;
+
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
 
@@ -52,14 +55,23 @@ protected:
 
 	FVector wDestVector;
 
+	bool canDamage = false;
+
 	UFUNCTION()
 	void BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
 
+	UFUNCTION()
+	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
 	void setLocationAfterDelay();
 
 	void fireDamage(AActor* actorToDamage, AController* damageInstigator);
+
+	void enableDamage();
+
+	void disableEffect();
 
 	class AHnS_PlayerController* pController;
 
