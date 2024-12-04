@@ -8,6 +8,8 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include <PDaI_Project/HnS_Character.h>
+#include <PDaI_Project/Hns_CharacterPlayer.h>
+#include <PDaI_Project/HnS_BaseEnemy.h>
 
 // Sets default values
 AHnS_AoE::AHnS_AoE()
@@ -54,12 +56,10 @@ void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Othe
 	AActor* caster = GetInstigator();
 	if (OtherActor != caster && Cast<AHnS_Character>(OtherActor))
 	{
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
-
 		FVector casterLocation = caster->GetActorLocation();
 		FVector targetLocation = OtherActor->GetActorLocation();
 
-		FVector directionVector = targetLocation-casterLocation;
+		FVector directionVector = targetLocation - casterLocation;
 
 
 		directionVector.Normalize();
@@ -69,12 +69,32 @@ void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Othe
 
 		float angleDegrees = acos(dot) * (180.0 / 3.141592653589793238463f);
 
-
-		if (angleDegrees <= angle / 2.f)
+		if (auto* tempCaster = Cast<AHns_CharacterPlayer>(caster)) 
 		{
-			UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
+			if (auto* tempTarget = Cast<AHnS_BaseEnemy>(OtherActor)) 
+			{
+				if (angleDegrees <= angle / 2.f)
+				{
+					UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
+					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
+				}
+			}
 		}
+		else 
+		{
+			if (auto* tempTarget = Cast<AHns_CharacterPlayer>(OtherActor))
+			{
+				if (angleDegrees <= angle / 2.f)
+				{
+					UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
+					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
+				}
+			}
+		}
+		
+
+
+		
 	}
 }
 
