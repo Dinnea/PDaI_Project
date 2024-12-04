@@ -25,7 +25,7 @@ AHnS_WAbility::AHnS_WAbility()
 // Called when the game starts or when spawned
 void AHnS_WAbility::BeginPlay()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("W casted"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("W casted"));
 	//CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
 	Super::BeginPlay();
 	//CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);

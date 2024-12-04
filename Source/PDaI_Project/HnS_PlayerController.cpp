@@ -138,7 +138,7 @@ void AHnS_PlayerController::OnAbility1()
 	}
 	if (PlayerCharacter) 
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability 1 key");
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability 1 key");
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		PlayerCharacter->rotatePlayer(cachedDest_attack);
 
@@ -159,7 +159,7 @@ void AHnS_PlayerController::q_ability(const FInputActionValue& value)
 		GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, rollingTime, false);
 		PlayerCharacter->roll();
 		if (!isRolling)
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("false"));
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("false"));
 		cachedDest = PlayerCharacter->destVector;
 		canRoll = false;
 		//GetWorldTimerManager().ClearTimer(qTimerHandle);
@@ -177,7 +177,7 @@ void AHnS_PlayerController::enableMovement()
 	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
 	prevTimeBetweenFires = timeBetweenFires;
 	timeBetweenFires = timeBetweenFires - 0.3;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
 
 	FTimerDelegate tDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setTimeBetweenFires);
 	FTimerHandle tTimerHandle;
@@ -187,7 +187,7 @@ void AHnS_PlayerController::enableMovement()
 void AHnS_PlayerController::setTimeBetweenFires()
 {
 	timeBetweenFires = prevTimeBetweenFires;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
 }
 
 /*

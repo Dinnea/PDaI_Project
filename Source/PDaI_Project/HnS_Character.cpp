@@ -37,7 +37,7 @@ void AHnS_Character::CreateWeapon()
 
 void AHnS_Character::enableMovement()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Enable movement"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Enable movement"));
 	GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 }
 
@@ -72,6 +72,7 @@ void AHnS_Character::SetupHPBar()
 		WidgetComponent->SetWidgetSpace(EWidgetSpace::World);
 		WidgetComponent->SetRelativeLocation(FVector(0.f, 0.f, 125.f)); //Attach healthbar (from widget) above players/enemies head
 		WidgetComponent->SetRelativeRotation(FRotator(180.f, 75.f, 180.f));
+		WidgetComponent->SetCollisionProfileName(TEXT("NoCollision"));
 		static ConstructorHelpers::FClassFinder<UUserWidget> WidgetClass{ TEXT("/Game/WBP_NPCHealthBar") }; //Choose blueprint to attach the healthbar from
 		if (WidgetClass.Succeeded())
 		{
@@ -178,20 +179,20 @@ float AHnS_Character::roll()
 	attackHitSuccessful = Cast<APlayerController>(GetController())->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
 
 	if (attackHitSuccessful) {
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Debug test"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Debug test"));
 		cachedDest_roll = attackHit.Location;
 	}
 	rotatePlayer(cachedDest_roll);
 	if (GEngine)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
 	}
 	FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(cachedDest_roll, ActorLocation);
 	destVector = GetActorLocation() + GetActorForwardVector()*Distance;
 	//destVector.X *= -1;
 	//rotVector = rotVector * -1;
 	playRollAnimation = true;
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
 	return 0;
 }
 
@@ -202,6 +203,6 @@ void AHnS_Character::rotatePlayer(FVector destination)
 	FRotator PlayerRotation = UKismetMathLibrary::FindLookAtRotation(destination, PlayerLoc);
 	FRotator newPlayerRotation = FRotator(GetActorRotation().Pitch, PlayerRotation.Yaw - 180, GetActorRotation().Roll);
 	SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
 }
 

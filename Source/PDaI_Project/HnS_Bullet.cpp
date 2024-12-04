@@ -6,6 +6,8 @@
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Hns_CharacterPlayer.h"
+#include "HnS_BaseEnemy.h"
 
 // Sets default values
 AHnS_Bullet::AHnS_Bullet()
@@ -37,16 +39,16 @@ void AHnS_Bullet::BeginPlay()
 
 void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
 	//OtherActor->GetFName().ToString() != "BP_HnS_PlayerChar_C_0"
 	//GetOwner()->GetFName().ToString();
 	if (GetOwner() == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Owner nullptr"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Owner nullptr"));
 	}
 	if (GetInstigator() == nullptr)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Instigator nullptr"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Instigator nullptr"));
 	}
 	AController* PlayerC = GetInstigator()->GetController(); //Instigator - Object which created the actor/event (player created bullet)
 
@@ -59,26 +61,48 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, OtherActor->GetFName().ToString());
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, impactParticles, GetActorLocation());
 			//BulletHit();
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, PlayerC->GetPawn()->GetFName().ToString());
-			if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass()) UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
-			Destroy();
-		}
-		if (AHnS_Character* tempCharacter = Cast<AHnS_Character>(OtherActor))
-		{
-			if (tempCharacter->HP <= 0)
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, PlayerC->GetPawn()->GetFName().ToString());
+			//if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass()) 
+			//UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
+
+			if (auto* tempCaster = Cast<AHns_CharacterPlayer>(GetInstigator()))
 			{
-				UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, deathImpactParticles, GetActorLocation());
+				if (auto* tempTarget = Cast<AHnS_BaseEnemy>(OtherActor))
+				{
+					BulletHit(OtherActor);
+				}
 			}
+			else
+			{
+				if (auto* tempTarget = Cast<AHns_CharacterPlayer>(OtherActor))
+				{
+					BulletHit(OtherActor);
+				}
+			}
+			if (AHnS_Character* tempCharacter = Cast<AHnS_Character>(OtherActor))
+			{
+				if (tempCharacter->HP <= 0)
+				{
+					UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, deathImpactParticles, GetActorLocation());
+				}
+			}
+
+			
 		}
+
+		
+		
 	}
 	else
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("AActor to AHnS_Character cast failed"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("AActor to AHnS_Character cast failed"));
 	}
 }
 
-void AHnS_Bullet::BulletHit()
+void AHnS_Bullet::BulletHit(AActor* OtherActor)
 {
+	UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, GetInstigatorController(), this, DamageType);
+	Destroy();
 }
 
 void AHnS_Bullet::bulletDestroy(bool Value)
