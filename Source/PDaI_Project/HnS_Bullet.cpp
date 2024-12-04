@@ -6,6 +6,8 @@
 #include "NiagaraSystem.h"
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
+#include "Hns_CharacterPlayer.h"
+#include "HnS_BaseEnemy.h"
 
 // Sets default values
 AHnS_Bullet::AHnS_Bullet()
@@ -61,16 +63,35 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 			//BulletHit();
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, PlayerC->GetPawn()->GetFName().ToString());
 			//if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass()) 
-			UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
-			Destroy();
-		}
-		if (AHnS_Character* tempCharacter = Cast<AHnS_Character>(OtherActor))
-		{
-			if (tempCharacter->HP <= 0)
+			//UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
+
+			if (auto* tempCaster = Cast<AHns_CharacterPlayer>(GetInstigator()))
 			{
-				UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, deathImpactParticles, GetActorLocation());
+				if (auto* tempTarget = Cast<AHnS_BaseEnemy>(OtherActor))
+				{
+					BulletHit(OtherActor);
+				}
 			}
+			else
+			{
+				if (auto* tempTarget = Cast<AHns_CharacterPlayer>(OtherActor))
+				{
+					BulletHit(OtherActor);
+				}
+			}
+			if (AHnS_Character* tempCharacter = Cast<AHnS_Character>(OtherActor))
+			{
+				if (tempCharacter->HP <= 0)
+				{
+					UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, deathImpactParticles, GetActorLocation());
+				}
+			}
+
+			
 		}
+
+		
+		
 	}
 	else
 	{
@@ -78,8 +99,10 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 	}
 }
 
-void AHnS_Bullet::BulletHit()
+void AHnS_Bullet::BulletHit(AActor* OtherActor)
 {
+	UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, GetInstigatorController(), this, DamageType);
+	Destroy();
 }
 
 void AHnS_Bullet::bulletDestroy(bool Value)
