@@ -6,6 +6,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <GameFramework/Actor.h>
 #include "HnS_Character.generated.h"
+#include <HnS_Ability.h>
 
 
 class USpringArmComponent;
@@ -62,6 +63,8 @@ public:
 	void updateRoll();
 
 	void rotatePlayer(FVector destination);
+
+	AHnS_Ability* GetAbilityW();
 
 protected:
 	// Called when the game starts or when spawned

@@ -118,9 +118,9 @@ void AHnS_Character::BeginPlay()
 		abilityPtr->SetUser(this);
 		abilityPtr->SetAbilitySpawnLocation(SpawnLocation);
 	}
-	else if (auto* abilityPtr = Cast<AHnS_Ability>(abilityW->GetChildActor()))
+	else if (auto* abilityPtrr = Cast<AHnS_Ability>(abilityW->GetChildActor()))
 	{
-		abilityPtr->SetUser(this);
+		abilityPtrr->SetUser(this);
 	}
 }
 
@@ -208,5 +208,10 @@ void AHnS_Character::rotatePlayer(FVector destination)
 	FRotator newPlayerRotation = FRotator(GetActorRotation().Pitch, PlayerRotation.Yaw - 180, GetActorRotation().Roll);
 	SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
+}
+
+AHnS_Ability* AHnS_Character::GetAbilityW()
+{
+	return  Cast<AHnS_Ability>(abilityW->GetChildActor());
 }
 

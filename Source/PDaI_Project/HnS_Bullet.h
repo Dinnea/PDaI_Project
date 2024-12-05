@@ -52,7 +52,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float timeToDestroy = 5.f;
 
-	void bulletDestroy (bool Value);
+	void bulletDestroy(bool Value);
 
 
 public:	
