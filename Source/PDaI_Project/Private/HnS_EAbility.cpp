@@ -36,6 +36,7 @@ void AHnS_EAbility::disableCrouch()
 void AHnS_EAbility::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, ePlayerCharacter->trap_crouch ? TEXT("Crouch: true") : TEXT("Crouch: false"));
 
 }
 

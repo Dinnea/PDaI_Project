@@ -110,7 +110,6 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 		PlayerCharacter->rotatePlayer(cachedDest_attack);
 
 		PlayerCharacter->AutoAttack();
-
 	}
 }
 

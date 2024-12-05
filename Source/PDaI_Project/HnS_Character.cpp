@@ -223,7 +223,10 @@ void AHnS_Character::rotatePlayer(FVector destination)
 
 bool AHnS_Character::AbilityE()
 {
-	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityE->GetChildActor())) return abilityPtr->Execute();
+	if (!playRollAnimation)
+	{
+		if (auto* abilityPtr = Cast<AHnS_Ability>(abilityE->GetChildActor())) return abilityPtr->Execute();
+	}
 	return false;
 }
 
