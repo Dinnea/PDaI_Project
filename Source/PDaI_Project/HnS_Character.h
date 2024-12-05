@@ -63,6 +63,8 @@ public:
 
 	void rotatePlayer(FVector destination);
 
+	bool AbilityE();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -79,6 +81,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Abilities");
 	UChildActorComponent* abilityW;
+
+	UPROPERTY(EditAnywhere, Category = "Abilities");
+	UChildActorComponent* abilityE;
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;

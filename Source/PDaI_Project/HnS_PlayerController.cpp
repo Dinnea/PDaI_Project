@@ -30,9 +30,9 @@ void AHnS_PlayerController::SetupInputComponent()
 {
 	Super::SetupInputComponent();
 
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer())) 
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
 	{
-		Subsystem ->AddMappingContext(defaultMappingContext, 0);
+		Subsystem->AddMappingContext(defaultMappingContext, 0);
 	}
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
 	{
@@ -44,10 +44,11 @@ void AHnS_PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(setDestination, ETriggerEvent::Canceled, this, &AHnS_PlayerController::OnSetDestinationReleased);
 		//Setup basic attack input events
 		EnhancedInputComponent->BindAction(autoAttack, ETriggerEvent::Started, this, &AHnS_PlayerController::autoAttackBullet);
-	
+
 		//ability input events
 		EnhancedInputComponent->BindAction(ability1, ETriggerEvent::Started, this, &AHnS_PlayerController::OnAbility1);
 		EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
+		EnhancedInputComponent->BindAction(EAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::e_ability);
 	}
 	else
 	{
@@ -67,14 +68,8 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 		followTime += GetWorld()->GetDeltaSeconds();
-		FHitResult hit;
-		bool hitSuccessful = false;
 
-		hitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, hit);
-
-		if (hitSuccessful) {
-			cachedDest = hit.Location;
-		}
+		cachedDest = getClickLocation();
 
 		APawn* controlledPawn = GetPawn();
 		if (controlledPawn != nullptr) {
@@ -95,16 +90,9 @@ void AHnS_PlayerController::OnSetDestinationReleased()
 	followTime = 0.f;
 }
 
-void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
+void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 {
-	FHitResult attackHit;
-	bool attackHitSuccessful = false;
-
-	attackHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
-
-	if (attackHitSuccessful) {
-		cachedDest_attack = attackHit.Location;
-	}
+	cachedDest_attack = getClickLocation();
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
 	if (PlayerCharacter)// && canFire)
 	{
@@ -128,19 +116,12 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue &value)
 
 void AHnS_PlayerController::OnAbility1()
 {
-	FHitResult attackHit;
-	bool attackHitSuccessful = false;
-
-	attackHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
-
-	if (attackHitSuccessful) {
-		cachedDest_attack = attackHit.Location;
-	}
-	if (PlayerCharacter) 
+	cachedDest_W = getClickLocation();
+	if (PlayerCharacter)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability 1 key");
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability W key");
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
-		PlayerCharacter->rotatePlayer(cachedDest_attack);
+		PlayerCharacter->rotatePlayer(cachedDest_W);
 
 		PlayerCharacter->AbilityW();
 	}
@@ -188,6 +169,36 @@ void AHnS_PlayerController::setTimeBetweenFires()
 {
 	timeBetweenFires = prevTimeBetweenFires;
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
+}
+
+void AHnS_PlayerController::e_ability(const FInputActionValue& value)
+{
+	cachedDest_E = getClickLocation();
+	if (PlayerCharacter)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability E key");
+		GetCharacter()->GetCharacterMovement()->DisableMovement();
+		PlayerCharacter->rotatePlayer(cachedDest_E);
+
+		PlayerCharacter->AbilityE();
+	}
+}
+
+FVector AHnS_PlayerController::getClickLocation()
+{
+	FHitResult attackHit;
+	bool attackHitSuccessful = false;
+
+	attackHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
+
+	if (attackHitSuccessful) {
+		return attackHit.Location;
+	}
+	else
+	{
+		return FVector::ZeroVector;
+	}
+	return FVector();
 }
 
 /*

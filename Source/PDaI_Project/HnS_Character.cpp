@@ -99,8 +99,11 @@ AHnS_Character::AHnS_Character()
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
 
-	abilityW = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityQ"));
+	abilityW = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityW"));
 	abilityW->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+
+	abilityE = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityE"));
+	abilityE->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
 
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
@@ -123,6 +126,12 @@ void AHnS_Character::BeginPlay()
 	{
 		abilityPtr->SetUser(this);
 		abilityPtr->SetAbilitySpawnLocation(SpawnLocation);
+	}
+
+	if (auto* eAbilityPtr = Cast<AHnS_Weapon>(abilityE->GetChildActor()))
+	{
+		eAbilityPtr->SetUser(this);
+		eAbilityPtr->SetAbilitySpawnLocation(SpawnLocation);
 	}
 }
 
@@ -210,5 +219,11 @@ void AHnS_Character::rotatePlayer(FVector destination)
 	FRotator newPlayerRotation = FRotator(GetActorRotation().Pitch, PlayerRotation.Yaw - 180, GetActorRotation().Roll);
 	SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
+}
+
+bool AHnS_Character::AbilityE()
+{
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityW->GetChildActor())) return abilityPtr->Execute();
+	return false;
 }
 

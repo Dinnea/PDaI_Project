@@ -39,8 +39,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* ability1;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* EAbility;
+
 	FVector cachedDest_attack;
-	
+
+	FVector cachedDest_W;
+
+	FVector cachedDest_E;
+
 protected:
 
 	virtual void SetupInputComponent() override;
@@ -50,11 +57,13 @@ protected:
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
-	void autoAttackBullet(const FInputActionValue &value);
+	void autoAttackBullet(const FInputActionValue& value);
 	void q_ability(const FInputActionValue& value);
 	void OnAbility1();
 	void enableMovement();
 	void setTimeBetweenFires();
+	void e_ability(const FInputActionValue& value);
+	FVector getClickLocation();
 
 	class AHnS_Character* PlayerCharacter;
 
