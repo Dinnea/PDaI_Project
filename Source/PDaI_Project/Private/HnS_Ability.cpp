@@ -21,6 +21,11 @@ void AHnS_Ability::SetUser(ACharacter* pUser)
 	user = pUser;
 }
 
+float AHnS_Ability::GetTimer()
+{	
+	return GetWorldTimerManager().GetTimerElapsed(cooldownHandle);
+}
+
 
 bool AHnS_Ability::Execute()
 {
@@ -32,8 +37,9 @@ bool AHnS_Ability::Execute()
 
 	SetReady(false);
 	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Ability::SetReady, true);
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, cooldown, false);
+	GetWorld()->GetTimerManager().SetTimer(cooldownHandle, Delegate, cooldown, false);
+
+	//GetWorldTimerManager().GetTimerElapsed(handle);
 	return true;
 }
 

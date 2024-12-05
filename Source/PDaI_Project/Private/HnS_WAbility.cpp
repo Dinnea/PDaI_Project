@@ -30,7 +30,7 @@ AHnS_WAbility::AHnS_WAbility()
 // Called when the game starts or when spawned
 void AHnS_WAbility::BeginPlay()
 {
-	pController = Cast<AHnS_PlayerController>(GetInstigator()->GetController());
+	if (GetInstigator() != nullptr) pController = Cast<AHnS_PlayerController>(GetInstigator()->GetController());
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("W casted"));
 	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
 	CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AHnS_WAbility::OnOverlapEnd);
