@@ -118,6 +118,10 @@ void AHnS_Character::BeginPlay()
 		abilityPtr->SetUser(this);
 		abilityPtr->SetAbilitySpawnLocation(SpawnLocation);
 	}
+	else if (auto* abilityPtr = Cast<AHnS_Ability>(abilityW->GetChildActor()))
+	{
+		abilityPtr->SetUser(this);
+	}
 }
 
 // Called every frame

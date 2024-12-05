@@ -32,7 +32,7 @@ protected:
 	void BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
-	virtual void BulletHit();
+	virtual void BulletHit(AActor* OtherActor);
 
 	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* impactParticles;
@@ -52,10 +52,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float timeToDestroy = 5.f;
 
-	UPROPERTY(EditAnywhere)
-	bool hurtsEnemies = true;
-
-	void bulletDestroy(bool Value);
+	void bulletDestroy (bool Value);
 
 
 public:	
