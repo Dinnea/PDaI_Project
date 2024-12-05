@@ -46,12 +46,21 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool playRollAnimation = false;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool trap_crouch = false;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* onFireParticleEffect;
+
+	UParticleSystemComponent* onFireInstance;
+
 	float globalDeltaTime;
 	float Zpos;
 	FVector destVector;
 	bool invulnerable = false;
 
 	FVector cachedDest_roll;
+
 
 	AHnS_Character();
 	float roll();
@@ -63,6 +72,14 @@ public:
 
 	void rotatePlayer(FVector destination);
 
+	bool AbilityE();
+
+	void setCrouch(bool flag);
+
+	void disableOnFire();
+
+	void enableOnFire(float duration);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -72,12 +89,16 @@ protected:
 	void CreateWeapon();
 	void SetupHPBar();
 	void enableMovement();
+	void onFire();
 
 	UPROPERTY(EditAnywhere, Category="Abilities");
 	UChildActorComponent* Weapon;
 
 	UPROPERTY(EditAnywhere, Category = "Abilities");
 	UChildActorComponent* abilityW;
+
+	UPROPERTY(EditAnywhere, Category = "Abilities");
+	UChildActorComponent* abilityE;
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;
@@ -90,6 +111,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Interp")
 	float Distance;
+
+	FTimerHandle fTimerHandle;
 
 
 public:	

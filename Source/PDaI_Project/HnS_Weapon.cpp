@@ -23,7 +23,6 @@ bool AHnS_Weapon::Execute()
 	SpawnParams.Instigator = user;
 	SpawnParams.Owner = this;
 	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, user->GetActorRotation(), SpawnParams);
-
 	return true;
 }
 

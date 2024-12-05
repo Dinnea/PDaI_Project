@@ -23,7 +23,7 @@ protected:
 	class UNiagaraComponent* W_FX;
 
 	UPROPERTY(EditDefaultsOnly)
-	class USphereComponent* CollisionSphere;
+	class UBoxComponent* CollisionBox;
 
 	UPROPERTY(EditDefaultsOnly)
 	class UProjectileMovementComponent* ProjectileMovement;
@@ -31,10 +31,49 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	class UNiagaraSystem* Particle;
 
+	UPROPERTY(EditAnywhere)
+	float WDistance;
+
+	UPROPERTY(EditAnywhere)
+	float damageInterval;
+
+	UPROPERTY(EditAnywhere)
+	int fireTicks;
+
+	UPROPERTY(EditAnywhere)
+	float BaseDamage;
+
+	UPROPERTY(EditAnywhere)
+	float duration;
+
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageType> DamageType;
+
+	int prevFireTicks;
+
+	FTimerHandle mTimerHandle;
+
+	FVector wDestVector;
+
+	bool canDamage = false;
+
 	UFUNCTION()
 	void BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
+
+	UFUNCTION()
+	void OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+
+	void setLocationAfterDelay();
+
+	void fireDamage(AActor* actorToDamage, AController* damageInstigator);
+
+	void enableDamage();
+
+	void disableEffect();
+
+	class AHnS_PlayerController* pController;
 
 public:
 	// Called every frame

@@ -8,9 +8,13 @@
 #include "EnhancedInputComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "HealthBarWidget.h"
 #include <HnS_Ability.h>
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
 #include <TestChildAbility.h>
 
 void AHnS_Character::SetupMesh()
@@ -39,6 +43,12 @@ void AHnS_Character::enableMovement()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Enable movement"));
 	GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
+}
+
+void AHnS_Character::onFire()
+{
+	//FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Character::applyFireDamage);
+	//GetWorld()->GetTimerManager().SetTimer(fTimerHandle, Delegate, damageInterval, false, 1.f);
 }
 
 void AHnS_Character::updateRoll()
@@ -93,8 +103,11 @@ AHnS_Character::AHnS_Character()
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
 	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
 
-	abilityW = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityQ"));
+	abilityW = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityW"));
 	abilityW->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+
+	abilityE = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityE"));
+	abilityE->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
 
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
@@ -117,6 +130,12 @@ void AHnS_Character::BeginPlay()
 	{
 		abilityPtr->SetUser(this);
 		abilityPtr->SetAbilitySpawnLocation(SpawnLocation);
+	}
+
+	if (auto* eAbilityPtr = Cast<AHnS_Weapon>(abilityE->GetChildActor()))
+	{
+		eAbilityPtr->SetUser(this);
+		eAbilityPtr->SetAbilitySpawnLocation(SpawnLocation);
 	}
 }
 
@@ -204,5 +223,33 @@ void AHnS_Character::rotatePlayer(FVector destination)
 	FRotator newPlayerRotation = FRotator(GetActorRotation().Pitch, PlayerRotation.Yaw - 180, GetActorRotation().Roll);
 	SetActorRotation(newPlayerRotation); //ludek->GetActorRotation().Yaw
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(PlayerRotation.ToString()));
+}
+
+bool AHnS_Character::AbilityE()
+{
+	if (!playRollAnimation)
+	{
+		if (auto* abilityPtr = Cast<AHnS_Ability>(abilityE->GetChildActor())) return abilityPtr->Execute();
+	}
+	return false;
+}
+
+void AHnS_Character::setCrouch(bool flag)
+{
+	trap_crouch = flag;
+}
+
+void AHnS_Character::enableOnFire(float duration)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("ON FIRE DEBUG"));
+	onFireInstance = UGameplayStatics::SpawnEmitterAtLocation(this, onFireParticleEffect, GetActorLocation());
+	FTimerDelegate Delegate1 = FTimerDelegate::CreateUObject(this, &AHnS_Character::disableOnFire);
+	FTimerHandle enTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(enTimerHandle, Delegate1, duration, false);
+}
+
+void AHnS_Character::disableOnFire()
+{
+	onFireInstance->Deactivate();
 }
 
