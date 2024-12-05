@@ -49,6 +49,11 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool trap_crouch = false;
 
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* onFireParticleEffect;
+
+	UParticleSystemComponent* onFireInstance;
+
 	float globalDeltaTime;
 	float Zpos;
 	FVector destVector;
@@ -70,6 +75,10 @@ public:
 	bool AbilityE();
 
 	void setCrouch(bool flag);
+
+	void disableOnFire();
+
+	void enableOnFire(float duration);
 
 protected:
 	// Called when the game starts or when spawned

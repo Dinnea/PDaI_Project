@@ -8,6 +8,9 @@
 #include "EnhancedInputComponent.h"
 #include "Components/WidgetComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "NiagaraComponent.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
 #include "HealthBarWidget.h"
 #include <HnS_Ability.h>
 #include "Kismet/KismetMathLibrary.h"
@@ -233,5 +236,19 @@ bool AHnS_Character::AbilityE()
 void AHnS_Character::setCrouch(bool flag)
 {
 	trap_crouch = flag;
+}
+
+void AHnS_Character::enableOnFire(float duration)
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("ON FIRE DEBUG"));
+	onFireInstance = UGameplayStatics::SpawnEmitterAtLocation(this, onFireParticleEffect, GetActorLocation());
+	FTimerDelegate Delegate1 = FTimerDelegate::CreateUObject(this, &AHnS_Character::disableOnFire);
+	FTimerHandle enTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(enTimerHandle, Delegate1, duration, false);
+}
+
+void AHnS_Character::disableOnFire()
+{
+	onFireInstance->Deactivate();
 }
 

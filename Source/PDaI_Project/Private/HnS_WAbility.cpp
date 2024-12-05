@@ -81,6 +81,7 @@ void AHnS_WAbility::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor*
 				{
 					FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::fireDamage, OtherActor, PlayerC);
 					GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, damageInterval, true);
+					TargetPlayer->enableOnFire(damageInterval * fireTicks);
 				}
 				//UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, PlayerC, this, DamageType);
 				//Destroy();
