@@ -63,7 +63,7 @@ void AHnS_PlayerController::OnInputStarted()
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
-	if (!isRolling)
+	if (!isRolling && !PlayerCharacter->trap_crouch)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
@@ -174,6 +174,7 @@ void AHnS_PlayerController::setTimeBetweenFires()
 void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 {
 	cachedDest_E = getClickLocation();
+	GetCharacter()->GetCharacterMovement()->DisableMovement();
 	if (PlayerCharacter)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability E key");

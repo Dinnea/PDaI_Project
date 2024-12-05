@@ -46,12 +46,16 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool playRollAnimation = false;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool trap_crouch = false;
+
 	float globalDeltaTime;
 	float Zpos;
 	FVector destVector;
 	bool invulnerable = false;
 
 	FVector cachedDest_roll;
+
 
 	AHnS_Character();
 	float roll();
@@ -64,6 +68,8 @@ public:
 	void rotatePlayer(FVector destination);
 
 	bool AbilityE();
+
+	void setCrouch(bool flag);
 
 protected:
 	// Called when the game starts or when spawned

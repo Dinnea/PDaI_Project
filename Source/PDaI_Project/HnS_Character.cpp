@@ -223,7 +223,12 @@ void AHnS_Character::rotatePlayer(FVector destination)
 
 bool AHnS_Character::AbilityE()
 {
-	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityW->GetChildActor())) return abilityPtr->Execute();
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityE->GetChildActor())) return abilityPtr->Execute();
 	return false;
+}
+
+void AHnS_Character::setCrouch(bool flag)
+{
+	trap_crouch = flag;
 }
 
