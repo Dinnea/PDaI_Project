@@ -20,7 +20,7 @@ AHnS_EAbility::AHnS_EAbility()
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
 	CollisionSphere->SetupAttachment(E_FX);
 	trapMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon Mesh"));
-	//trapMesh->SetupAttachment(E_FX);
+	trapMesh->SetupAttachment(E_FX);
 	trapMesh->Mobility = EComponentMobility::Movable;
 	//trapMesh->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
@@ -38,6 +38,8 @@ void AHnS_EAbility::BeginPlay()
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_EAbility::BeginOverlap);
 
 	ignoredActors.Add(ePlayerCharacter);
+
+	trapMesh->ToggleVisibility();
 
 	/*
 	if ((eWeapon = Cast<AHnS_Weapon>(GetInstigator())))
@@ -59,6 +61,7 @@ void AHnS_EAbility::BeginPlay()
 void AHnS_EAbility::disableCrouch()
 {
 	ePlayerCharacter->setCrouch(false);
+	trapMesh->ToggleVisibility();
 	trap_active_particle = UGameplayStatics::SpawnEmitterAtLocation(this, E_aura, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - zOffset));
 }
 
@@ -90,6 +93,7 @@ void AHnS_EAbility::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor*
 					false,
 					ECollisionChannel::ECC_Visibility);
 				otherPlayer->GetCharacterMovement()->DisableMovement();
+				trapMesh->ToggleVisibility();
 				UGameplayStatics::SpawnEmitterAtLocation(this, E_activate, FVector(otherPlayer->GetActorLocation().X, otherPlayer->GetActorLocation().Y, otherPlayer->GetActorLocation().Z - zOffset));
 				trap_active_particle->Deactivate();
 				immobility_effect = UGameplayStatics::SpawnEmitterAtLocation(this, E_ImmobilityEffect, FVector(otherPlayer->GetActorLocation().X, otherPlayer->GetActorLocation().Y, otherPlayer->GetActorLocation().Z));

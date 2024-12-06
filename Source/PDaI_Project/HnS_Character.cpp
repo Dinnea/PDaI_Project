@@ -111,12 +111,17 @@ AHnS_Character::AHnS_Character()
 
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
+
+	onFireInstance = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("On Fire particle component"));
+	onFireInstance->SetupAttachment(GetMesh());
 }
 
 // Called when the game starts or when spawned
 void AHnS_Character::BeginPlay()
 {
 	Super::BeginPlay();
+
+	onFireInstance->ToggleVisibility();
 	/*check(GEngine != nullptr);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));*/
 	MaxHP = HP;
@@ -189,29 +194,32 @@ bool AHnS_Character::AbilityW()
 
 float AHnS_Character::roll()
 {
-	invulnerable = true;
-	FHitResult attackHit;
-	bool attackHitSuccessful = false;
-
-	FVector ActorLocation = GetActorLocation();
-
-	attackHitSuccessful = Cast<APlayerController>(GetController())->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
-
-	if (attackHitSuccessful) {
-		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Debug test"));
-		cachedDest_roll = attackHit.Location;
-	}
-	rotatePlayer(cachedDest_roll);
-	if (GEngine)
+	if (!trap_crouch)
 	{
+		invulnerable = true;
+		FHitResult attackHit;
+		bool attackHitSuccessful = false;
+
+		FVector ActorLocation = GetActorLocation();
+
+		attackHitSuccessful = Cast<APlayerController>(GetController())->GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, attackHit);
+
+		if (attackHitSuccessful) {
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Debug test"));
+			cachedDest_roll = attackHit.Location;
+		}
+		rotatePlayer(cachedDest_roll);
+		if (GEngine)
+		{
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+		}
+		FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(cachedDest_roll, ActorLocation);
+		destVector = GetActorLocation() + GetActorForwardVector() * Distance;
+		//destVector.X *= -1;
+		//rotVector = rotVector * -1;
+		playRollAnimation = true;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
 	}
-	FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(cachedDest_roll, ActorLocation);
-	destVector = GetActorLocation() + GetActorForwardVector()*Distance;
-	//destVector.X *= -1;
-	//rotVector = rotVector * -1;
-	playRollAnimation = true;
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
 	return 0;
 }
 
@@ -242,7 +250,9 @@ void AHnS_Character::setCrouch(bool flag)
 void AHnS_Character::enableOnFire(float duration)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("ON FIRE DEBUG"));
-	onFireInstance = UGameplayStatics::SpawnEmitterAtLocation(this, onFireParticleEffect, GetActorLocation());
+	//onFireInstance = UGameplayStatics::SpawnEmitterAtLocation(this, onFireParticleEffect, GetActorLocation());
+	//onFireInstance = UGameplayStatics::SpawnEmitterAttached(onFireParticleEffect, Particle, NAME_None, GetActorLocation(), GetActorRotation(), GetActorScale(), EAttachLocation::SnapToTarget, false, EPSCPoolMethod::AutoRelease);
+	onFireInstance->ToggleVisibility();
 	FTimerDelegate Delegate1 = FTimerDelegate::CreateUObject(this, &AHnS_Character::disableOnFire);
 	FTimerHandle enTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(enTimerHandle, Delegate1, duration, false);
@@ -250,6 +260,7 @@ void AHnS_Character::enableOnFire(float duration)
 
 void AHnS_Character::disableOnFire()
 {
-	onFireInstance->Deactivate();
+	onFireInstance->ToggleVisibility();
+	//onFireInstance->Deactivate();
 }
 

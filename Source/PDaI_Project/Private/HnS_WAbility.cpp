@@ -30,35 +30,39 @@ AHnS_WAbility::AHnS_WAbility()
 // Called when the game starts or when spawned
 void AHnS_WAbility::BeginPlay()
 {
-	pController = Cast<AHnS_PlayerController>(GetInstigator()->GetController());
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("W casted"));
-	CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
-	CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AHnS_WAbility::OnOverlapEnd);
-	Super::BeginPlay();
-	//CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
-	//UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, Particle, GetActorLocation());
-	FVector wActorLocation = GetActorLocation();
-	//pController->cachedDest_attack;
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *(pController->cachedDest_attack.ToString()));
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *(pController->cachedDest_attack.ToString()));
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(pController->HP));
-	FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(pController->cachedDest_attack, wActorLocation);
-	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *(rotVector).ToString());
-	wDestVector = wActorLocation + GetActorForwardVector() * WDistance;
-	SetActorLocation(wDestVector);
-	/*
-	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::setLocationAfterDelay);
-	FTimerHandle mTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, 1, false);
-	*/
-	//UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, Particle, Cast<AHnS_Character>(GetInstigator())->GetActorLocation());
-	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::enableDamage);
-	FTimerHandle eTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(eTimerHandle, Delegate, 1, false);
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("W Beginplay"));
+	if (GetInstigator() != nullptr)
+	{
+		pController = Cast<AHnS_PlayerController>(GetInstigator()->GetController());
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("W casted"));
+		CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
+		CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AHnS_WAbility::OnOverlapEnd);
+		Super::BeginPlay();
+		//CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
+		//UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, Particle, GetActorLocation());
+		FVector wActorLocation = GetActorLocation();
+		//pController->cachedDest_attack;
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *(pController->cachedDest_attack.ToString()));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *(pController->cachedDest_attack.ToString()));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(pController->HP));
+		FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(pController->cachedDest_attack, wActorLocation);
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, *(rotVector).ToString());
+		wDestVector = wActorLocation + GetActorForwardVector() * WDistance;
+		SetActorLocation(wDestVector);
+		/*
+		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::setLocationAfterDelay);
+		FTimerHandle mTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, 1, false);
+		*/
+		//UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, Particle, Cast<AHnS_Character>(GetInstigator())->GetActorLocation());
+		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::enableDamage);
+		FTimerHandle eTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(eTimerHandle, Delegate, 1, false);
 
-	FTimerDelegate duration_Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::disableEffect);
-	FTimerHandle dTimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(dTimerHandle, duration_Delegate, duration, false);
+		FTimerDelegate duration_Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::disableEffect);
+		FTimerHandle dTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(dTimerHandle, duration_Delegate, duration, false);
+	}
 }
 
 void AHnS_WAbility::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

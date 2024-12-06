@@ -154,7 +154,7 @@ void AHnS_PlayerController::enableMovement()
 	isRolling = false;
 	PlayerCharacter->updateRoll();
 	PlayerCharacter->invulnerable = false;
-	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
+	//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
 	prevTimeBetweenFires = timeBetweenFires;
 	timeBetweenFires = timeBetweenFires - 0.3;
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));

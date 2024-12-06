@@ -52,12 +52,17 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UParticleSystem* onFireParticleEffect;
 
+	UPROPERTY(EditAnywhere)
 	UParticleSystemComponent* onFireInstance;
+
+	UPROPERTY(EditAnywhere)
+	USceneComponent* Particle;
 
 	float globalDeltaTime;
 	float Zpos;
 	FVector destVector;
 	bool invulnerable = false;
+	bool isPlacingTrap = false;
 
 	FVector cachedDest_roll;
 
