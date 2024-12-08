@@ -56,13 +56,18 @@ public:
 	UParticleSystemComponent* onFireInstance;
 
 	UPROPERTY(EditAnywhere)
-	USceneComponent* Particle;
+	UParticleSystemComponent* UltimateFX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	USceneComponent* R_Particle;
 
 	float globalDeltaTime;
 	float Zpos;
+	float prevMaxWalkSpeed;
 	FVector destVector;
 	bool invulnerable = false;
 	bool isPlacingTrap = false;
+	bool RCasted = false;
 
 	FVector cachedDest_roll;
 
@@ -85,6 +90,10 @@ public:
 
 	void enableOnFire(float duration);
 
+	bool UltimateAutoAttack();
+
+	void AbilityR();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -95,6 +104,7 @@ protected:
 	void SetupHPBar();
 	void enableMovement();
 	void onFire();
+	void disableRBuff();
 
 	UPROPERTY(EditAnywhere, Category="Abilities");
 	UChildActorComponent* Weapon;
@@ -104,6 +114,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Abilities");
 	UChildActorComponent* abilityE;
+
+	UPROPERTY(EditAnywhere, Category = "Abilities");
+	UChildActorComponent* RBullet;
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;
@@ -117,7 +130,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Interp")
 	float Distance;
 
+	UPROPERTY(EditAnywhere, Category = "Ultimate Ability")
+	float rDuration;
+
+	UPROPERTY(EditAnywhere, Category = "Ultimate Ability")
+	float RSpeedMultiplier;
+
 	FTimerHandle fTimerHandle;
+
+	class AHnS_Ability* autoAttack;
 
 
 public:	

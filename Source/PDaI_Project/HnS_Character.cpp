@@ -51,6 +51,13 @@ void AHnS_Character::onFire()
 	//GetWorld()->GetTimerManager().SetTimer(fTimerHandle, Delegate, damageInterval, false, 1.f);
 }
 
+void AHnS_Character::disableRBuff()
+{
+	UltimateFX->Deactivate();
+	charMovement->MaxWalkSpeed = prevMaxWalkSpeed;
+	RCasted = false;
+}
+
 void AHnS_Character::updateRoll()
 {
 	playRollAnimation = false;
@@ -101,16 +108,22 @@ AHnS_Character::AHnS_Character()
 	SetupHPBar();
 
 	Weapon = CreateDefaultSubobject<UChildActorComponent>(TEXT("Weapon"));
-	Weapon->SetupAttachment(GetMesh(),TEXT("WeaponSocket"));
+	Weapon->SetupAttachment(GetMesh(),TEXT("AA_WeaponSocket"));
 
 	abilityW = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityW"));
-	abilityW->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+	abilityW->SetupAttachment(GetMesh(), TEXT("W_WeaponSocket"));
 
 	abilityE = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityE"));
-	abilityE->SetupAttachment(GetMesh(), TEXT("WeaponSocket"));
+	abilityE->SetupAttachment(GetMesh(), TEXT("E_WeaponSocket"));
+
+	RBullet = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityR"));
+	RBullet->SetupAttachment(GetMesh(), TEXT("R_WeaponSocket"));
 
 	SpawnLocation = CreateDefaultSubobject<USceneComponent>(TEXT("Bullet spawn points"));
 	SpawnLocation->SetupAttachment(GetMesh());
+
+	R_Particle = CreateDefaultSubobject<USceneComponent>(TEXT("Ultimate particle effect"));
+	R_Particle->SetupAttachment(GetMesh());
 
 	onFireInstance = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("On Fire particle component"));
 	onFireInstance->SetupAttachment(GetMesh());
@@ -142,6 +155,13 @@ void AHnS_Character::BeginPlay()
 		eAbilityPtr->SetUser(this);
 		eAbilityPtr->SetAbilitySpawnLocation(SpawnLocation);
 	}
+
+	if (auto* rAbilityPtr = Cast<AHnS_Weapon>(RBullet->GetChildActor()))
+	{
+		rAbilityPtr->SetUser(this);
+		rAbilityPtr->SetAbilitySpawnLocation(SpawnLocation);
+	}
+	autoAttack = Cast<AHnS_Ability>(Weapon->GetChildActor());
 }
 
 // Called every frame
@@ -219,6 +239,7 @@ float AHnS_Character::roll()
 		//rotVector = rotVector * -1;
 		playRollAnimation = true;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
+		//autoAttack->cooldown = 0.1;
 	}
 	return 0;
 }
@@ -256,6 +277,24 @@ void AHnS_Character::enableOnFire(float duration)
 	FTimerDelegate Delegate1 = FTimerDelegate::CreateUObject(this, &AHnS_Character::disableOnFire);
 	FTimerHandle enTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(enTimerHandle, Delegate1, duration, false);
+}
+
+bool AHnS_Character::UltimateAutoAttack()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("bullet casted"));
+	if (auto* abilityPtr = Cast<AHnS_Ability>(RBullet->GetChildActor())) return abilityPtr->ExecuteRSubclass();
+	return false;
+}
+
+void AHnS_Character::AbilityR()
+{
+	UltimateFX = UGameplayStatics::SpawnEmitterAttached(onFireParticleEffect, R_Particle, NAME_None, GetActorLocation(), GetActorRotation(), GetActorScale(), EAttachLocation::KeepWorldPosition, false, EPSCPoolMethod::AutoRelease);
+	RCasted = true;
+	prevMaxWalkSpeed = charMovement->MaxWalkSpeed;
+	charMovement->MaxWalkSpeed = charMovement->MaxWalkSpeed*RSpeedMultiplier;
+	FTimerDelegate rDelegate = FTimerDelegate::CreateUObject(this, &AHnS_Character::disableRBuff);
+	FTimerHandle rTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(rTimerHandle, rDelegate, rDuration, false);
 }
 
 void AHnS_Character::disableOnFire()

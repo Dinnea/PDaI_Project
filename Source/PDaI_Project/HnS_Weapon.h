@@ -19,6 +19,7 @@ public:
 	void SetAbilitySpawnLocation(USceneComponent* pSpawnLocation);
 
 	virtual bool Execute() override;
+	virtual bool ExecuteRSubclass() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -26,6 +27,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Stats")
 	TSubclassOf<AActor> objectToSpawn;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	TSubclassOf<class AHnS_RBullet> r_objectToSpawn;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Stats")
 	FVector Offset;

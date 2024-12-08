@@ -24,6 +24,7 @@ void AHnS_Ability::SetUser(ACharacter* pUser)
 
 bool AHnS_Ability::Execute()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Ability execute"));
 	if (!ready) 
 	{ 
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
@@ -35,6 +36,11 @@ bool AHnS_Ability::Execute()
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, cooldown, false);
 	return true;
+}
+
+bool AHnS_Ability::ExecuteRSubclass()
+{
+	return AHnS_Ability::Execute();
 }
 
 // Called when the game starts or when spawned

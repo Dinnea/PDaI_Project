@@ -17,16 +17,17 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual bool Execute();
+	virtual bool ExecuteRSubclass();
 
 	void SetReady(bool value);
 	void SetUser(ACharacter* pUser);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
+	float cooldown = 5;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
-	float cooldown = 1;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float damage = 0;

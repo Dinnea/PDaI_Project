@@ -42,6 +42,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* EAbility;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	class UInputAction* RAbility;
+
 	FVector cachedDest_attack;
 
 	FVector cachedDest_W;
@@ -63,6 +66,7 @@ protected:
 	void enableMovement();
 	void setTimeBetweenFires();
 	void e_ability(const FInputActionValue& value);
+	void r_ability(const FInputActionValue& value);
 	FVector getClickLocation();
 
 	class AHnS_Character* PlayerCharacter;

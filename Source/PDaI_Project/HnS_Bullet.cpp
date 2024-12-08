@@ -31,10 +31,22 @@ AHnS_Bullet::AHnS_Bullet()
 void AHnS_Bullet::BeginPlay()
 {
 	Super::BeginPlay();
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet Beginplay"));
+	if (GetInstigator()) {
+		ePlayerCharacter = Cast<AHnS_Character>(GetInstigator());
+		PlayerC = GetInstigator()->GetController(); //Instigator - Object which created the actor/event (player created bullet)
+	}
+	else
+	{
+		ePlayerCharacter = nullptr;
+		PlayerC = nullptr;
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Instigator nullptr"));
+	}
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_Bullet::BeginOverlap);
 	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Bullet::bulletDestroy, true);
 	FTimerHandle TimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, timeToDestroy, false);
+	ignoredActors.Add(ePlayerCharacter);
 }
 
 void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -50,7 +62,6 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Instigator nullptr"));
 	}
-	AController* PlayerC = GetInstigator()->GetController(); //Instigator - Object which created the actor/event (player created bullet)
 
 
 
@@ -101,7 +112,24 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 
 void AHnS_Bullet::BulletHit(AActor* OtherActor)
 {
-	UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, GetInstigatorController(), this, DamageType);
+	if (ePlayerCharacter->RCasted)
+	{
+		UGameplayStatics::ApplyRadialDamage(GetWorld(),
+			BaseDamage,
+			GetActorLocation(),
+			radius,
+			DamageType,
+			ignoredActors,
+			PlayerC,
+			nullptr,
+			false,
+			ECollisionChannel::ECC_Visibility);
+	}
+	else
+	{ 
+		UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, GetInstigatorController(), this, DamageType);
+	}
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Bullet Hit"));
 	Destroy();
 }
 

@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "HnS_Bullet.h"
 #include "Hns_CharacterPlayer.h"
+#include "HnS_RBullet.h"
 
 // Sets default values
 AHnS_Weapon::AHnS_Weapon()
@@ -22,7 +23,20 @@ bool AHnS_Weapon::Execute()
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = user;
 	SpawnParams.Owner = this;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Weapon execute"));
 	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, user->GetActorRotation(), SpawnParams);
+	return true;
+}
+
+bool AHnS_Weapon::ExecuteRSubclass()
+{
+	if (!Super::ExecuteRSubclass()) return false;
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Instigator = user;
+	SpawnParams.Owner = this;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Weapon execute R"));
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_RBullet>(r_objectToSpawn, spawnLocation->GetComponentLocation() + Offset, user->GetActorRotation(), SpawnParams);
 	return true;
 }
 

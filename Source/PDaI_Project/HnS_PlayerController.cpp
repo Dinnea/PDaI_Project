@@ -49,6 +49,7 @@ void AHnS_PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(ability1, ETriggerEvent::Started, this, &AHnS_PlayerController::OnAbility1);
 		EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
 		EnhancedInputComponent->BindAction(EAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::e_ability);
+		EnhancedInputComponent->BindAction(RAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::r_ability);
 	}
 	else
 	{
@@ -96,8 +97,6 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
 	if (PlayerCharacter)// && canFire)
 	{
-
-		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		/*
 		APawn* ludek = GetPawn();
 		FVector PlayerLoc = ludek->GetActorLocation();
@@ -109,7 +108,9 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 		*/
 		PlayerCharacter->rotatePlayer(cachedDest_attack);
 
-		PlayerCharacter->AutoAttack();
+		if (PlayerCharacter->RCasted) { PlayerCharacter->UltimateAutoAttack(); }
+		else { PlayerCharacter->AutoAttack();
+		GetCharacter()->GetCharacterMovement()->DisableMovement(); }
 	}
 }
 
@@ -182,6 +183,11 @@ void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 
 		PlayerCharacter->AbilityE();
 	}
+}
+
+void AHnS_PlayerController::r_ability(const FInputActionValue& value)
+{
+	PlayerCharacter->AbilityR();
 }
 
 FVector AHnS_PlayerController::getClickLocation()
