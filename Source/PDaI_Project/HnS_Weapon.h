@@ -18,7 +18,7 @@ public:
 	AHnS_Weapon();
 	void SetAbilitySpawnLocation(USceneComponent* pSpawnLocation);
 
-	virtual bool Execute() override;
+	virtual bool Execute(bool flag) override;
 	virtual bool ExecuteRSubclass() override;
 
 protected:
@@ -36,6 +36,8 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* WeaponMesh;
+
+	class AHnS_Character* pCharacter;
 
 	
 

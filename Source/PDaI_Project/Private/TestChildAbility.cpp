@@ -3,9 +3,9 @@
 
 #include "TestChildAbility.h"
 
-bool ATestChildAbility::Execute() 
+bool ATestChildAbility::Execute(bool flag) 
 {
-	if (!Super::Execute())
+	if (!Super::Execute(flag))
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Failed to execute."));
 		return false;

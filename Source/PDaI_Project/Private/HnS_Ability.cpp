@@ -16,13 +16,13 @@ void AHnS_Ability::SetReady(bool value)
 	ready = value;
 }
 
-void AHnS_Ability::SetUser(ACharacter* pUser)
+void AHnS_Ability::SetUser(AHnS_Character* pUser)
 {
 	user = pUser;
 }
 
 
-bool AHnS_Ability::Execute()
+bool AHnS_Ability::Execute(bool flag)
 {
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Ability execute"));
 	if (!ready) 
@@ -40,7 +40,7 @@ bool AHnS_Ability::Execute()
 
 bool AHnS_Ability::ExecuteRSubclass()
 {
-	return AHnS_Ability::Execute();
+	return AHnS_Ability::Execute(false);
 }
 
 // Called when the game starts or when spawned

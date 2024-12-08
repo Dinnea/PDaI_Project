@@ -43,6 +43,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxHP;
 
+	UPROPERTY(EditAnywhere, Category = "Q Ability")
+	float QMultiplier;
+
+	UPROPERTY(EditAnywhere, Category = "Q Ability")
+	float QEffectDuration;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool playRollAnimation = false;
 
@@ -61,6 +67,15 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
 	USceneComponent* R_Particle;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	USceneComponent* Q_Particle;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* qBuffParticleEffect;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystemComponent* Q_FX;
+
 	float globalDeltaTime;
 	float Zpos;
 	float prevMaxWalkSpeed;
@@ -68,6 +83,8 @@ public:
 	bool invulnerable = false;
 	bool isPlacingTrap = false;
 	bool RCasted = false;
+	bool QCasted = false;
+	float prevCooldown;
 
 	FVector cachedDest_roll;
 
@@ -105,6 +122,7 @@ protected:
 	void enableMovement();
 	void onFire();
 	void disableRBuff();
+	void disableQBuff();
 
 	UPROPERTY(EditAnywhere, Category="Abilities");
 	UChildActorComponent* Weapon;

@@ -58,6 +58,13 @@ void AHnS_Character::disableRBuff()
 	RCasted = false;
 }
 
+void AHnS_Character::disableQBuff()
+{
+	autoAttack->cooldown = prevCooldown;
+	Q_FX->Deactivate();
+	QCasted = false;
+}
+
 void AHnS_Character::updateRoll()
 {
 	playRollAnimation = false;
@@ -124,6 +131,9 @@ AHnS_Character::AHnS_Character()
 
 	R_Particle = CreateDefaultSubobject<USceneComponent>(TEXT("Ultimate particle effect"));
 	R_Particle->SetupAttachment(GetMesh());
+
+	Q_Particle = CreateDefaultSubobject<USceneComponent>(TEXT("Q particle effect"));
+	Q_Particle->SetupAttachment(GetMesh());
 
 	onFireInstance = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("On Fire particle component"));
 	onFireInstance->SetupAttachment(GetMesh());
@@ -202,13 +212,13 @@ void AHnS_Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 bool AHnS_Character::AutoAttack()
 {
-	if (auto* weaponPtr = Cast<AHnS_Ability>(Weapon->GetChildActor())) return weaponPtr->Execute();
+	if (auto* weaponPtr = Cast<AHnS_Ability>(Weapon->GetChildActor())) return weaponPtr->Execute(true);
 	return false;
 }
 
 bool AHnS_Character::AbilityW()
 {
-	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityW->GetChildActor())) return abilityPtr->Execute();
+	if (auto* abilityPtr = Cast<AHnS_Ability>(abilityW->GetChildActor())) return abilityPtr->Execute(false);
 	return false;
 }
 
@@ -239,7 +249,14 @@ float AHnS_Character::roll()
 		//rotVector = rotVector * -1;
 		playRollAnimation = true;
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
-		//autoAttack->cooldown = 0.1;
+		prevCooldown = autoAttack->cooldown;
+		autoAttack->cooldown = autoAttack->cooldown * QMultiplier;
+		QCasted = true;
+
+		FTimerDelegate qDelegate = FTimerDelegate::CreateUObject(this, &AHnS_Character::disableQBuff);
+		FTimerHandle qTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(qTimerHandle, qDelegate, QEffectDuration, false);
+		Q_FX = UGameplayStatics::SpawnEmitterAttached(qBuffParticleEffect, Q_Particle, NAME_None, GetActorLocation(), GetActorRotation(), GetActorScale(), EAttachLocation::KeepWorldPosition, false, EPSCPoolMethod::AutoRelease);
 	}
 	return 0;
 }
@@ -258,7 +275,7 @@ bool AHnS_Character::AbilityE()
 {
 	if (!playRollAnimation)
 	{
-		if (auto* abilityPtr = Cast<AHnS_Ability>(abilityE->GetChildActor())) return abilityPtr->Execute();
+		if (auto* abilityPtr = Cast<AHnS_Ability>(abilityE->GetChildActor())) return abilityPtr->Execute(false);
 	}
 	return false;
 }

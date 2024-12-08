@@ -15,6 +15,6 @@ class PDAI_PROJECT_API ATestChildAbility : public AHnS_Ability
 	GENERATED_BODY()
 
 public:
-	virtual bool Execute() override;
+	virtual bool Execute(bool flag) override;
 	
 };

@@ -16,11 +16,11 @@ public:
 	AHnS_Ability();
 
 	UFUNCTION(BlueprintCallable)
-	virtual bool Execute();
+	virtual bool Execute(bool flag);
 	virtual bool ExecuteRSubclass();
 
 	void SetReady(bool value);
-	void SetUser(ACharacter* pUser);
+	void SetUser(class AHnS_Character* pUser);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float cooldown = 5;
@@ -36,7 +36,7 @@ protected:
 	USceneComponent* spawnLocation;
 
 	bool ready = true;
-	ACharacter* user;
+	class AHnS_Character* user;
 
 public:	
 	// Called every frame
