@@ -67,6 +67,8 @@ protected:
 	void setTimeBetweenFires();
 	void e_ability(const FInputActionValue& value);
 	void r_ability(const FInputActionValue& value);
+	void setCanCastE();
+	void setCanCastR();
 	FVector getClickLocation();
 
 	class AHnS_Character* PlayerCharacter;
@@ -81,11 +83,23 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool canRoll = true;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool canCastE = true;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool canCastR = true;
+
 	UPROPERTY(EditAnywhere)
 	float timeBetweenFires = 0.7f;
 
 	UPROPERTY(EditAnywhere)
-	float QCooldown = 8.f;
+	float QCooldown = 7.f;
+
+	UPROPERTY(EditAnywhere)
+	float ECooldown = 13.f;
+
+	UPROPERTY(EditAnywhere)
+	float RCooldown = 90.f;
 
 	UPROPERTY(EditAnywhere)
 	float rollingTime;

@@ -175,19 +175,42 @@ void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 {
 	cachedDest_E = getClickLocation();
 	GetCharacter()->GetCharacterMovement()->DisableMovement();
-	if (PlayerCharacter)
+	if (PlayerCharacter && canCastE)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability E key");
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		PlayerCharacter->rotatePlayer(cachedDest_E);
 
 		PlayerCharacter->AbilityE();
+
+		canCastE = false;
+		FTimerDelegate eDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastE);
+		FTimerHandle eTimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(eTimerHandle, eDelegate, ECooldown, false);
 	}
 }
 
 void AHnS_PlayerController::r_ability(const FInputActionValue& value)
 {
-	PlayerCharacter->AbilityR();
+	if (PlayerCharacter && canCastR)
+	{
+		PlayerCharacter->AbilityR();
+
+		canCastR = false;
+		FTimerDelegate ult_Delegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastR);
+		FTimerHandle ult_TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(ult_TimerHandle, ult_Delegate, RCooldown, false);
+	}
+}
+
+void AHnS_PlayerController::setCanCastE()
+{
+	canCastE = true;
+}
+
+void AHnS_PlayerController::setCanCastR()
+{
+	canCastR = true;
 }
 
 FVector AHnS_PlayerController::getClickLocation()
