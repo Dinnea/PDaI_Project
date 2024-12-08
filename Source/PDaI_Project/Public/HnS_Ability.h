@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include <Components/WidgetComponent.h>
 #include "HnS_Ability.generated.h"
+
 
 UCLASS()
 class PDAI_PROJECT_API AHnS_Ability : public AActor
@@ -21,6 +23,7 @@ public:
 	void SetReady(bool value);
 	void SetUser(ACharacter* pUser);
 
+	UFUNCTION(BlueprintCallable)
 	float GetTimer();
 
 protected:

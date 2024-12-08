@@ -8,7 +8,6 @@ AHnS_Ability::AHnS_Ability()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void AHnS_Ability::SetReady(bool value)
