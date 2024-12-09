@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "HnS_Bullet.h"
 #include "Hns_CharacterPlayer.h"
+#include "HnS_RBullet.h"
 
 // Sets default values
 AHnS_Weapon::AHnS_Weapon()
@@ -15,14 +16,34 @@ AHnS_Weapon::AHnS_Weapon()
 
 }
 
-bool AHnS_Weapon::Execute()
+bool AHnS_Weapon::Execute(bool flag)
 {
-	if(!Super::Execute()) return false;
+	if(!Super::Execute(flag)) return false;
 
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = user;
 	SpawnParams.Owner = this;
-	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, user->GetActorRotation(), SpawnParams);
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Weapon execute"));
+	FRotator playerRotation = user->GetActorRotation();
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, playerRotation, SpawnParams);
+	if (user->QCasted && flag)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Q casted visible in HnS_Weapon"));
+		AActor* leftSpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, FRotator(playerRotation.Pitch, playerRotation.Yaw + 15, playerRotation.Roll), SpawnParams);
+		AActor* rightSpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, FRotator(playerRotation.Pitch, playerRotation.Yaw - 15, playerRotation.Roll), SpawnParams);
+	}
+	return true;
+}
+
+bool AHnS_Weapon::ExecuteRSubclass()
+{
+	if (!Super::ExecuteRSubclass()) return false;
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Instigator = user;
+	SpawnParams.Owner = this;
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Weapon execute R"));
+	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_RBullet>(r_objectToSpawn, spawnLocation->GetComponentLocation() + Offset, user->GetActorRotation(), SpawnParams);
 	return true;
 }
 
@@ -30,6 +51,8 @@ bool AHnS_Weapon::Execute()
 void AHnS_Weapon::BeginPlay()
 {
 	Super::BeginPlay();
+
+	pCharacter = Cast<AHnS_Character>(user);
 	//Player = UGameplayStatics::GetPlayerCharacter(this,0)
 	
 }

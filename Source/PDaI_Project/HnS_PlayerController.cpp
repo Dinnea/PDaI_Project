@@ -49,6 +49,7 @@ void AHnS_PlayerController::SetupInputComponent()
 		EnhancedInputComponent->BindAction(ability1, ETriggerEvent::Started, this, &AHnS_PlayerController::OnAbility1);
 		EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
 		EnhancedInputComponent->BindAction(EAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::e_ability);
+		EnhancedInputComponent->BindAction(RAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::r_ability);
 	}
 	else
 	{
@@ -96,8 +97,6 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
 	if (PlayerCharacter)// && canFire)
 	{
-
-		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		/*
 		APawn* ludek = GetPawn();
 		FVector PlayerLoc = ludek->GetActorLocation();
@@ -109,7 +108,9 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 		*/
 		PlayerCharacter->rotatePlayer(cachedDest_attack);
 
-		PlayerCharacter->AutoAttack();
+		if (PlayerCharacter->RCasted) { PlayerCharacter->UltimateAutoAttack(); }
+		else { PlayerCharacter->AutoAttack();
+		GetCharacter()->GetCharacterMovement()->DisableMovement(); }
 	}
 }
 
@@ -154,7 +155,7 @@ void AHnS_PlayerController::enableMovement()
 	isRolling = false;
 	PlayerCharacter->updateRoll();
 	PlayerCharacter->invulnerable = false;
-	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
+	//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
 	prevTimeBetweenFires = timeBetweenFires;
 	timeBetweenFires = timeBetweenFires - 0.3;
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(timeBetweenFires));
@@ -174,7 +175,7 @@ void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 {
 	cachedDest_E = getClickLocation();
 	GetCharacter()->GetCharacterMovement()->DisableMovement();
-	if (PlayerCharacter)
+	if (PlayerCharacter )
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability E key");
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
@@ -182,6 +183,29 @@ void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 
 		PlayerCharacter->AbilityE();
 	}
+}
+
+void AHnS_PlayerController::r_ability(const FInputActionValue& value)
+{
+	if (PlayerCharacter && canCastR)
+	{
+		PlayerCharacter->AbilityR();
+
+		canCastR = false;
+		FTimerDelegate ult_Delegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastR);
+		FTimerHandle ult_TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(ult_TimerHandle, ult_Delegate, RCooldown, false);
+	}
+}
+
+void AHnS_PlayerController::setCanCastE()
+{
+	canCastE = true;
+}
+
+void AHnS_PlayerController::setCanCastR()
+{
+	canCastR = true;
 }
 
 FVector AHnS_PlayerController::getClickLocation()

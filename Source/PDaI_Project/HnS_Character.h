@@ -45,6 +45,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float MaxHP;
 
+	UPROPERTY(EditAnywhere, Category = "Q Ability")
+	float QMultiplier;
+
+	UPROPERTY(EditAnywhere, Category = "Q Ability")
+	float QEffectDuration;
+
 	UPROPERTY(BlueprintReadOnly)
 	bool playRollAnimation = false;
 
@@ -54,12 +60,33 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	class UParticleSystem* onFireParticleEffect;
 
+	UPROPERTY(EditAnywhere)
 	UParticleSystemComponent* onFireInstance;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystemComponent* UltimateFX;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	USceneComponent* R_Particle;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Effects")
+	USceneComponent* Q_Particle;
+
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* qBuffParticleEffect;
+
+	UPROPERTY(EditAnywhere)
+	UParticleSystemComponent* Q_FX;
 
 	float globalDeltaTime;
 	float Zpos;
+	float prevMaxWalkSpeed;
 	FVector destVector;
 	bool invulnerable = false;
+	bool isPlacingTrap = false;
+	bool RCasted = false;
+	bool QCasted = false;
+	float prevCooldown;
 
 	FVector cachedDest_roll;
 
@@ -85,6 +112,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	AHnS_Ability* GetAbility(int ability);
 
+	bool UltimateAutoAttack();
+
+	void AbilityR();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -95,6 +126,8 @@ protected:
 	void SetupHPBar();
 	void enableMovement();
 	void onFire();
+	void disableRBuff();
+	void disableQBuff();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Abilities");
 	UChildActorComponent* Weapon;
@@ -104,6 +137,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities");
 	UChildActorComponent* abilityE;
+
+	UPROPERTY(EditAnywhere, Category = "Abilities");
+	UChildActorComponent* RBullet;
 
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;
@@ -117,7 +153,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Interp")
 	float Distance;
 
+	UPROPERTY(EditAnywhere, Category = "Ultimate Ability")
+	float rDuration;
+
+	UPROPERTY(EditAnywhere, Category = "Ultimate Ability")
+	float RSpeedMultiplier;
+
 	FTimerHandle fTimerHandle;
+
+	class AHnS_Ability* autoAttack;
 
 
 public:	

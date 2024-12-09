@@ -18,7 +18,8 @@ public:
 	AHnS_Weapon();
 	void SetAbilitySpawnLocation(USceneComponent* pSpawnLocation);
 
-	virtual bool Execute() override;
+	virtual bool Execute(bool flag) override;
+	virtual bool ExecuteRSubclass() override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -28,10 +29,15 @@ protected:
 	TSubclassOf<AActor> objectToSpawn;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	TSubclassOf<class AHnS_RBullet> r_objectToSpawn;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
 	FVector Offset;
 
 	UPROPERTY(EditAnywhere)
 	UStaticMeshComponent* WeaponMesh;
+
+	class AHnS_Character* pCharacter;
 
 	
 

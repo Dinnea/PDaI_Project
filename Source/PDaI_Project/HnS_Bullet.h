@@ -46,7 +46,19 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
 
+	UPROPERTY(EditAnywhere)
+	float radius;
+
+	TArray<AActor*> ignoredActors;
+
+	class AHnS_Character* ePlayerCharacter;
+
+	AController* PlayerC;
+
+
 	bool canDestroy = false;
+
+	bool isOnUltimate = false;
 
 
 	UPROPERTY(EditAnywhere)
