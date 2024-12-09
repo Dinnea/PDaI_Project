@@ -248,6 +248,49 @@ void AHnS_Character::enableOnFire(float duration)
 	GetWorld()->GetTimerManager().SetTimer(enTimerHandle, Delegate1, duration, false);
 }
 
+AHnS_Ability* AHnS_Character::GetAbility(int ability)
+{
+	/*switch (ability)
+	{
+	case 0:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return autoattack"));
+		return Weapon;
+		break;
+	case 1:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return w"));
+		return abilityW;
+		break;
+	case 2:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return e"));
+		return abilityE;
+		break;
+	default:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return none"));
+		return nullptr;
+		break;
+	}*/
+
+	switch (ability) 
+	{
+	case 0:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return autoattack"));
+		return Cast<AHnS_Ability>(Weapon->GetChildActor());
+		break;
+	case 1:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return w"));
+		return Cast<AHnS_Ability>(abilityW->GetChildActor());
+		break;
+	case 2:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return e"));
+		return Cast<AHnS_Ability>(abilityE->GetChildActor());
+		break;
+	default:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return none"));
+		return nullptr;
+		break;
+	}
+}
+
 void AHnS_Character::disableOnFire()
 {
 	onFireInstance->Deactivate();

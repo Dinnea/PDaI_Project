@@ -5,7 +5,9 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include <GameFramework/Actor.h>
+#include <HnS_Ability.h>
 #include "HnS_Character.generated.h"
+
 
 
 class USpringArmComponent;
@@ -80,6 +82,9 @@ public:
 
 	void enableOnFire(float duration);
 
+	UFUNCTION(BlueprintCallable)
+	AHnS_Ability* GetAbility(int ability);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -91,13 +96,13 @@ protected:
 	void enableMovement();
 	void onFire();
 
-	UPROPERTY(EditAnywhere, Category="Abilities");
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Abilities");
 	UChildActorComponent* Weapon;
 
-	UPROPERTY(EditAnywhere, Category = "Abilities");
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities");
 	UChildActorComponent* abilityW;
 
-	UPROPERTY(EditAnywhere, Category = "Abilities");
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Abilities");
 	UChildActorComponent* abilityE;
 
 	UPROPERTY(EditAnywhere);

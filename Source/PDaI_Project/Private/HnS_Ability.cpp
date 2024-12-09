@@ -8,7 +8,6 @@ AHnS_Ability::AHnS_Ability()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 void AHnS_Ability::SetReady(bool value)
@@ -19,6 +18,11 @@ void AHnS_Ability::SetReady(bool value)
 void AHnS_Ability::SetUser(ACharacter* pUser)
 {
 	user = pUser;
+}
+
+float AHnS_Ability::GetTimer()
+{	
+	return GetWorldTimerManager().GetTimerElapsed(cooldownHandle);
 }
 
 
@@ -32,8 +36,9 @@ bool AHnS_Ability::Execute()
 
 	SetReady(false);
 	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_Ability::SetReady, true);
-	FTimerHandle TimerHandle;
-	GetWorld()->GetTimerManager().SetTimer(TimerHandle, Delegate, cooldown, false);
+	GetWorld()->GetTimerManager().SetTimer(cooldownHandle, Delegate, cooldown, false);
+
+	//GetWorldTimerManager().GetTimerElapsed(handle);
 	return true;
 }
 

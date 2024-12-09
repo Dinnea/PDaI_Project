@@ -20,7 +20,8 @@ AHnS_EAbility::AHnS_EAbility()
 	CollisionSphere = CreateDefaultSubobject<USphereComponent>(TEXT("Collision Sphere"));
 	CollisionSphere->SetupAttachment(E_FX);
 	trapMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Weapon Mesh"));
-	//trapMesh->SetupAttachment(E_FX);
+	//trapMesh->GetComponentLocation();
+	trapMesh->SetupAttachment(E_FX);
 	trapMesh->Mobility = EComponentMobility::Movable;
 	//trapMesh->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 
