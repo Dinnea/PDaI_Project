@@ -137,6 +137,12 @@ AHnS_Character::AHnS_Character()
 
 	onFireInstance = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("On Fire particle component"));
 	onFireInstance->SetupAttachment(GetMesh());
+
+	qTrigger = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityQTrigger"));
+	qTrigger->SetupAttachment(GetMesh());
+
+	rTrigger = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityRTrigger"));
+	rTrigger->SetupAttachment(GetMesh());
 }
 
 // Called when the game starts or when spawned
@@ -148,13 +154,13 @@ void AHnS_Character::BeginPlay()
 	/*check(GEngine != nullptr);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));*/
 	MaxHP = HP;
-	if(auto* const weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor()))
+	if (auto* const weaponPtr = Cast<AHnS_Weapon>(Weapon->GetChildActor()))
 	{
 		weaponPtr->SetUser(this);
 		weaponPtr->SetAbilitySpawnLocation(SpawnLocation);
 	}
 
-	if (auto* abilityPtr = Cast<AHnS_Weapon>(abilityW->GetChildActor())) 
+	if (auto* abilityPtr = Cast<AHnS_Weapon>(abilityW->GetChildActor()))
 	{
 		abilityPtr->SetUser(this);
 		abilityPtr->SetAbilitySpawnLocation(SpawnLocation);
@@ -172,6 +178,17 @@ void AHnS_Character::BeginPlay()
 		rAbilityPtr->SetAbilitySpawnLocation(SpawnLocation);
 	}
 	autoAttack = Cast<AHnS_Ability>(Weapon->GetChildActor());
+
+	if (auto* qPtr = Cast<AQ_AbilityTrigger>(qTrigger->GetChildActor())) 
+	{
+		qPtr->SetUser(this);
+		qPtr->SetCooldown();
+	}
+	if (auto* rPtr = Cast<AR_AbilityTrigger>(rTrigger->GetChildActor()))
+	{
+		rPtr->SetUser(this);
+		rPtr->SetCooldown();
+	}
 }
 
 // Called every frame
@@ -314,6 +331,16 @@ void AHnS_Character::AbilityR()
 	GetWorld()->GetTimerManager().SetTimer(rTimerHandle, rDelegate, rDuration, false);
 }
 
+void AHnS_Character::TriggerAbilityR()
+{
+	if (auto* abilityPtr = Cast<AHnS_Ability>(rTrigger->GetChildActor())) abilityPtr->Execute(false);
+}
+
+void AHnS_Character::TriggerAbilityQ()
+{
+	if (auto* abilityPtr = Cast<AHnS_Ability>(qTrigger->GetChildActor())) abilityPtr->Execute(false);
+}
+
 AHnS_Ability* AHnS_Character::GetAbility(int ability)
 {
 
@@ -324,12 +351,20 @@ AHnS_Ability* AHnS_Character::GetAbility(int ability)
 		return Cast<AHnS_Ability>(Weapon->GetChildActor());
 		break;
 	case 1:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return autoattack"));
+		return Cast<AHnS_Ability>(qTrigger->GetChildActor());
+		break;
+	case 2:
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return w"));
 		return Cast<AHnS_Ability>(abilityW->GetChildActor());
 		break;
-	case 2:
+	case 3:
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return e"));
 		return Cast<AHnS_Ability>(abilityE->GetChildActor());
+		break;
+	case 4:
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return r"));
+		return Cast<AHnS_Ability>(rTrigger->GetChildActor());
 		break;
 	default:
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return none"));

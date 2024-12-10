@@ -47,9 +47,9 @@ void AHnS_PlayerController::SetupInputComponent()
 
 		//ability input events
 		EnhancedInputComponent->BindAction(ability1, ETriggerEvent::Started, this, &AHnS_PlayerController::OnAbility1);
-		EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::q_ability);
+		EnhancedInputComponent->BindAction(QAbility, ETriggerEvent::Started, this, &AHnS_PlayerController:: TriggerQ);
 		EnhancedInputComponent->BindAction(EAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::e_ability);
-		EnhancedInputComponent->BindAction(RAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::r_ability);
+		EnhancedInputComponent->BindAction(RAbility, ETriggerEvent::Started, this, &AHnS_PlayerController::TriggerR);
 	}
 	else
 	{
@@ -126,28 +126,40 @@ void AHnS_PlayerController::OnAbility1()
 		PlayerCharacter->AbilityW();
 	}
 }
-void AHnS_PlayerController::q_ability(const FInputActionValue& value)
+void AHnS_PlayerController::q_ability()
 {
-	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, canRoll ? TEXT("True") : TEXT("False"));
-	if (canRoll)
-	{
-		//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());
-		isRolling = true;
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation()); //Overwrite old move destination to stop movement on Q pressed event
-		//StopMovement();
-		FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::enableMovement);
-		FTimerHandle mTimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, rollingTime, false);
-		PlayerCharacter->roll();
-		if (!isRolling)
-			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("false"));
+
+	//UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation());
+	isRolling = true;
+	UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, PlayerCharacter->GetActorLocation()); //Overwrite old move destination to stop movement on Q pressed event
+	//StopMovement();
+	FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::enableMovement);
+	FTimerHandle mTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(mTimerHandle, Delegate, rollingTime, false);
+	PlayerCharacter->roll();
+	if (!isRolling)
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("false"));
 		cachedDest = PlayerCharacter->destVector;
-		canRoll = false;
-		//GetWorldTimerManager().ClearTimer(qTimerHandle);
-		FTimerDelegate qDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastQ, true);
-		FTimerHandle qTimerHandle;
-		GetWorld()->GetTimerManager().SetTimer(qTimerHandle, qDelegate, QCooldown, false);
-	}
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, canRoll ? TEXT("True") : TEXT("False"));
+	//if (canRoll)
+	//{
+	//	
+	//	canRoll = false;
+	//	//GetWorldTimerManager().ClearTimer(qTimerHandle);
+	//	FTimerDelegate qDelegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastQ, true);
+	//	FTimerHandle qTimerHandle;
+	//	GetWorld()->GetTimerManager().SetTimer(qTimerHandle, qDelegate, QCooldown, false);
+	//}
+}
+
+float AHnS_PlayerController::GetQCooldown()
+{
+	return QCooldown;
+}
+
+void AHnS_PlayerController::TriggerQ()
+{
+	PlayerCharacter->TriggerAbilityQ();
 }
 
 void AHnS_PlayerController::enableMovement()
@@ -185,17 +197,27 @@ void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 	}
 }
 
-void AHnS_PlayerController::r_ability(const FInputActionValue& value)
+void AHnS_PlayerController::TriggerR()
 {
-	if (PlayerCharacter && canCastR)
+	if (PlayerCharacter) 
 	{
-		PlayerCharacter->AbilityR();
+		PlayerCharacter->TriggerAbilityR();
+	}
+
+	/*if (PlayerCharacter && canCastR)
+	{
+		
 
 		canCastR = false;
 		FTimerDelegate ult_Delegate = FTimerDelegate::CreateUObject(this, &AHnS_PlayerController::setCanCastR);
 		FTimerHandle ult_TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(ult_TimerHandle, ult_Delegate, RCooldown, false);
-	}
+	}*/
+}
+
+float AHnS_PlayerController::GetRCooldown()
+{
+	return RCooldown;
 }
 
 void AHnS_PlayerController::setCanCastE()
