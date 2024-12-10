@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Stats")
 	float cooldown;
 
+	UTexture2D* GetIcon();
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -43,6 +46,9 @@ protected:
 
 	bool ready = true;
 	class AHnS_Character* user;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Cosmetic")
+	UTexture2D* icon;
 
 private:
 	FTimerHandle cooldownHandle;
