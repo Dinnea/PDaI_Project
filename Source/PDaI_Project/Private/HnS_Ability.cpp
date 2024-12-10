@@ -26,6 +26,12 @@ float AHnS_Ability::GetTimer()
 	return GetWorldTimerManager().GetTimerElapsed(cooldownHandle);
 }
 
+UTexture2D* AHnS_Ability::GetIcon()
+{
+	if (icon != nullptr) return icon;
+	else return nullptr;
+}
+
 
 bool AHnS_Ability::Execute(bool flag)
 {

@@ -6,7 +6,10 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include <GameFramework/Actor.h>
 #include <HnS_Ability.h>
+#include <Q_AbilityTrigger.h>
+#include <R_AbilityTrigger.h>
 #include "HnS_Character.generated.h"
+
 
 
 
@@ -116,6 +119,9 @@ public:
 
 	void AbilityR();
 
+	void TriggerAbilityR();
+	void TriggerAbilityQ();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -141,6 +147,12 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Abilities");
 	UChildActorComponent* RBullet;
 
+	UPROPERTY(EditAnywhere, Category = "Abilities");
+	UChildActorComponent* qTrigger;
+
+	UPROPERTY(EditAnywhere, Category = "Abilities");
+	UChildActorComponent* rTrigger;
+
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;
 
@@ -162,7 +174,6 @@ protected:
 	FTimerHandle fTimerHandle;
 
 	class AHnS_Ability* autoAttack;
-
 
 public:	
 	// Called every frame

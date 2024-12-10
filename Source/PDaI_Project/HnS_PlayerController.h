@@ -50,6 +50,13 @@ public:
 	FVector cachedDest_W;
 
 	FVector cachedDest_E;
+	void q_ability();
+	float GetQCooldown();
+	void TriggerQ();
+
+	void TriggerR();
+	float GetRCooldown();
+
 
 protected:
 
@@ -61,12 +68,12 @@ protected:
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
 	void autoAttackBullet(const FInputActionValue& value);
-	void q_ability(const FInputActionValue& value);
+	
 	void OnAbility1();
 	void enableMovement();
 	void setTimeBetweenFires();
 	void e_ability(const FInputActionValue& value);
-	void r_ability(const FInputActionValue& value);
+	
 	void setCanCastE();
 	void setCanCastR();
 	FVector getClickLocation();
@@ -104,7 +111,6 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float rollingTime;
 
-	void setCanFire(bool Value);
 	void setCanCastQ(bool Value);
 
 private:
