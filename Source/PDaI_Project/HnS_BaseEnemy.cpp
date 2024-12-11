@@ -41,3 +41,8 @@ void AHnS_BaseEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 }
+
+void AHnS_BaseEnemy::Die()
+{
+	Destroy();
+}

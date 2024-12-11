@@ -65,6 +65,10 @@ void AHnS_Character::disableQBuff()
 	QCasted = false;
 }
 
+void AHnS_Character::Die()
+{
+}
+
 void AHnS_Character::updateRoll()
 {
 	playRollAnimation = false;
@@ -76,7 +80,7 @@ float AHnS_Character::TakeDamage(float DamageAmount, FDamageEvent const& DamageE
 	HP -= DamageAmount;
 	if (HP <= 0)
 	{
-		Destroy();
+		Die();//Destroy();
 	}
 	return DamageAmount;
 }

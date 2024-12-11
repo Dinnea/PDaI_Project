@@ -6,6 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include <Perception/AISense_Sight.h>
+#include <Kismet/GameplayStatics.h>
 
 void AHns_CharacterPlayer::SetupStimulusSouce()
 {
@@ -43,6 +44,13 @@ AHns_CharacterPlayer::AHns_CharacterPlayer()
 void AHns_CharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+}
+
+void AHns_CharacterPlayer::Die()
+{
+	Super::Die();
+	UGameplayStatics::OpenLevel(GetWorld(), FName("MainMenu"));
+
 }
 
 void AHns_CharacterPlayer::Tick(float DeltaTime)
