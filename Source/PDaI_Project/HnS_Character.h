@@ -135,6 +135,8 @@ protected:
 	void disableRBuff();
 	void disableQBuff();
 
+	virtual void Die();
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Abilities");
 	UChildActorComponent* Weapon;
 

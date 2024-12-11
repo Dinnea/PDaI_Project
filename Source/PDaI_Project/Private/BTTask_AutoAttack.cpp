@@ -25,8 +25,9 @@ EBTNodeResult::Type UBTTask_AutoAttack::ExecuteTask(UBehaviorTreeComponent& owne
 				AActor* const target = Cast<AActor>(blackboard->GetValueAsObject(GetSelectedBlackboardKey()));
 				if (target)
 				{
-					FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(enemy->GetActorLocation(), target->GetActorLocation());
-					enemy->SetActorRotation(newRotation);
+					//FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(enemy->GetActorLocation(), target->GetActorLocation());
+					//enemy->SetActorRotation(newRotation);
+					enemy->rotatePlayer(target->GetActorLocation());
 					enemy->AutoAttack();
 				}
 			}
