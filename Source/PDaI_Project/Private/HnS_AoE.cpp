@@ -44,7 +44,6 @@ void AHnS_AoE::BeginPlay()
 	CollisionSphere->OnComponentBeginOverlap.AddDynamic(this, &AHnS_AoE::BeginOverlap);
 
 	FTimerDelegate collisionDelegate = FTimerDelegate::CreateUObject(this, &AHnS_AoE::StartCollisionChecking);
-
 	GetWorld()->GetTimerManager().SetTimerForNextTick(collisionDelegate);
 	
 }
