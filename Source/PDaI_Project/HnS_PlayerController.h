@@ -56,6 +56,8 @@ public:
 
 	void TriggerR();
 	float GetRCooldown();
+	
+	void setDead(bool flag);
 
 
 protected:
@@ -82,6 +84,8 @@ protected:
 
 
 	bool isRolling = false;
+
+	bool dead = false;
 
 	float prevTimeBetweenFires = 0.f;
 
