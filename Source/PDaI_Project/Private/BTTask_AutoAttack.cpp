@@ -27,7 +27,7 @@ EBTNodeResult::Type UBTTask_AutoAttack::ExecuteTask(UBehaviorTreeComponent& owne
 				{
 					//FRotator newRotation = UKismetMathLibrary::FindLookAtRotation(enemy->GetActorLocation(), target->GetActorLocation());
 					//enemy->SetActorRotation(newRotation);
-					enemy->rotatePlayer(target->GetActorLocation());
+					//enemy->rotatePlayer(target->GetActorLocation());
 					enemy->AutoAttack();
 				}
 			}
