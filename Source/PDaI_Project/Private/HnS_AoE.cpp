@@ -54,48 +54,48 @@ void AHnS_AoE::BeginPlay()
 void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AActor* caster = GetInstigator();
-	if (OtherActor != caster && Cast<AHnS_Character>(OtherActor))
+	if (auto* targetPtr = Cast<AHnS_Character>(OtherActor))
 	{
-		FVector casterLocation = caster->GetActorLocation();
-		FVector targetLocation = OtherActor->GetActorLocation();
-
-		FVector directionVector = targetLocation - casterLocation;
-
-
-		directionVector.Normalize();
-		FVector forward = caster->GetActorForwardVector();
-
-		float dot = forward.Dot(directionVector);
-
-		float angleDegrees = acos(dot) * (180.0 / 3.141592653589793238463f);
-
-		if (auto* tempCaster = Cast<AHns_CharacterPlayer>(caster)) 
+		if (OtherActor != caster && !targetPtr->invulnerable)
 		{
-			if (auto* tempTarget = Cast<AHnS_BaseEnemy>(OtherActor)) 
+			FVector casterLocation = caster->GetActorLocation();
+			FVector targetLocation = targetPtr->GetActorLocation();
+
+			FVector directionVector = targetLocation - casterLocation;
+
+
+			directionVector.Normalize();
+			FVector forward = caster->GetActorForwardVector();
+
+			float dot = forward.Dot(directionVector);
+
+			float angleDegrees = acos(dot) * (180.0 / 3.141592653589793238463f);
+
+			if (auto* tempCaster = Cast<AHns_CharacterPlayer>(caster))
 			{
-				if (angleDegrees <= angle / 2.f)
+				if (auto* tempTarget = Cast<AHnS_BaseEnemy>(targetPtr))
 				{
-					UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
-					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
+					if (angleDegrees <= angle / 2.f)
+					{
+						UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
+						GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
+					}
+				}
+			}
+			else
+			{
+				if (auto* tempTarget = Cast<AHns_CharacterPlayer>(OtherActor))
+				{
+					if (angleDegrees <= angle / 2.f)
+					{
+						UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
+						GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
+					}
 				}
 			}
 		}
-		else 
-		{
-			if (auto* tempTarget = Cast<AHns_CharacterPlayer>(OtherActor))
-			{
-				if (angleDegrees <= angle / 2.f)
-				{
-					UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
-					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
-				}
-			}
-		}
-		
-
-
-		
 	}
+	
 }
 
 void AHnS_AoE::StartCollisionChecking()
