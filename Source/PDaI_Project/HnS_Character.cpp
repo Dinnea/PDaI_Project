@@ -260,10 +260,7 @@ float AHnS_Character::roll()
 			cachedDest_roll = attackHit.Location;
 		}
 		rotatePlayer(cachedDest_roll);
-		if (GEngine)
-		{
-			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Roll debug"));
-		}
+		//
 		FRotator rotVector = UKismetMathLibrary::FindLookAtRotation(cachedDest_roll, ActorLocation);
 		destVector = GetActorLocation() + GetActorForwardVector() * Distance;
 		//destVector.X *= -1;
@@ -308,7 +305,7 @@ void AHnS_Character::setCrouch(bool flag)
 
 void AHnS_Character::enableOnFire(float duration)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("ON FIRE DEBUG"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("ON FIRE DEBUG"));
 	//onFireInstance = UGameplayStatics::SpawnEmitterAtLocation(this, onFireParticleEffect, GetActorLocation());
 	//onFireInstance = UGameplayStatics::SpawnEmitterAttached(onFireParticleEffect, Particle, NAME_None, GetActorLocation(), GetActorRotation(), GetActorScale(), EAttachLocation::SnapToTarget, false, EPSCPoolMethod::AutoRelease);
 	onFireInstance->ToggleVisibility();
@@ -319,7 +316,7 @@ void AHnS_Character::enableOnFire(float duration)
 
 bool AHnS_Character::UltimateAutoAttack()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("bullet casted"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("bullet casted"));
 	if (auto* abilityPtr = Cast<AHnS_Ability>(RBullet->GetChildActor())) return abilityPtr->ExecuteRSubclass();
 	return false;
 }
@@ -351,27 +348,27 @@ AHnS_Ability* AHnS_Character::GetAbility(int ability)
 	switch (ability) 
 	{
 	case 0:
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return autoattack"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return autoattack"));
 		return Cast<AHnS_Ability>(Weapon->GetChildActor());
 		break;
 	case 1:
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return autoattack"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return autoattack"));
 		return Cast<AHnS_Ability>(qTrigger->GetChildActor());
 		break;
 	case 2:
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return w"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return w"));
 		return Cast<AHnS_Ability>(abilityW->GetChildActor());
 		break;
 	case 3:
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return e"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return e"));
 		return Cast<AHnS_Ability>(abilityE->GetChildActor());
 		break;
 	case 4:
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return r"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return r"));
 		return Cast<AHnS_Ability>(rTrigger->GetChildActor());
 		break;
 	default:
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return none"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Return none"));
 		return nullptr;
 		break;
 	}
