@@ -40,6 +40,8 @@ private:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "AI", meta = (AllowPrivateAccess = "true"))
 	float attackRange;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Points", meta = (AllowPrivateAccess = "true"))
+	float points = 1;
 
 	
 };

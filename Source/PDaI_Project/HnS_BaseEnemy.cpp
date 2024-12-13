@@ -2,6 +2,8 @@
 
 
 #include "HnS_BaseEnemy.h"
+#include <HnS_GameModeBase.h>
+#include <HnS_GameInstance.h>
 
 AHnS_BaseEnemy::AHnS_BaseEnemy()
 {
@@ -44,5 +46,13 @@ void AHnS_BaseEnemy::BeginPlay()
 
 void AHnS_BaseEnemy::Die()
 {
+	if (auto* const gameInstancePtr = Cast<UHnS_GameInstance>(GetGameInstance()))
+	{
+		gameInstancePtr->AddScore(points);
+	}
+	/*if (auto* const gameModePtr = Cast<AHnS_GameModeBase>(GetWorld()->GetAuthGameMode())) 
+	{
+		gameModePtr->
+	}*/
 	Destroy();
 }

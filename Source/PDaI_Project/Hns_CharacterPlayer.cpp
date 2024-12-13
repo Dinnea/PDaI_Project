@@ -7,6 +7,8 @@
 #include "Perception/AIPerceptionStimuliSourceComponent.h"
 #include <Perception/AISense_Sight.h>
 #include <Kismet/GameplayStatics.h>
+#include <HnS_GameModeBase.h>
+#include "HnS_GameInstance.h"
 
 void AHns_CharacterPlayer::SetupStimulusSouce()
 {
@@ -49,6 +51,15 @@ void AHns_CharacterPlayer::BeginPlay()
 void AHns_CharacterPlayer::Die()
 {
 	Super::Die();
+	/*if (auto* const gameModePtr = Cast<AHnS_GameModeBase>(GetWorld()->GetAuthGameMode()))
+	{
+		gameModePtr->isGameOver = true;
+	}*/
+
+	if (auto* const gameInstancePtr = Cast<UHnS_GameInstance>(GetGameInstance())) 
+	{
+		gameInstancePtr->isGameOver = false;
+	}
 	UGameplayStatics::OpenLevel(GetWorld(), FName("MainMenu"));
 
 }
