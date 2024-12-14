@@ -59,6 +59,8 @@ public:
 	
 	void setDead(bool flag);
 
+	void setCanUseAbilities(bool flag);
+
 
 protected:
 
@@ -86,6 +88,8 @@ protected:
 	bool isRolling = false;
 
 	bool dead = false;
+
+	bool canUseAbilities = true;
 
 	float prevTimeBetweenFires = 0.f;
 

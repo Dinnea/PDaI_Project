@@ -54,7 +54,8 @@ void AHnS_AoE::BeginPlay()
 void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AActor* caster = GetInstigator();
-	if (OtherActor != caster && Cast<AHnS_Character>(OtherActor))
+	AHnS_Character* overlappedCharacter;
+	if ((OtherActor != caster) && (overlappedCharacter = Cast<AHnS_Character>(OtherActor)))
 	{
 		FVector casterLocation = caster->GetActorLocation();
 		FVector targetLocation = OtherActor->GetActorLocation();
@@ -73,7 +74,7 @@ void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Othe
 		{
 			if (auto* tempTarget = Cast<AHnS_BaseEnemy>(OtherActor)) 
 			{
-				if (angleDegrees <= angle / 2.f)
+				if (angleDegrees <= angle / 2.f && !overlappedCharacter->invulnerable)
 				{
 					UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
 					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
@@ -84,7 +85,7 @@ void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Othe
 		{
 			if (auto* tempTarget = Cast<AHns_CharacterPlayer>(OtherActor))
 			{
-				if (angleDegrees <= angle / 2.f)
+				if (angleDegrees <= angle / 2.f && !overlappedCharacter->invulnerable)
 				{
 					UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
 					GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));

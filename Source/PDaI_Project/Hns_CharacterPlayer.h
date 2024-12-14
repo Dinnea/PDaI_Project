@@ -45,6 +45,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void death();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Stats")
+	TSubclassOf<class AHealArea> healAura_spawn;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

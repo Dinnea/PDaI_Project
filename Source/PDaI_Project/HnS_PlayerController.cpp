@@ -95,7 +95,7 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 {
 	cachedDest_attack = getClickLocation();
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
-	if (PlayerCharacter && !dead)
+	if (PlayerCharacter && !dead && canUseAbilities)
 	{
 		/*
 		APawn* ludek = GetPawn();
@@ -117,7 +117,7 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 void AHnS_PlayerController::OnAbility1()
 {
 	cachedDest_W = getClickLocation();
-	if (PlayerCharacter && !dead)
+	if (PlayerCharacter && !dead && canUseAbilities)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability W key");
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
@@ -159,7 +159,7 @@ float AHnS_PlayerController::GetQCooldown()
 
 void AHnS_PlayerController::TriggerQ()
 {
-	if (PlayerCharacter && !dead)
+	if (PlayerCharacter && !dead && canUseAbilities)
 	{
 		PlayerCharacter->TriggerAbilityQ();
 	}
@@ -188,10 +188,10 @@ void AHnS_PlayerController::setTimeBetweenFires()
 
 void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 {
-	cachedDest_E = getClickLocation();
-	GetCharacter()->GetCharacterMovement()->DisableMovement();
-	if (PlayerCharacter && !dead)
+	if (PlayerCharacter && !dead && canUseAbilities)
 	{
+		cachedDest_E = getClickLocation();
+		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability E key");
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		PlayerCharacter->rotatePlayer(cachedDest_E);
@@ -202,7 +202,7 @@ void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 
 void AHnS_PlayerController::TriggerR()
 {
-	if (PlayerCharacter && !dead)
+	if (PlayerCharacter && !dead && canUseAbilities)
 	{
 		PlayerCharacter->TriggerAbilityR();
 	}
@@ -236,6 +236,11 @@ void AHnS_PlayerController::setCanCastE()
 void AHnS_PlayerController::setCanCastR()
 {
 	canCastR = true;
+}
+
+void AHnS_PlayerController::setCanUseAbilities(bool flag)
+{
+	canUseAbilities = flag;
 }
 
 FVector AHnS_PlayerController::getClickLocation()
