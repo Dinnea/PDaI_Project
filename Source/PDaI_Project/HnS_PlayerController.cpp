@@ -119,7 +119,7 @@ void AHnS_PlayerController::OnAbility1()
 	cachedDest_W = getClickLocation();
 	if (PlayerCharacter)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability W key");
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability W key");
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		PlayerCharacter->rotatePlayer(cachedDest_W);
 
@@ -189,7 +189,7 @@ void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 	GetCharacter()->GetCharacterMovement()->DisableMovement();
 	if (PlayerCharacter )
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability E key");
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability E key");
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		PlayerCharacter->rotatePlayer(cachedDest_E);
 

@@ -23,12 +23,12 @@ bool AHnS_Weapon::Execute(bool flag)
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = user;
 	SpawnParams.Owner = this;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Weapon execute"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Weapon execute"));
 	FRotator playerRotation = user->GetActorRotation();
 	AActor* SpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, playerRotation, SpawnParams);
 	if (user->QCasted && flag)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Q casted visible in HnS_Weapon"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Q casted visible in HnS_Weapon"));
 		AActor* leftSpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, FRotator(playerRotation.Pitch, playerRotation.Yaw + 15, playerRotation.Roll), SpawnParams);
 		AActor* rightSpawnedActor = GetWorld()->SpawnActor<AActor>(objectToSpawn, spawnLocation->GetComponentLocation() + Offset, FRotator(playerRotation.Pitch, playerRotation.Yaw - 15, playerRotation.Roll), SpawnParams);
 	}
@@ -42,7 +42,7 @@ bool AHnS_Weapon::ExecuteRSubclass()
 	FActorSpawnParameters SpawnParams;
 	SpawnParams.Instigator = user;
 	SpawnParams.Owner = this;
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Weapon execute R"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Weapon execute R"));
 	AActor* SpawnedActor = GetWorld()->SpawnActor<AHnS_RBullet>(r_objectToSpawn, spawnLocation->GetComponentLocation() + Offset, user->GetActorRotation(), SpawnParams);
 	return true;
 }

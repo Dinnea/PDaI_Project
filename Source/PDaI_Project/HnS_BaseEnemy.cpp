@@ -42,6 +42,7 @@ float AHnS_BaseEnemy::GetAttackRange() const
 void AHnS_BaseEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	bUseControllerRotationYaw = true;
 }
 
 void AHnS_BaseEnemy::Die()

@@ -6,8 +6,10 @@
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Perception/AISenseConfig_Sight.h"
+#include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "HnS_BaseEnemy.h"
+#include "Kismet/GameplayStatics.h"
 
 
 ABaseEnemyController::ABaseEnemyController(FObjectInitializer const& objectInitializer)
@@ -38,10 +40,13 @@ void ABaseEnemyController::OnPossess(APawn* InPawn)
 void ABaseEnemyController::SetUpPerceptionSystem()
 {
 	sight = CreateDefaultSubobject<UAISenseConfig_Sight>(TEXT("Sight"));
+	SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
+	UPROPERTY()
+	UAIPerceptionComponent* perception = GetPerceptionComponent();
 
 	if (sight) 
 	{
-		SetPerceptionComponent(*CreateDefaultSubobject<UAIPerceptionComponent>(TEXT("Perception Component")));
+		
 		sight->SightRadius = 500.f;
 		sight->LoseSightRadius = sight->SightRadius + 25.f;
 		sight->PeripheralVisionAngleDegrees = 360;
@@ -54,18 +59,48 @@ void ABaseEnemyController::SetUpPerceptionSystem()
 		sight->DetectionByAffiliation.bDetectNeutrals = true;
 		sight->DetectionByAffiliation.bDetectFriendlies = true;
 
-		UPROPERTY()
-		UAIPerceptionComponent* perception = GetPerceptionComponent();
+		
 		perception->SetDominantSense(*sight->GetSenseImplementation());
-		perception->OnTargetPerceptionUpdated.AddDynamic(this, &ABaseEnemyController::OnTargetDetected);
 		perception->ConfigureSense(*sight);
+	}
+
+	hearing = CreateDefaultSubobject<UAISenseConfig_Hearing>(TEXT("Hearing"));
+
+	if (hearing) 
+	{
+		hearing->HearingRange = 2000.f;
+
+		hearing->SetMaxAge(5.f);
+		hearing->DetectionByAffiliation.bDetectEnemies = true;
+		hearing->DetectionByAffiliation.bDetectNeutrals = true;
+		hearing->DetectionByAffiliation.bDetectFriendlies = true;
+		perception->ConfigureSense(*hearing);
+	}
+
+	if (hearing || sight) 
+	{
+		perception->OnTargetPerceptionUpdated.AddDynamic(this, &ABaseEnemyController::OnTargetDetected);
 	}
 
 }
 
 void ABaseEnemyController::OnTargetDetected(AActor* actor, FAIStimulus const stimulus)
 {
-	if (auto* const character = Cast<AHns_CharacterPlayer>(actor)) 
+	if (stimulus.Type == UAISense::GetSenseID<UAISense_Hearing>()) 
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOUND"));
+		if (auto* const ptr = Cast<AHnS_Bullet>(actor))
+		{
+			
+			if (auto* const playerPtr = Cast<AHns_CharacterPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))
+			{
+				GetBlackboardComponent()->SetValueAsVector("soundLocation", playerPtr->GetActorLocation());
+			}
+			
+
+		}
+	}
+	else if (auto* const character = Cast<AHns_CharacterPlayer>(actor)) 
 	{
 		GetBlackboardComponent()->SetValueAsObject("targetActor", actor);
 		//GetBlackboardComponent()->SetValueAsBool("hasSeenPlayer?", stimulus.WasSuccessfullySensed());
