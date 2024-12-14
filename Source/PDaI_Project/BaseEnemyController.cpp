@@ -9,6 +9,7 @@
 #include "Perception/AISenseConfig_Hearing.h"
 #include "Perception/AIPerceptionComponent.h"
 #include "HnS_BaseEnemy.h"
+#include "Kismet/GameplayStatics.h"
 
 
 ABaseEnemyController::ABaseEnemyController(FObjectInitializer const& objectInitializer)
@@ -88,7 +89,16 @@ void ABaseEnemyController::OnTargetDetected(AActor* actor, FAIStimulus const sti
 	if (stimulus.Type == UAISense::GetSenseID<UAISense_Hearing>()) 
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOUND"));
-		if (auto* const ptr = Cast<AHnS_Bullet>(actor)) GetBlackboardComponent()->SetValueAsVector("soundLocation", actor->GetActorLocation());
+		if (auto* const ptr = Cast<AHnS_Bullet>(actor))
+		{
+			
+			if (auto* const playerPtr = Cast<AHns_CharacterPlayer>(UGameplayStatics::GetPlayerPawn(GetWorld(), 0)))
+			{
+				GetBlackboardComponent()->SetValueAsVector("soundLocation", playerPtr->GetActorLocation());
+			}
+			
+
+		}
 	}
 	else if (auto* const character = Cast<AHns_CharacterPlayer>(actor)) 
 	{
