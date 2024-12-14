@@ -2,15 +2,18 @@
 
 
 #include "HnS_RBullet.h"
+#include "Kismet/GameplayStatics.h"
 
 AHnS_RBullet::AHnS_RBullet()
 {
 	//AHnS_Bullet::AHnS_Bullet();
+	ultimate_arrowSound = CreateDefaultSubobject<USoundBase>(TEXT("Ult arrow sound"));
 }
 
 void AHnS_RBullet::BeginPlay()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("R Bullet Beginplay"));
+	UGameplayStatics::PlaySound2D(GetWorld(), ultimate_arrowSound, 1, 1, 0, NULL, nullptr, true);
 	Super::BeginPlay();
 }
 

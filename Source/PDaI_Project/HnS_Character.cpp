@@ -150,6 +150,8 @@ AHnS_Character::AHnS_Character()
 
 	onHealInstance = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("On Heal particle component"));
 	onHealInstance->SetupAttachment(GetMesh());
+
+	ultimateTriggerSound = CreateDefaultSubobject<USoundBase>(TEXT("Ult trigger sound"));
 }
 
 // Called when the game starts or when spawned
@@ -355,6 +357,7 @@ bool AHnS_Character::UltimateAutoAttack()
 void AHnS_Character::AbilityR()
 {
 	UltimateFX = UGameplayStatics::SpawnEmitterAttached(onFireParticleEffect, R_Particle, NAME_None, GetActorLocation(), GetActorRotation(), GetActorScale(), EAttachLocation::KeepWorldPosition, false, EPSCPoolMethod::AutoRelease);
+	UGameplayStatics::PlaySound2D(GetWorld(), ultimateTriggerSound, 1, 1, 0, NULL, nullptr, true);
 	RCasted = true;
 	prevMaxWalkSpeed = charMovement->MaxWalkSpeed;
 	charMovement->MaxWalkSpeed = charMovement->MaxWalkSpeed*RSpeedMultiplier;

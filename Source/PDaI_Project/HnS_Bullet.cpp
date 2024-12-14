@@ -19,6 +19,8 @@ AHnS_Bullet::AHnS_Bullet()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComponent"));
 	ProjectileMovement->ProjectileGravityScale = 0;
+	hitSound = CreateDefaultSubobject<USoundBase>(TEXT("Hit sound"));
+	ultimate_explosion = CreateDefaultSubobject<USoundBase>(TEXT("Ult explosion sound"));
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, ProjectileMovement);
 
 	PrimaryActorTick.bCanEverTick = true;
@@ -71,6 +73,7 @@ void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* O
 		{
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, OtherActor->GetFName().ToString());
 			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, impactParticles, GetActorLocation());
+
 			//BulletHit();
 			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, PlayerC->GetPawn()->GetFName().ToString());
 			//if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass()) 
@@ -124,10 +127,12 @@ void AHnS_Bullet::BulletHit(AActor* OtherActor)
 			nullptr,
 			false,
 			ECollisionChannel::ECC_Visibility);
+		UGameplayStatics::PlaySound2D(GetWorld(), ultimate_explosion, 1, 1, 0, NULL, nullptr, true);
 	}
 	else
 	{ 
 		UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, GetInstigatorController(), this, DamageType);
+		UGameplayStatics::PlaySound2D(GetWorld(), hitSound, 1, 1, 0, NULL, nullptr, true);
 	}
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Bullet Hit"));
 	Destroy();

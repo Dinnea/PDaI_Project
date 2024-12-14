@@ -23,6 +23,7 @@ AHnS_EAbility::AHnS_EAbility()
 	trapMesh->SetupAttachment(E_FX);
 	trapMesh->Mobility = EComponentMobility::Movable;
 	//trapMesh->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	explosionSound = CreateDefaultSubobject<USoundBase>(TEXT("Explosion sound"));
 
 }
 
@@ -98,6 +99,7 @@ void AHnS_EAbility::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor*
 				UGameplayStatics::SpawnEmitterAtLocation(this, E_activate, FVector(otherPlayer->GetActorLocation().X, otherPlayer->GetActorLocation().Y, otherPlayer->GetActorLocation().Z - zOffset));
 				trap_active_particle->Deactivate();
 				immobility_effect = UGameplayStatics::SpawnEmitterAtLocation(this, E_ImmobilityEffect, FVector(otherPlayer->GetActorLocation().X, otherPlayer->GetActorLocation().Y, otherPlayer->GetActorLocation().Z));
+				UGameplayStatics::PlaySound2D(GetWorld(), explosionSound, 1, 1, 0, NULL, nullptr, true);
 				CollisionSphere->OnComponentBeginOverlap.RemoveAll(this);
 					//UGameplayStatics::ApplyDamage(actorToDamage, BaseDamage, damageInstigator, this, DamageType);
 			}

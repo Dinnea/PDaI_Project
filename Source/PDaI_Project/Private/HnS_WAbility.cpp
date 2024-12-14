@@ -22,6 +22,8 @@ AHnS_WAbility::AHnS_WAbility()
 	SetRootComponent(W_FX);
 	CollisionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("Collision Box"));
 	CollisionBox->SetupAttachment(W_FX);
+	WSound = CreateDefaultSubobject<USoundBase>(TEXT("Hail of arrow sound"));
+	fireSound = CreateDefaultSubobject<USoundBase>(TEXT("Fire sound"));
 	//ProjectileMovement = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileComponent"));
 	//ProjectileMovement->ProjectileGravityScale = 0;
 
@@ -62,6 +64,8 @@ void AHnS_WAbility::BeginPlay()
 		FTimerDelegate duration_Delegate = FTimerDelegate::CreateUObject(this, &AHnS_WAbility::disableEffect);
 		FTimerHandle dTimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(dTimerHandle, duration_Delegate, duration, false);
+
+		UGameplayStatics::PlaySound2D(GetWorld(), WSound, 1, 1, 0, NULL, nullptr, true);
 	}
 }
 
@@ -140,6 +144,7 @@ void AHnS_WAbility::enableDamage()
 	float prevActorZLocation = GetActorLocation().Z;
 	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, 10000));
 	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, prevActorZLocation));
+	UGameplayStatics::PlaySound2D(GetWorld(), fireSound, 1, 1, 0, NULL, nullptr, true);
 }
 
 void AHnS_WAbility::disableEffect()
