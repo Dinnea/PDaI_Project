@@ -14,3 +14,11 @@ void UHealthBarWidget::SetBarValuePercent(float const value)
 {
 	HealthValue->SetPercent(value);
 }
+
+void UHealthBarWidget::SetEffectText(FText const value)
+{
+	if (NameTextBlock)
+	{
+		NameTextBlock->SetText(value);
+	}
+}

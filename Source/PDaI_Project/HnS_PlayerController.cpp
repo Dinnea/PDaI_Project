@@ -64,7 +64,7 @@ void AHnS_PlayerController::OnInputStarted()
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
 {
-	if (!isRolling && !PlayerCharacter->trap_crouch)
+	if (!isRolling && !PlayerCharacter->trap_crouch && !dead)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
@@ -83,7 +83,7 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 void AHnS_PlayerController::OnSetDestinationReleased()
 {
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, FString::SanitizeFloat(followTime));
-	if (followTime <= shortPressThreshold && !isRolling)
+	if (followTime <= shortPressThreshold && !isRolling && !dead)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Navigation movement debug"));
 		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, cachedDest);
@@ -95,7 +95,7 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 {
 	cachedDest_attack = getClickLocation();
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet debug!"));
-	if (PlayerCharacter)// && canFire)
+	if (PlayerCharacter && !dead && canUseAbilities)
 	{
 		/*
 		APawn* ludek = GetPawn();
@@ -117,7 +117,7 @@ void AHnS_PlayerController::autoAttackBullet(const FInputActionValue& value)
 void AHnS_PlayerController::OnAbility1()
 {
 	cachedDest_W = getClickLocation();
-	if (PlayerCharacter)
+	if (PlayerCharacter && !dead && canUseAbilities)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability W key");
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
@@ -159,7 +159,10 @@ float AHnS_PlayerController::GetQCooldown()
 
 void AHnS_PlayerController::TriggerQ()
 {
-	PlayerCharacter->TriggerAbilityQ();
+	if (PlayerCharacter && !dead && canUseAbilities)
+	{
+		PlayerCharacter->TriggerAbilityQ();
+	}
 }
 
 void AHnS_PlayerController::enableMovement()
@@ -185,11 +188,11 @@ void AHnS_PlayerController::setTimeBetweenFires()
 
 void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 {
-	cachedDest_E = getClickLocation();
-	GetCharacter()->GetCharacterMovement()->DisableMovement();
-	if (PlayerCharacter )
+	if (PlayerCharacter && !dead && canUseAbilities)
 	{
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, "Clicked use ability E key");
+		cachedDest_E = getClickLocation();
+		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		GetCharacter()->GetCharacterMovement()->DisableMovement();
 		PlayerCharacter->rotatePlayer(cachedDest_E);
 
@@ -199,7 +202,7 @@ void AHnS_PlayerController::e_ability(const FInputActionValue& value)
 
 void AHnS_PlayerController::TriggerR()
 {
-	if (PlayerCharacter) 
+	if (PlayerCharacter && !dead && canUseAbilities)
 	{
 		PlayerCharacter->TriggerAbilityR();
 	}
@@ -220,6 +223,11 @@ float AHnS_PlayerController::GetRCooldown()
 	return RCooldown;
 }
 
+void AHnS_PlayerController::setDead(bool flag)
+{
+	dead = flag;
+}
+
 void AHnS_PlayerController::setCanCastE()
 {
 	canCastE = true;
@@ -228,6 +236,11 @@ void AHnS_PlayerController::setCanCastE()
 void AHnS_PlayerController::setCanCastR()
 {
 	canCastR = true;
+}
+
+void AHnS_PlayerController::setCanUseAbilities(bool flag)
+{
+	canUseAbilities = flag;
 }
 
 FVector AHnS_PlayerController::getClickLocation()

@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
 #include "Components/ProgressBar.h"
+#include "Components/TextBlock.h"
 #include "HealthBarWidget.generated.h"
 
 /**
@@ -19,5 +20,9 @@ public:
 	void SetBarValuePercent(float const value);
 	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UProgressBar* HealthValue = nullptr;
+
+	void SetEffectText(FText const value);
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UTextBlock* NameTextBlock = nullptr;
 private:
 };

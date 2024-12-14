@@ -35,10 +35,10 @@ UTexture2D* AHnS_Ability::GetIcon()
 
 bool AHnS_Ability::Execute(bool flag)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Ability execute"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("Ability execute"));
 	if (!ready) 
 	{ 
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("No execute."));
 		return false; 
 	}
 

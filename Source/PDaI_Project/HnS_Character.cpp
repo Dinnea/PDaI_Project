@@ -147,6 +147,9 @@ AHnS_Character::AHnS_Character()
 
 	rTrigger = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityRTrigger"));
 	rTrigger->SetupAttachment(GetMesh());
+
+	onHealInstance = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("On Heal particle component"));
+	onHealInstance->SetupAttachment(GetMesh());
 }
 
 // Called when the game starts or when spawned
@@ -154,6 +157,7 @@ void AHnS_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
+	toggleOnHeal();
 	onFireInstance->ToggleVisibility();
 	/*check(GEngine != nullptr);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));*/
@@ -202,6 +206,27 @@ void AHnS_Character::Tick(float DeltaTime)
 	if (auto const widget = Cast<UHealthBarWidget>(WidgetComponent->GetUserWidgetObject()))
 	{
 		widget->SetBarValuePercent(HP/MaxHP);
+		if (invulnerable)
+		{
+			widget->SetEffectText(FText::FromString("INVULNERABLE!"));
+		}
+		else if (immobilized)
+		{
+			widget->SetEffectText(FText::FromString("IMMOBILIZED!"));
+		}
+		else if(b_onFire)
+		{
+			widget->SetEffectText(FText::FromString("ON FIRE!"));
+		}
+		else if (RCasted)
+		{
+			widget->SetEffectText(FText::FromString("UNSTOPPABLE!"));
+		}
+		else
+		{
+			widget->SetEffectText(FText::FromString(""));
+		}
+
 	}
 
 	FVector v1 = GetActorLocation() + Distance;
@@ -312,6 +337,12 @@ void AHnS_Character::enableOnFire(float duration)
 	FTimerDelegate Delegate1 = FTimerDelegate::CreateUObject(this, &AHnS_Character::disableOnFire);
 	FTimerHandle enTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(enTimerHandle, Delegate1, duration, false);
+	b_onFire = true;
+}
+
+void AHnS_Character::toggleOnHeal()
+{
+	onHealInstance->ToggleVisibility();
 }
 
 bool AHnS_Character::UltimateAutoAttack()
@@ -377,6 +408,7 @@ AHnS_Ability* AHnS_Character::GetAbility(int ability)
 void AHnS_Character::disableOnFire()
 {
 	onFireInstance->ToggleVisibility();
+	b_onFire = false;
 	//onFireInstance->Deactivate();
 }
 
