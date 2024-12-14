@@ -31,7 +31,7 @@ AHnS_Bullet::AHnS_Bullet()
 void AHnS_Bullet::BeginPlay()
 {
 	Super::BeginPlay();
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet Beginplay"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("Bullet Beginplay"));
 	if (GetInstigator()) {
 		ePlayerCharacter = Cast<AHnS_Character>(GetInstigator());
 		PlayerC = GetInstigator()->GetController(); //Instigator - Object which created the actor/event (player created bullet)
@@ -51,7 +51,7 @@ void AHnS_Bullet::BeginPlay()
 
 void AHnS_Bullet::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, OtherActor->GetFName().ToString());
 	//OtherActor->GetFName().ToString() != "BP_HnS_PlayerChar_C_0"
 	//GetOwner()->GetFName().ToString();
 	if (GetOwner() == nullptr)
@@ -129,7 +129,7 @@ void AHnS_Bullet::BulletHit(AActor* OtherActor)
 	{ 
 		UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, GetInstigatorController(), this, DamageType);
 	}
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Bullet Hit"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Bullet Hit"));
 	Destroy();
 }
 
@@ -143,5 +143,6 @@ void AHnS_Bullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, *(this->GetActorLocation().ToString()));
+	//reportnoise
 }
 

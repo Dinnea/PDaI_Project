@@ -10,7 +10,7 @@ AHnS_RBullet::AHnS_RBullet()
 
 void AHnS_RBullet::BeginPlay()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("R Bullet Beginplay"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, TEXT("R Bullet Beginplay"));
 	Super::BeginPlay();
 }
 

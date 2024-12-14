@@ -77,7 +77,7 @@ void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Othe
 					if (angleDegrees <= angle / 2.f)
 					{
 						UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
-						GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
+						//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
 					}
 				}
 			}
@@ -88,7 +88,7 @@ void AHnS_AoE::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Othe
 					if (angleDegrees <= angle / 2.f)
 					{
 						UGameplayStatics::ApplyDamage(OtherActor, damage, GetInstigatorController(), this, DamageType);
-						GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::SanitizeFloat(angleDegrees));
+						
 					}
 				}
 			}

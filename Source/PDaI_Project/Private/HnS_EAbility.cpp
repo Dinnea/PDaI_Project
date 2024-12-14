@@ -29,7 +29,7 @@ AHnS_EAbility::AHnS_EAbility()
 // Called when the game starts or when spawned
 void AHnS_EAbility::BeginPlay()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("E ability casted"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("E ability casted"));
 	Super::BeginPlay();
 
 	ePlayerCharacter = Cast<AHnS_Character>(GetInstigator());
@@ -68,20 +68,20 @@ void AHnS_EAbility::disableCrouch()
 void AHnS_EAbility::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	AController* PlayerC = GetInstigator()->GetController();
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Entered E overlap");
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, "Entered E overlap");
 
 	if (AHnS_Character* const TargetPlayer = Cast<AHnS_Character>(OtherActor))
 	{
 		if (OtherActor != PlayerC->GetPawn() && !TargetPlayer->invulnerable)
 		{
 			AHnS_Character* otherPlayer = Cast<AHnS_Character>(OtherActor);
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, PlayerC->GetPawn()->GetFName().ToString());
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, PlayerC->GetPawn()->GetFName().ToString());
 			if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass())
 			{
 				FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_EAbility::despawn, otherPlayer);
 				FTimerHandle dTimerHandle;
 				GetWorld()->GetTimerManager().SetTimer(dTimerHandle, Delegate, effect_duration, false);
-				GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, "E debug test");
+				//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, "E debug test");
 				UGameplayStatics::ApplyRadialDamage(GetWorld(),
 					baseDamage,
 					GetActorLocation(),

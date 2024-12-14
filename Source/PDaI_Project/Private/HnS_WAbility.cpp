@@ -30,11 +30,11 @@ AHnS_WAbility::AHnS_WAbility()
 // Called when the game starts or when spawned
 void AHnS_WAbility::BeginPlay()
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("W Beginplay"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("W Beginplay"));
 	if (GetInstigator() != nullptr)
 	{
 		pController = Cast<AHnS_PlayerController>(GetInstigator()->GetController());
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("W casted"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("W casted"));
 		CollisionBox->OnComponentBeginOverlap.AddDynamic(this, &AHnS_WAbility::BeginOverlap);
 		CollisionBox->OnComponentEndOverlap.AddDynamic(this, &AHnS_WAbility::OnOverlapEnd);
 		Super::BeginPlay();
@@ -69,8 +69,8 @@ void AHnS_WAbility::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor*
 {
 	if (canDamage)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Overlap begin"));
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("W overlap"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Overlap begin"));
+		//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("W overlap"));
 		prevFireTicks = fireTicks;
 		AController* PlayerC = GetInstigator()->GetController(); //Instigator - Object which created the actor/event (player created bullet)
 
@@ -102,14 +102,14 @@ void AHnS_WAbility::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor*
 		}
 		else
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("[W Ability] AActor to AHnS_Character cast failed"));
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("[W Ability] AActor to AHnS_Character cast failed"));
 		}
 	}
 }
 
 void AHnS_WAbility::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Overlap end"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Blue, TEXT("Overlap end"));
 }
 
 void AHnS_WAbility::setLocationAfterDelay()
@@ -124,7 +124,7 @@ void AHnS_WAbility::Tick(float DeltaTime)
 
 void AHnS_WAbility::fireDamage(AActor* actorToDamage, AController* damageInstigator)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Timer test"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("Timer test"));
 	fireTicks = fireTicks - 1;
 	UGameplayStatics::ApplyDamage(actorToDamage, BaseDamage, damageInstigator, this, DamageType);
 	if (fireTicks <= 0)
