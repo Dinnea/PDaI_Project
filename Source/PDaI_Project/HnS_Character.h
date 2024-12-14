@@ -81,6 +81,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	UParticleSystemComponent* Q_FX;
 
+	UPROPERTY(EditAnywhere)
+	UParticleSystemComponent* onHealInstance;
+
 	float globalDeltaTime;
 	float Zpos;
 	float prevMaxWalkSpeed;
@@ -111,6 +114,8 @@ public:
 	void disableOnFire();
 
 	void enableOnFire(float duration);
+
+	void toggleOnHeal();
 
 	UFUNCTION(BlueprintCallable)
 	AHnS_Ability* GetAbility(int ability);

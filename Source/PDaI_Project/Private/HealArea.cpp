@@ -48,6 +48,10 @@ void AHealArea::BeginPlay()
 		controlled_player = Cast<AHnS_Character>(GetInstigator());
 		PlayerC = Cast<AHnS_PlayerController>(GetInstigator()->GetController());
 	}
+
+	FTimerDelegate delay_Delegate = FTimerDelegate::CreateUObject(this, &AHealArea::overlapReset);
+	FTimerHandle delay_TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(delay_TimerHandle, delay_Delegate, 0.5, false);
 }
 
 void AHealArea::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -66,6 +70,7 @@ void AHealArea::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Oth
 			prevTickAmount = ticksAmount;
 			FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHealArea::heal);
 			GetWorld()->GetTimerManager().SetTimer(hTimerHandle, Delegate, healInterval, true);
+			controlled_player->toggleOnHeal(); //player heal particle on
 
 			FTimerDelegate aDelegate = FTimerDelegate::CreateUObject(this, &AHealArea::aura_cooldown);
 			FTimerHandle aTimerHandle;
@@ -77,12 +82,19 @@ void AHealArea::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Oth
 
 void AHealArea::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, *(OtherActor->GetFName()).ToString());
+	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, *(OtherActor->GetFName()).ToString());
 	if (controlled_player == Cast<AHnS_Character>(OtherActor))
 	{
 		canHeal = false;
 		controlled_player->invulnerable = false;
 		PlayerC->setCanUseAbilities(true);
+
+		if (endOverlapCount == 2) //Player triggers end overlap on game start 2 times for some reason (idk why), so this fixes overlap not working by resetting it on 3rd time
+		{
+			overlapReset();
+			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Overlap reset"));
+		}
+		endOverlapCount++;
 	}
 }
 
@@ -97,6 +109,7 @@ void AHealArea::heal()
 	{
 		flare_toggleVisibility(true); //green off
 		flare_toggleVisibility(false); //red on
+		controlled_player->toggleOnHeal(); //player heal particle off
 		ticksAmount = prevTickAmount;
 		GetWorldTimerManager().ClearTimer(hTimerHandle);
 	}
@@ -107,9 +120,7 @@ void AHealArea::aura_cooldown()
 	flare_toggleVisibility(false); //red off
 	flare_toggleVisibility(true); //green on
 	canUseAura = true;
-	float prevActorZLocation = GetActorLocation().Z;
-	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, 10000));
-	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, prevActorZLocation));
+	overlapReset();
 }
 
 void AHealArea::flare_toggleVisibility(bool color)
@@ -128,6 +139,13 @@ void AHealArea::flare_toggleVisibility(bool color)
 		redFlare3->ToggleVisibility();
 		redFlare4->ToggleVisibility();
 	}
+}
+
+void AHealArea::overlapReset()
+{
+	float prevActorZLocation = GetActorLocation().Z;
+	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, 10000));
+	SetActorLocation(FVector(GetActorLocation().X, GetActorLocation().Y, prevActorZLocation));
 }
 
 // Called every frame

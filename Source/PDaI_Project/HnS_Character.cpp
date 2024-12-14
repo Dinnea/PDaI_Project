@@ -147,6 +147,9 @@ AHnS_Character::AHnS_Character()
 
 	rTrigger = CreateDefaultSubobject<UChildActorComponent>(TEXT("AbilityRTrigger"));
 	rTrigger->SetupAttachment(GetMesh());
+
+	onHealInstance = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("On Heal particle component"));
+	onHealInstance->SetupAttachment(GetMesh());
 }
 
 // Called when the game starts or when spawned
@@ -154,6 +157,7 @@ void AHnS_Character::BeginPlay()
 {
 	Super::BeginPlay();
 
+	toggleOnHeal();
 	onFireInstance->ToggleVisibility();
 	/*check(GEngine != nullptr);
 	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("We are using TestCharacter."));*/
@@ -315,6 +319,11 @@ void AHnS_Character::enableOnFire(float duration)
 	FTimerDelegate Delegate1 = FTimerDelegate::CreateUObject(this, &AHnS_Character::disableOnFire);
 	FTimerHandle enTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(enTimerHandle, Delegate1, duration, false);
+}
+
+void AHnS_Character::toggleOnHeal()
+{
+	onHealInstance->ToggleVisibility();
 }
 
 bool AHnS_Character::UltimateAutoAttack()

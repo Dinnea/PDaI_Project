@@ -56,6 +56,8 @@ public:
 
 	int prevTickAmount;
 
+	int endOverlapCount = 0;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -82,6 +84,8 @@ protected:
 	void aura_cooldown();
 
 	void flare_toggleVisibility(bool color);
+
+	void overlapReset();
 
 	bool canHeal = false;
 
