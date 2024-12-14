@@ -78,6 +78,7 @@ void AHnS_EAbility::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor*
 			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, PlayerC->GetPawn()->GetFName().ToString());
 			if (OtherActor->GetClass() != PlayerC->GetPawn()->GetClass())
 			{
+				otherPlayer->immobilized = true;
 				FTimerDelegate Delegate = FTimerDelegate::CreateUObject(this, &AHnS_EAbility::despawn, otherPlayer);
 				FTimerHandle dTimerHandle;
 				GetWorld()->GetTimerManager().SetTimer(dTimerHandle, Delegate, effect_duration, false);
@@ -109,6 +110,7 @@ void AHnS_EAbility::despawn(AHnS_Character* targetPlayer)
 	FTimerDelegate Delegate1 = FTimerDelegate::CreateUObject(this, &AHnS_EAbility::despawn_delay, targetPlayer);
 	FTimerHandle deTimerHandle;
 	GetWorld()->GetTimerManager().SetTimer(deTimerHandle, Delegate1, 1, false);
+	targetPlayer->immobilized = false;
 	immobility_effect->Deactivate();
 }
 

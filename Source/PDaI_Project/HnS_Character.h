@@ -92,6 +92,8 @@ public:
 	bool isPlacingTrap = false;
 	bool RCasted = false;
 	bool QCasted = false;
+	bool b_onFire = false;
+	bool immobilized = false;
 	float prevCooldown;
 
 	FVector cachedDest_roll;
