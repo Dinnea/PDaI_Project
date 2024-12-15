@@ -9,6 +9,8 @@
 #include "Blueprint/AIBlueprintHelperLibrary.h"
 #include <string>
 #include "Kismet/KismetMathLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Particles/ParticleSystemComponent.h"
 #include "HnS_Character.h"
 
 AHnS_PlayerController::AHnS_PlayerController()
@@ -60,6 +62,20 @@ void AHnS_PlayerController::SetupInputComponent()
 void AHnS_PlayerController::OnInputStarted()
 {
 	//StopMovement();
+	cachedDest = getClickLocation();
+	FVector location = cachedDest;
+	FRotator rotation = FRotator::ZeroRotator;
+	FVector scale = FVector(0.2f, 0.2f, 0.2f);
+	FTransform transform;
+	transform.SetLocation(location);
+	transform.SetRotation(FQuat(rotation));
+	transform.SetScale3D(scale);
+	UParticleSystemComponent* particleComponent = UGameplayStatics::SpawnEmitterAtLocation(this, clickDestEffect, location, rotation, true);
+	if (particleComponent)
+	{
+		// Apply the desired scale
+		particleComponent->SetWorldScale3D(scale);
+	}
 }
 
 void AHnS_PlayerController::OnSetDestinationTriggered()
@@ -69,8 +85,6 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("Movement debug!"));
 		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 		followTime += GetWorld()->GetDeltaSeconds();
-
-		cachedDest = getClickLocation();
 
 		APawn* controlledPawn = GetPawn();
 		if (controlledPawn != nullptr) {

@@ -45,6 +45,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	class UInputAction* RAbility;
 
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* clickDestEffect;
+
 	FVector cachedDest_attack;
 
 	FVector cachedDest_W;
