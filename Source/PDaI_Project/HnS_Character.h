@@ -84,6 +84,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	UParticleSystemComponent* onHealInstance;
 
+	UPROPERTY(EditDefaultsOnly)
+	class UParticleSystem* deathImpactParticle;
+
 	float globalDeltaTime;
 	float Zpos;
 	float prevMaxWalkSpeed;

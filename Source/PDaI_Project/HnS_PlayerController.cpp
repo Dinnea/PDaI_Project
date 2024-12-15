@@ -86,6 +86,8 @@ void AHnS_PlayerController::OnSetDestinationTriggered()
 		GetCharacter()->GetCharacterMovement()->SetMovementMode(MOVE_NavWalking);
 		followTime += GetWorld()->GetDeltaSeconds();
 
+		cachedDest = getClickLocation();
+
 		APawn* controlledPawn = GetPawn();
 		if (controlledPawn != nullptr) {
 			FVector direction = (cachedDest - controlledPawn->GetActorLocation()).GetSafeNormal();

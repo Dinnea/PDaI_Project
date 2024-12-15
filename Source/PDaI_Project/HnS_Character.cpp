@@ -67,6 +67,7 @@ void AHnS_Character::disableQBuff()
 
 void AHnS_Character::Die()
 {
+	UGameplayStatics::SpawnEmitterAtLocation(this, deathImpactParticle, GetActorLocation());
 }
 
 void AHnS_Character::updateRoll()
