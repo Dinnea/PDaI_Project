@@ -58,12 +58,12 @@ void AHealArea::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Oth
 {
 	if (controlled_player == Cast<AHnS_Character>(OtherActor))
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Overlap begin"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Overlap begin"));
 		controlled_player->invulnerable = true;
 		PlayerC->setCanUseAbilities(false);
 		if ((controlled_player->HP < controlled_player->MaxHP) && canUseAura && initialUseAmount)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("HealAura overlap"));
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Green, TEXT("HealAura overlap"));
 			canHeal = true;
 			canUseAura = false;
 			initialUseAmount -= 1;
@@ -82,7 +82,7 @@ void AHealArea::BeginOverlap(UPrimitiveComponent* OverlappedContent, AActor* Oth
 
 void AHealArea::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, *(OtherActor->GetFName()).ToString());
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Cyan, *(OtherActor->GetFName()).ToString());
 	if (controlled_player == Cast<AHnS_Character>(OtherActor))
 	{
 		canHeal = false;
@@ -92,7 +92,7 @@ void AHealArea::OnOverlapEnd(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		if (endOverlapCount == 2) //Player triggers end overlap on game start 2 times for some reason (idk why), so this fixes overlap not working by resetting it on 3rd time
 		{
 			overlapReset();
-			GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Overlap reset"));
+			//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Purple, TEXT("Overlap reset"));
 		}
 		endOverlapCount++;
 	}

@@ -30,7 +30,7 @@ void AHnS_LevelScript::MassSpawnTimer(TSubclassOf<AHnS_BaseEnemy> enemy, AEnemyS
 	FTimerDelegate spawnerDelegate;
 
 	spawnerDelegate.BindUFunction(this, "MassEnemySpawn", enemy, spawner, number, radius);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("ene spawn"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Red, TEXT("ene spawn"));
 	GetWorld()->GetTimerManager().SetTimer(spawnTimer, spawnerDelegate, spawnInterval, true); //will spawn enemies constantly
 }
 

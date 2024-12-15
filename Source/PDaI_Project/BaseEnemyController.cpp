@@ -88,7 +88,7 @@ void ABaseEnemyController::OnTargetDetected(AActor* actor, FAIStimulus const sti
 {
 	if (stimulus.Type == UAISense::GetSenseID<UAISense_Hearing>()) 
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOUND"));
+		//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, TEXT("SOUND"));
 		if (auto* const ptr = Cast<AHnS_Bullet>(actor))
 		{
 			

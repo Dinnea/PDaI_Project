@@ -66,7 +66,7 @@ void AHns_CharacterPlayer::BeginPlay()
 	SpawnParams.Instigator = this;
 	SpawnParams.Owner = this;
 	AActor* heal_aura = GetWorld()->SpawnActor<AHealArea>(healAura_spawn, FVector(-6029, -1342, 202), FRotator(0,0,0), SpawnParams);
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Character Player beginplay"));
+	//GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Orange, TEXT("Character Player beginplay"));
 }
 
 void AHns_CharacterPlayer::Die()
