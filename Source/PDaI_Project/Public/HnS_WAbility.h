@@ -49,6 +49,13 @@ protected:
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<UDamageType> DamageType;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	class USoundBase* WSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	class USoundBase* fireSound;
+
+
 	int prevFireTicks;
 
 	FTimerHandle mTimerHandle;

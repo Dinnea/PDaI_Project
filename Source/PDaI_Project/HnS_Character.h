@@ -165,6 +165,9 @@ protected:
 	UPROPERTY(EditAnywhere);
 	USceneComponent* SpawnLocation;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	class USoundBase* ultimateTriggerSound;
+
 	UPROPERTY(EditAnywhere, Category="Interp")
 	float WaitTime;
 

@@ -65,6 +65,9 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float effect_duration;
 
+	UPROPERTY(EditDefaultsOnly, Category="Sound")
+	class USoundBase* explosionSound;
+
 	void despawn(AHnS_Character* otherPlayer);
 
 	void despawn_delay(AHnS_Character* targetPlayer);

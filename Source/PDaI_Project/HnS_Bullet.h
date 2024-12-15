@@ -49,6 +49,12 @@ protected:
 	UPROPERTY(EditAnywhere)
 	float radius;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	class USoundBase* hitSound;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	class USoundBase* ultimate_explosion;
+
 	TArray<AActor*> ignoredActors;
 
 	class AHnS_Character* ePlayerCharacter;

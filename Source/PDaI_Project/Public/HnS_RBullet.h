@@ -22,6 +22,9 @@ class PDAI_PROJECT_API AHnS_RBullet : public AHnS_Bullet
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep,
 		const FHitResult& SweepResult);
 
+	UPROPERTY(EditDefaultsOnly, Category = "Sound")
+	class USoundBase* ultimate_arrowSound;
+
 	virtual void Tick(float DeltaTime) override;
 	
 };
