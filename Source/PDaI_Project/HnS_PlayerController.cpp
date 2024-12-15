@@ -65,7 +65,7 @@ void AHnS_PlayerController::OnInputStarted()
 	cachedDest = getClickLocation();
 	FVector location = cachedDest;
 	FRotator rotation = FRotator::ZeroRotator;
-	FVector scale = FVector(0.2f, 0.2f, 0.2f);
+	FVector scale = FVector(0.1f, 0.1f, 0.1f);
 	FTransform transform;
 	transform.SetLocation(location);
 	transform.SetRotation(FQuat(rotation));

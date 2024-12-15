@@ -81,7 +81,7 @@ void AHns_CharacterPlayer::Die()
 	{
 		gameInstancePtr->isGameOver = false;
 	}
-	UGameplayStatics::OpenLevel(GetWorld(), FName("MainMenu"));
+	//UGameplayStatics::OpenLevel(GetWorld(), FName("MainMenu"));
 
 	playDeathAnim = true;
 	GetCharacterMovement()->DisableMovement();

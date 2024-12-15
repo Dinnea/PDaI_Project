@@ -67,7 +67,8 @@ void AHnS_Character::disableQBuff()
 
 void AHnS_Character::Die()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(this, deathImpactParticle, GetActorLocation());
+	UGameplayStatics::SpawnEmitterAtLocation(this, deathImpactParticle, FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z - DeathParticleZOffset));
+	GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, TEXT("death particle")); 
 }
 
 void AHnS_Character::updateRoll()

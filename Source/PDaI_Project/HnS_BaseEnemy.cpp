@@ -47,6 +47,7 @@ void AHnS_BaseEnemy::BeginPlay()
 
 void AHnS_BaseEnemy::Die()
 {
+	Super::Die();
 	if (auto* const gameInstancePtr = Cast<UHnS_GameInstance>(GetGameInstance()))
 	{
 		gameInstancePtr->AddScore(points);

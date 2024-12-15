@@ -180,6 +180,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Interp")
 	float Distance;
 
+	UPROPERTY(EditAnywhere, Category = "Interp")
+	float DeathParticleZOffset;
+
 	UPROPERTY(EditAnywhere, Category = "Ultimate Ability")
 	float rDuration;
 
